@@ -6,7 +6,7 @@
 
 #include "IGStreamerPlayer.h"
 #include "IVideoGrabber.h"
-#include "Point2d.h"
+#include "UnityHelpers.h"
 #include <string>
 
 namespace mray
@@ -42,7 +42,7 @@ public:
 
 	//defined by the source video stream
 	virtual void SetFrameSize(int w, int h) {}
-	virtual const math::vector2di& GetFrameSize() ;
+	virtual const Vector2d& GetFrameSize() ;
 
 	//defined by the source video stream
 	virtual void SetImageFormat(video::EPixelFormat fmt){}
@@ -65,7 +65,7 @@ public:
 		m_player = p;
 	}
 	virtual void SetFrameSize(int w, int h) { m_player->SetFrameSize(w, h); }
-	virtual const math::vector2di& GetFrameSize() { return m_player->GetFrameSize(); }
+	virtual const Vector2d& GetFrameSize() { return m_player->GetFrameSize(); }
 
 	virtual void SetImageFormat(video::EPixelFormat fmt)  { m_player->SetImageFormat(fmt); }
 	virtual video::EPixelFormat GetImageFormat() { return m_player->GetImageFormat(); }

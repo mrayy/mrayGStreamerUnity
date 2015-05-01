@@ -15,7 +15,6 @@
 #define ___IVideoGrabber___
 
 #include "ImageInfo.h"
-#include "Point2d.h"
 
 namespace mray
 {
@@ -31,7 +30,7 @@ public:
 	virtual~IVideoGrabber(){}
 
 	virtual void SetFrameSize(int w,int h)=0;
-	virtual const math::vector2di& GetFrameSize()=0;
+	virtual const Vector2d& GetFrameSize()=0;
 
 	virtual void SetImageFormat(video::EPixelFormat fmt)=0;
 	virtual video::EPixelFormat GetImageFormat()=0;

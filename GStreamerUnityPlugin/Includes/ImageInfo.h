@@ -14,10 +14,11 @@
 #ifndef ___ImageInfo___
 #define ___ImageInfo___
 
-#include "CompileConfig.h"
+//#include "CompileConfig.h"
 #include "mTypes.h"
 #include "videoCommon.h"
-#include <Point3d.h>
+#include "UnityHelpers.h"
+//#include <Point3d.h>
 
 namespace mray{
 namespace video{
@@ -33,8 +34,8 @@ public:
 	int getPitch()const;
 
 	void clear();
-	void setData(const void*data,const math::vector3di&size,EPixelFormat format);
-	void createData(const math::vector3di& size,EPixelFormat format);
+	void setData(const void*data, const Vector2d&size, EPixelFormat format);
+	void createData(const Vector2d& size,EPixelFormat format);
 
 	uchar*getSurface(int d);
 	const uchar*getSurface(int d)const;
@@ -43,7 +44,7 @@ public:
 
 	bool autoDel;
 
-	math::vector3di Size;
+	Vector2d Size;
 	EPixelFormat format;
 	ulong	imageDataSize;
 	uchar* imageData;

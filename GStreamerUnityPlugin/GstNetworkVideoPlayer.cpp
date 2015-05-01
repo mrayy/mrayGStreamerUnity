@@ -182,7 +182,7 @@ public:
 	}
 
 
-	virtual const math::vector2di& GetFrameSize()
+	virtual const Vector2d& GetFrameSize()
 	{
 		return m_videoHandler.GetFrameSize();
 	}
@@ -253,7 +253,7 @@ void GstNetworkVideoPlayer::Close()
 
 }
 
-const math::vector2di& GstNetworkVideoPlayer::GetFrameSize()
+const Vector2d& GstNetworkVideoPlayer::GetFrameSize()
 {
 	return m_impl->GetFrameSize();
 }

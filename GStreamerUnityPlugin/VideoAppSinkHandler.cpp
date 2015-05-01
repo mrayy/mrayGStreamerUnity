@@ -148,8 +148,8 @@ bool VideoAppSinkHandler::_Allocate(int width, int height, video::EPixelFormat f
 	m_frameSize.x = width;
 	m_frameSize.y = height;
 
-	m_pixels.createData(math::vector3di(width, height, 1), fmt);
-	m_backPixels.createData(math::vector3di(width, height, 1), fmt);
+	m_pixels.createData(Vector2d(width, height), fmt);
+	m_backPixels.createData(Vector2d(width, height), fmt);
 
 	m_HavePixelsChanged = false;
 	m_BackPixelsChanged = true;
@@ -166,7 +166,7 @@ bool VideoAppSinkHandler::GrabFrame(){
 	m_HavePixelsChanged = m_BackPixelsChanged;
 	if (m_HavePixelsChanged){
 		m_BackPixelsChanged = false;
-		math::Swap(m_pixels.imageData, m_backPixels.imageData);
+		Swap(m_pixels.imageData, m_backPixels.imageData);
 
 		prevBuffer = buffer;
 	}

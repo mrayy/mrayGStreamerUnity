@@ -46,7 +46,7 @@ extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p,
 	{
 		if (p->GrabFrame())
 		{
-			math::vector2di sz = p->GetFrameSize();
+			Vector2d sz = p->GetFrameSize();
 			w = sz.x;
 			h = sz.y;
 			return true;
@@ -60,7 +60,7 @@ extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer*
 {
 	if (p != nullptr)
 	{
-		math::vector2di sz= p->GetFrameSize();
+		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
 	}else

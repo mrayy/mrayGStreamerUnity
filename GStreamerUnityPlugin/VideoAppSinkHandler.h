@@ -8,7 +8,6 @@
 #include "ImageInfo.h"
 #include "ListenerContainer.h"
 #include "IMutex.h"
-#include "Point2d.h"
 
 namespace mray
 {
@@ -36,7 +35,7 @@ protected:
 	bool			m_BackPixelsChanged;
 	bool			m_IsAllocated;
 	OS::IMutex*			m_mutex;
-	math::vector2di m_frameSize;
+	Vector2d m_frameSize;
 
 	uint m_frameID;
 
@@ -54,7 +53,7 @@ public:
 	video::ImageInfo*	getPixelsRef(){ return &m_pixels; }
 	bool GrabFrame();
 	uint GetFrameID(){ return m_frameID; }
-	virtual const math::vector2di& GetFrameSize(){ return m_frameSize; }
+	virtual const Vector2d& GetFrameSize(){ return m_frameSize; }
 
 	virtual GstFlowReturn process_sample(std::shared_ptr<GstSample> sample);
 	virtual GstFlowReturn preroll_cb(std::shared_ptr<GstSample> buffer);
