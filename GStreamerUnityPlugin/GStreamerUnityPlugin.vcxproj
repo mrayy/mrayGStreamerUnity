@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|X64">
+      <Configuration>Debug</Configuration>
+      <Platform>X64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|X64">
+      <Configuration>Release</Configuration>
+      <Platform>X64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="X64|Win32">
+      <Configuration>X64</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="X64|X64">
+      <Configuration>X64</Configuration>
+      <Platform>X64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8FB9AD24-E1C7-4C44-BD0E-CA167AF44482}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GStreamerUnityPlugin</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X64|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X64|X64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-video-1.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-app-1.0.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-video-1.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\gstreamer\1.0\x86_64\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-video-1.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='X64|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-1.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='X64|X64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="..\..\mrayEngine\Dependencies\GStreamerPropManager\2010\libs\gstreamer-1.0.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>C:\Users\Telubee\Downloads\RenderingPluginExample45\OculusTest\Assets\Plugins\x86</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\Users\Telubee\Downloads\RenderingPluginExample45\OculusTest\Assets\Plugins\x86</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\Users\Telubee\Downloads\RenderingPluginExample45\OculusTest\Assets\Plugins\x86_64</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X64|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>C:\Users\Telubee\Downloads\RenderingPluginExample45\OculusTest\Assets\Plugins\x86</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X64|X64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;C:\Development\mrayEngine\Engine\mrayMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>gstapp-1.0.lib;ws2_32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;C:\Development\mrayEngine\Engine\mrayMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>gstapp-1.0.lib;ws2_32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='X64|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='X64|X64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;.\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="CMySink.h" />
+    <ClInclude Include="CMySrc.h" />
+    <ClInclude Include="CMyUDPSink.h" />
+    <ClInclude Include="CMyUDPSrc.h" />
+    <ClInclude Include="CoreAPI.h" />
+    <ClInclude Include="GstNetworkVideoPlayer.h" />
+    <ClInclude Include="GstPipelineHandler.h" />
+    <ClInclude Include="GstPlayerBin.h" />
+    <ClInclude Include="GStreamerCore.h" />
+    <ClInclude Include="IGStreamerPlayer.h" />
+    <ClInclude Include="Includes\common.h" />
+    <ClInclude Include="Includes\GraphicsInclude.h" />
+    <ClInclude Include="Includes\ImageInfo.h" />
+    <ClInclude Include="Includes\IMutex.h" />
+    <ClInclude Include="Includes\INetwork.h" />
+    <ClInclude Include="Includes\ISingleton.h" />
+    <ClInclude Include="Includes\IThread.h" />
+    <ClInclude Include="Includes\IThreadFunction.h" />
+    <ClInclude Include="Includes\IThreadManager.h" />
+    <ClInclude Include="Includes\IUDPClient.h" />
+    <ClInclude Include="Includes\IVideoGrabber.h" />
+    <ClInclude Include="Includes\ListenerContainer.h" />
+    <ClInclude Include="Includes\mTypes.h" />
+    <ClInclude Include="Includes\NetAddress.h" />
+    <ClInclude Include="Includes\PixelUtil.h" />
+    <ClInclude Include="Includes\videoCommon.h" />
+    <ClInclude Include="Includes\Win32Network.h" />
+    <ClInclude Include="Includes\Win32UDPClient.h" />
+    <ClInclude Include="Includes\WinMutex.h" />
+    <ClInclude Include="Includes\WinThread.h" />
+    <ClInclude Include="Includes\WinThreadManager.h" />
+    <ClInclude Include="PlayersAPI.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UnityHelpers.h" />
+    <ClInclude Include="UnityPlugin.h" />
+    <ClInclude Include="VideoAppSinkHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CMySink.cpp" />
+    <ClCompile Include="CMySrc.cpp" />
+    <ClCompile Include="CMyUDPSink.cpp" />
+    <ClCompile Include="CMyUDPSrc.cpp" />
+    <ClCompile Include="CoreAPI.cpp" />
+    <ClCompile Include="GstNetworkVideoPlayer.cpp" />
+    <ClCompile Include="GstPipelineHandler.cpp" />
+    <ClCompile Include="GstPlayerBin.cpp" />
+    <ClCompile Include="GStreamerCore.cpp" />
+    <ClCompile Include="Includes\ImageInfo.cpp" />
+    <ClCompile Include="Includes\IThreadManager.cpp" />
+    <ClCompile Include="Includes\NetAddress.cpp" />
+    <ClCompile Include="Includes\PixelUtil.cpp" />
+    <ClCompile Include="Includes\UnityGraphicsDevice.cpp" />
+    <ClCompile Include="Includes\Win32Network.cpp" />
+    <ClCompile Include="Includes\Win32UDPClient.cpp" />
+    <ClCompile Include="Includes\WinMutex.cpp" />
+    <ClCompile Include="Includes\WinThread.cpp" />
+    <ClCompile Include="Includes\WinThreadManager.cpp" />
+    <ClCompile Include="PlayersAPI.cpp" />
+    <ClCompile Include="UnityHelpers.cpp" />
+    <ClCompile Include="VideoAppSinkHandler.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
