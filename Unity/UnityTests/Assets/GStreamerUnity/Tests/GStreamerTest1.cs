@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(GstNetworkTexture))]
-public class GStreamerTest0 : MonoBehaviour {
+[RequireComponent(typeof(GstCustomTexture))]
+public class GStreamerTest1 : MonoBehaviour {
 	
-	private GstNetworkTexture m_Texture = null;
+	private GstCustomTexture m_Texture = null;
 
-	public string Host = "127.0.0.1";
-	public int port=7000;
+	public string Pipeline = "autovideosrc";
 	// Use this for initialization
 	void Start () {
-		m_Texture = gameObject.GetComponent<GstNetworkTexture>();
+		m_Texture = gameObject.GetComponent<GstCustomTexture>();
 		
 		// Check to make sure we have an instance.
 		if (m_Texture == null)
@@ -20,7 +19,7 @@ public class GStreamerTest0 : MonoBehaviour {
 		
 		m_Texture.Initialize ();
 
-		m_Texture.ConnectToHost (Host, port);
+		m_Texture.SetPipeline (Pipeline);
 		m_Texture.Play ();
 	}
 	

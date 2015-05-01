@@ -138,6 +138,9 @@
     <ClInclude Include="Includes\Win32UDPClient.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="GstCustomVideoPlayer.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GStreamerCore.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="Includes\Win32UDPClient.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GstCustomVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

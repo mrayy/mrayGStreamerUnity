@@ -239,6 +239,7 @@
     <ClInclude Include="CMyUDPSink.h" />
     <ClInclude Include="CMyUDPSrc.h" />
     <ClInclude Include="CoreAPI.h" />
+    <ClInclude Include="GstCustomVideoPlayer.h" />
     <ClInclude Include="GstNetworkVideoPlayer.h" />
     <ClInclude Include="GstPipelineHandler.h" />
     <ClInclude Include="GstPlayerBin.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="CMyUDPSink.cpp" />
     <ClCompile Include="CMyUDPSrc.cpp" />
     <ClCompile Include="CoreAPI.cpp" />
+    <ClCompile Include="GstCustomVideoPlayer.cpp" />
     <ClCompile Include="GstNetworkVideoPlayer.cpp" />
     <ClCompile Include="GstPipelineHandler.cpp" />
     <ClCompile Include="GstPlayerBin.cpp" />

@@ -5,6 +5,7 @@
 
 #include "UnityPlugin.h"
 #include "GstNetworkVideoPlayer.h"
+#include "GstCustomVideoPlayer.h"
 
 
 using namespace mray;
@@ -16,6 +17,16 @@ extern "C" EXPORT_API bool mray_gst_netPlayerCreateStream(GstNetworkVideoPlayer*
 extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h);
 extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h);
 extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+
+
+
+extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer();
+extern "C" EXPORT_API void mray_gst_customPlayerSetPipeline(GstCustomVideoPlayer* p, const char* pipeline);
+extern "C" EXPORT_API bool mray_gst_customPlayerCreateStream(GstCustomVideoPlayer* p);
+extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+
 
 
 extern "C" EXPORT_API void mray_gst_PlayerDestroy(IGStreamerPlayer* p);

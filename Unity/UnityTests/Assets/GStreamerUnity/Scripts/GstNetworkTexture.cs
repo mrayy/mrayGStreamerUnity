@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GstTexture : MonoBehaviour {
+public class GstNetworkTexture : MonoBehaviour {
 	
 	public int m_Width = 64;
 	public int m_Height = 64;
@@ -178,7 +178,7 @@ public class GstTexture : MonoBehaviour {
 				if (_player.GrabFrame (out sz)) {
 					Resize ((int)sz.x,(int) sz.y);
 					if (m_Texture == null)
-						Debug.LogError ("The WebTexture does not have a texture assigned and will not paint.");
+						Debug.LogError ("The GstTexture does not have a texture assigned and will not paint.");
 					else
 						_player.BlitTexture (m_Texture.GetNativeTexturePtr (), m_Texture.width, m_Texture.height);
 				}

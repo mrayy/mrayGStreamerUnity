@@ -6,6 +6,13 @@
 #include <string>
 #include <sstream>
 
+namespace mray
+{
+	namespace video
+	{
+		class ImageInfo;
+	}
+}
 
 enum ELogLevel{
 	ELL_INFO,
@@ -15,6 +22,7 @@ enum ELogLevel{
 };
 
 extern void LogMessage(const std::string& msg, ELogLevel level);
+extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
 
 typedef void(*FuncPtr)(const char*);
