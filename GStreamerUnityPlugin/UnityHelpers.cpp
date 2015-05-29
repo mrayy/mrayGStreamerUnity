@@ -30,8 +30,8 @@ void LogMessage(const std::string& msg, ELogLevel level)
 #else
 	printf("%s", m.c_str());
 #endif
-	if (Debug)
-		Debug(m.c_str());
+// 	if (Debug)
+// 		Debug(m.c_str());
 }
 
 extern "C" EXPORT_API void mray_SetDebugFunction(FuncPtr f)

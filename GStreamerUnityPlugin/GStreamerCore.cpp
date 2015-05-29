@@ -168,7 +168,7 @@ void GStreamerCore::Unref()
 		LogMessage("GStreamerCore::Unref() - unreferencing GStreamer with no reference! ", ELL_ERROR);
 		return;
 	}
-	m_refCount--;
+	//m_refCount--;
 	if (m_refCount == 0)
 	{
 		delete m_instance;
