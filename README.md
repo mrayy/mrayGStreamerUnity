@@ -16,7 +16,7 @@ http://gstreamer.freedesktop.org/data/pkg/windows/
 
 4- To test the streaming if working or not, run the following pipeline (on the same machine) using command line:
 
-gst-launch-1.0 ksvideosrc device-index=0 ! video/x-raw,format=I420,width=1280,height=720,framerate=30/1 ! videoconvert ! x264enc name=videoEncbitrate=2000 tune=zerolatency pass=qual ! rtph264pay ! udpsink host=127.0.0.1 port=7000 sync=false -v
+gst-launch-1.0 ksvideosrc device-index=0 ! video/x-raw,format=I420,width=1280,height=720,framerate=30/1 ! videoconvert ! x264enc name=videoEnc bitrate=2000 tune=zerolatency pass=qual ! rtph264pay ! udpsink host=127.0.0.1 port=7000 sync=false -v
 
 
 You should see the cube textured with the streamed data.
