@@ -141,6 +141,12 @@
     <ClInclude Include="GstCustomVideoPlayer.h">
       <Filter>Source Files\Players</Filter>
     </ClInclude>
+    <ClInclude Include="GstNetworkMultipleVideoPlayer.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="IStreamListener.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GStreamerCore.cpp">
@@ -210,6 +216,12 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="GstCustomVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="GstNetworkMultipleVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="IGStreamerPlayer.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>

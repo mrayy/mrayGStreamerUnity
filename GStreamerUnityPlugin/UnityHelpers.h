@@ -5,6 +5,7 @@
 
 #include <string>
 #include <sstream>
+#include "mTypes.h"
 
 namespace mray
 {
@@ -26,7 +27,6 @@ extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr
 
 
 typedef void(*FuncPtr)(const char*);
-
 
 struct Vector2d
 {

@@ -408,24 +408,6 @@ EPixelType_Float32,
 //shift
 0,0,0,0
 },
-{
-//name
-mT("Stecil"),
-//elemSizeB
-4,
-//flags
-EPixelFlags_Luminance,
-//type
-EPixelType_Byte,
-//componentsCount
-1,
-//bits
-0,0,0,0,
-//mask
-0,0,0,0,
-//shift
-0,0,0,0
-},
 
 {
 //name
@@ -575,24 +557,6 @@ EPixelType_Byte,
 0, 0,0,0,
 //shift
 0,0,0,0
-},
-{
-	//name
-	mT("YUYV"),
-	//elemSizeB
-	1,
-	//flags
-	EPixelFlags_Compressed,
-	//type
-	EPixelType_Byte,
-	//componentsCount
-	1,
-	//bits
-	0, 0, 0, 0,
-	//mask
-	0, 0, 0, 0,
-	//shift
-	0, 0, 0, 0
 }
 };
 

@@ -28,22 +28,14 @@ protected:
 	std::shared_ptr<GstSample> 	buffer, prevBuffer;
 	GstMapInfo mapinfo;
 
-	video::EPixelFormat m_pixelFormat;
-	//quick hack for YUV support: maximum of 3 surfaces
-	video::ImageInfo m_pixels[3];				// 24 bit: rgb
-	video::ImageInfo m_backPixels[3];
+	video::ImageInfo m_pixels;				// 24 bit: rgb
+	video::ImageInfo m_backPixels;
 	bool			m_IsFrameNew;			// if we are new
 	bool			m_HavePixelsChanged;
 	bool			m_BackPixelsChanged;
 	bool			m_IsAllocated;
 	OS::IMutex*			m_mutex;
 	Vector2d m_frameSize;
-	int m_surfaceCount;
-
-	int m_captureFPS;
-	int m_frameCount;
-	float m_timeAcc;
-	float m_lastT;
 
 	uint m_frameID;
 
@@ -58,13 +50,10 @@ public:
 
 	void Close();
 	bool 			isFrameNew(){ return m_IsFrameNew; }
-	video::ImageInfo*	getPixelsRef(int surface=0){ return &m_pixels[surface]; }
-	int getSurfaceCount(){ return m_surfaceCount; }
+	video::ImageInfo*	getPixelsRef(){ return &m_pixels; }
 	bool GrabFrame();
 	uint GetFrameID(){ return m_frameID; }
 	virtual const Vector2d& GetFrameSize(){ return m_frameSize; }
-
-	float GetCaptureFrameRate();
 
 	virtual GstFlowReturn process_sample(std::shared_ptr<GstSample> sample);
 	virtual GstFlowReturn preroll_cb(std::shared_ptr<GstSample> buffer);

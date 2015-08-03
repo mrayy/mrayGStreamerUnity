@@ -17,7 +17,7 @@ extern "C" EXPORT_API void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, con
 {
 	if (p != nullptr)
 	{
-		p->SetIPAddress(ip, videoPort, rtcp);
+		p->SetIPAddress(ip, videoPort, 0,rtcp);
 	}
 }
 
@@ -78,6 +78,81 @@ extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p,
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
 }
+//////////////////////////////////////////////////////////////////////////
+extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer()
+{
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		GstNetworkMultipleVideoPlayer* player = new GstNetworkMultipleVideoPlayer();
+		return player;
+	}
+	return 0;
+}
+extern "C" EXPORT_API void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoPlayer* p, const char* ip, int baseVideoPort, int count, bool rtcp)
+{
+	if (p != nullptr)
+	{
+		p->SetIPAddress(ip, baseVideoPort,count, 0, rtcp);
+	}
+}
+
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipleVideoPlayer* p)
+{
+	if (p != nullptr)
+	{
+		return p->CreateStream();
+	}
+	return false;
+
+}
+extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h)
+{
+	if (p != nullptr)
+	{
+		Vector2d sz = p->GetFrameSize();
+		w = sz.x;
+		h = sz.y;
+	}
+	else
+		w = h = 0;
+}
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h)
+{
+	if (p != nullptr)
+	{
+		if (p->GrabFrame())
+		{
+			Vector2d sz = p->GetFrameSize();
+			w = sz.x;
+			h = sz.y;
+			return true;
+		}
+		return false;
+	}
+	return false;
+
+}
+extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+{
+	if (p == nullptr || !_TextureNativePtr)
+		return;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
+	}
+}
+extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p)
+{
+	if (p == nullptr)
+		return 0;
+	return p->GetFramesCount();
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 
 

@@ -130,8 +130,6 @@ namespace video{
 		EPixel_DXT4,
 		EPixel_DXT5,
 
-		EPixel_YUYV,
-
 		EPixelFormat_Count
 	};
 
@@ -226,6 +224,14 @@ namespace video{
 		ECF_Z_Negative,
 		ECF_Count
 	};
+
+	enum EFogType
+	{
+		EFog_Linear,
+		EFog_Exp,
+		EFog_Exp2
+	};
+
 
 	enum EMaterialRenderType
 	{

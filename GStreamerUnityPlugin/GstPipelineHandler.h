@@ -3,7 +3,9 @@
 #ifndef GstPipelineHandler_h__
 #define GstPipelineHandler_h__
 
-
+#include "mtypes.h"
+#include <string>
+#include "ListenerContainer.h"
 #include <gst/gst.h>
 
 
@@ -11,21 +13,35 @@ namespace mray
 {
 namespace video
 {
+
+	class GstPipelineHandlerImpl;
+	class GstPipelineHandler;
+
+	class IPipelineListener
+	{
+	public:
+		virtual void OnPipelineReady(GstPipelineHandler* p){}
+		virtual void OnPipelinePlaying(GstPipelineHandler* p){}
+		virtual void OnPipelineStopped(GstPipelineHandler* p){}
+		virtual void OnPipelineError(GstPipelineHandler* p){}
+	};
 	
-class GstPipelineHandler
+class GstPipelineHandler :public ListenerContainer<IPipelineListener*>
 {
 protected:
-	guint m_busWatchID;
-	GstElement* m_gstPipeline;
-	bool m_paused;
-	bool m_Loaded;
-	bool m_playing;
-	bool m_closing;
+
+	GstPipelineHandlerImpl* m_data;
+
+	DECLARE_FIRE_METHOD(OnPipelineReady, (GstPipelineHandler* p), (p));
+	DECLARE_FIRE_METHOD(OnPipelinePlaying, (GstPipelineHandler* p), (p));
+	DECLARE_FIRE_METHOD(OnPipelineStopped, (GstPipelineHandler* p), (p));
+	DECLARE_FIRE_METHOD(OnPipelineError, (GstPipelineHandler* p), (p));
 public:
 	GstPipelineHandler();
 	virtual ~GstPipelineHandler();
 
-	virtual bool CreatePipeline();
+	//set isMasterClock to true if 
+	virtual bool CreatePipeline(bool isMasterClock,const std::string& clockIP="",uint clockPort=7010);
 	virtual void SetPaused(bool p);
 	virtual void Stop();
 	virtual bool IsLoaded();
@@ -33,6 +49,13 @@ public:
 	virtual void Close();
 	virtual bool HandleMessage(GstBus * bus, GstMessage * msg);
 
+	virtual bool QueryLatency(bool &isLive,ulong& minLatency,ulong& maxLatency);
+
+	virtual void SetClockBaseTime(ulong baseTime);
+	virtual ulong GetClockBaseTime();
+
+	void SetPipeline(GstElement* p);
+	GstElement* GetPipeline();
 
 	static bool busFunction(GstBus * bus, GstMessage * message, GstPipelineHandler * player);
 

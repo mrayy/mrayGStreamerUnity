@@ -241,6 +241,7 @@
     <ClInclude Include="CMyUDPSrc.h" />
     <ClInclude Include="CoreAPI.h" />
     <ClInclude Include="GstCustomVideoPlayer.h" />
+    <ClInclude Include="GstNetworkMultipleVideoPlayer.h" />
     <ClInclude Include="GstNetworkVideoPlayer.h" />
     <ClInclude Include="GstPipelineHandler.h" />
     <ClInclude Include="GstPlayerBin.h" />
@@ -267,6 +268,7 @@
     <ClInclude Include="Includes\WinMutex.h" />
     <ClInclude Include="Includes\WinThread.h" />
     <ClInclude Include="Includes\WinThreadManager.h" />
+    <ClInclude Include="IStreamListener.h" />
     <ClInclude Include="PlayersAPI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UnityHelpers.h" />
@@ -280,10 +282,12 @@
     <ClCompile Include="CMyUDPSrc.cpp" />
     <ClCompile Include="CoreAPI.cpp" />
     <ClCompile Include="GstCustomVideoPlayer.cpp" />
+    <ClCompile Include="GstNetworkMultipleVideoPlayer.cpp" />
     <ClCompile Include="GstNetworkVideoPlayer.cpp" />
     <ClCompile Include="GstPipelineHandler.cpp" />
     <ClCompile Include="GstPlayerBin.cpp" />
     <ClCompile Include="GStreamerCore.cpp" />
+    <ClCompile Include="IGStreamerPlayer.cpp" />
     <ClCompile Include="Includes\ImageInfo.cpp" />
     <ClCompile Include="Includes\IThreadManager.cpp" />
     <ClCompile Include="Includes\NetAddress.cpp" />

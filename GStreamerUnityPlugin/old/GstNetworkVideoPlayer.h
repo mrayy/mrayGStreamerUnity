@@ -20,17 +20,13 @@ class GstNetworkVideoPlayer :public IGStreamerPlayer
 {
 protected:
 	GstNetworkVideoPlayerImpl* m_impl;
-	friend class GstNetworkVideoPlayerImpl;
-
-
-	GstPipelineHandler* GetPipeline();
 public:
 	GstNetworkVideoPlayer();
 	virtual ~GstNetworkVideoPlayer();
 
 	//set ip address for the target host
 	// videoport: port for the video stream, video rtcp is allocated as videoPort+1 and videoPort+2
-	void SetIPAddress(const std::string& ip, uint videoPort, uint clockPort, bool rtcp);
+	void SetIPAddress(const std::string& ip, int videoPort,bool rtcp);
 	bool CreateStream();
 
 	virtual bool IsStream() ;
@@ -46,10 +42,7 @@ public:
 
 	//defined by the source video stream
 	virtual void SetFrameSize(int w, int h) {}
-	virtual const Vector2d& GetFrameSize();
-
-	virtual float GetCaptureFrameRate();
-
+	virtual const Vector2d& GetFrameSize() ;
 
 	//defined by the source video stream
 	virtual void SetImageFormat(video::EPixelFormat fmt){}
@@ -80,9 +73,8 @@ public:
 	virtual bool GrabFrame() { return m_player->GrabFrame(); }
 	virtual bool HasNewFrame() { return m_player->HasNewFrame(); }
 	virtual ulong GetBufferID() { return m_player->GetBufferID(); }
-	virtual float GetCaptureFrameRate() { return m_player->GetCaptureFrameRate(); }
 
-	virtual const ImageInfo* GetLastFrame(int i) { return m_player->GetLastFrame(); }
+	virtual const ImageInfo* GetLastFrame() { return m_player->GetLastFrame(); }
 };
 
 }

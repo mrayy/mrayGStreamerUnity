@@ -6,6 +6,7 @@
 #include "UnityPlugin.h"
 #include "GstNetworkVideoPlayer.h"
 #include "GstCustomVideoPlayer.h"
+#include "GstNetworkMultipleVideoPlayer.h"
 
 
 using namespace mray;
@@ -18,6 +19,14 @@ extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer*
 extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h);
 extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
+
+extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer();
+extern "C" EXPORT_API void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoPlayer* p, const char* ip, int baseVideoPort,int count, bool rtcp);
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipleVideoPlayer* p);
+extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index);
+extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p);
 
 
 extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer();

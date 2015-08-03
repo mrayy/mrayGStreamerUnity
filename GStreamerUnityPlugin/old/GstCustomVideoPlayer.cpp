@@ -26,6 +26,7 @@ class GstCustomVideoPlayerImpl :public GstPipelineHandler
 public:
 	GstCustomVideoPlayerImpl()
 	{
+		m_gstPipeline = 0;
 		m_videoSink = 0;
 
 	}
@@ -48,22 +49,20 @@ public:
 	}
 	bool CreateStream()
 	{
-		if (IsLoaded())
+		if (m_Loaded)
 			return true;
 		_BuildPipeline();
 
 		GError *err = 0;
-		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
+		m_gstPipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
 			LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
 		}
-		if (!p)
+		if (!m_gstPipeline)
 			return false;
 
-		SetPipeline(p);
-
-		m_videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), "videoSink"));
+		m_videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(m_gstPipeline), "videoSink"));
 
 		m_videoHandler.SetSink(m_videoSink);
 
@@ -83,7 +82,7 @@ public:
 		gst_app_sink_set_callbacks(GST_APP_SINK(m_videoSink), &gstCallbacks, &m_videoHandler, NULL);
 
 
-		return CreatePipeline(false,"",0);
+		return CreatePipeline();
 
 	}
 
@@ -109,7 +108,7 @@ public:
 	}
 	void SetVolume(float vol)
 	{
-		g_object_set(G_OBJECT(GetPipeline()), "volume", (gdouble)vol, (void*)0);
+		g_object_set(G_OBJECT(m_gstPipeline), "volume", (gdouble)vol, (void*)0);
 	}
 
 
@@ -139,10 +138,6 @@ GstCustomVideoPlayer::GstCustomVideoPlayer()
 GstCustomVideoPlayer::~GstCustomVideoPlayer()
 {
 	delete m_impl;
-}
-GstPipelineHandler* GstCustomVideoPlayer::GetPipeline()
-{
-	return m_impl;
 }
 void GstCustomVideoPlayer::SetPipelineString(const std::string& pipeline)
 {

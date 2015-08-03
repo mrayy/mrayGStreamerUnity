@@ -19,7 +19,6 @@ class GstCustomVideoPlayer :public IGStreamerPlayer
 {
 protected:
 	GstCustomVideoPlayerImpl* m_impl;
-	GstPipelineHandler* GetPipeline();
 
 public:
 	GstCustomVideoPlayer();

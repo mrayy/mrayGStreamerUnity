@@ -3,9 +3,11 @@
 #include "stdafx.h"
 #include "VideoAppSinkHandler.h"
 #include "PixelUtil.h"
+#include "UnityHelpers.h"
 #include "IThreadManager.h"
 
 #include <gst/video/video.h>
+#include <sstream>
 
 namespace mray
 {
@@ -21,7 +23,6 @@ VideoAppSinkHandler::VideoAppSinkHandler()
 	m_BackPixelsChanged = false;
 	m_IsAllocated = false;
 	m_frameID = 0;
-	m_surfaceCount = 1;
 
 	m_mutex = OS::IThreadManager::getInstance().createMutex();
 }
@@ -32,11 +33,8 @@ void VideoAppSinkHandler::Close()
 {
 	m_frameID = 0;
 	m_IsAllocated = false;
-	for (int i = 0; i < m_surfaceCount; ++i)
-	{
-		m_pixels[i].clear();
-		m_backPixels[i].clear();
-	}
+	m_pixels.clear();
+	m_backPixels.clear();
 //	m_eventPixels.clear();
 }
 
@@ -71,9 +69,6 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 	case GST_VIDEO_FORMAT_RGB16:
 		return EPixel_R5G6B5;
 
-	case GST_VIDEO_FORMAT_I420:
-		return EPixel_YUYV;
-
 	default:
 		return EPixel_Unkown;
 	}
@@ -85,45 +80,30 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 
 	GstVideoInfo vinfo = getVideoInfo(sample.get());
 	video::EPixelFormat fmt = getVideoFormat(vinfo.finfo->format);
-	m_pixelFormat = fmt;
 	if (fmt == video::EPixel_Unkown)
 	{
 		return GST_FLOW_ERROR;
 	}
-	bool isI420 = false;;
-
-	int height = vinfo.height;
-	if (fmt == video::EPixel_YUYV)
-	{
-		isI420 = true;
-		//fmt = video::EPixel_LUMINANCE8;
-		height *= 1.5;
-	}
-	if (m_pixels[0].imageData && (m_pixels[0].Size.x != vinfo.width || m_pixels[0].Size.y != height || m_pixels[0].format != fmt))
+	if (m_pixels.imageData && (m_pixels.Size.x != vinfo.width || m_pixels.Size.y != vinfo.height || m_pixels.format != fmt))
 	{
 		m_IsAllocated = false;
-		m_pixels[0].clear();
-		m_backPixels[0].clear();
+		m_pixels.clear();
+		m_backPixels.clear();
 	}
 
 	gst_buffer_map(_buffer, &mapinfo, GST_MAP_READ);
 	guint size = mapinfo.size;
-	float pxSize = video::PixelUtil::getPixelDescription(fmt).elemSizeB;
-
+	int pxSize = video::PixelUtil::getPixelDescription(m_pixels.format).elemSizeB;
 	int stride = 0;
-	int dataSize = m_pixels[0].Size.x*m_pixels[0].Size.y;
-	if (isI420)
-	{
-	}
-	else
-		dataSize *= pxSize;
+	int dataSize = m_pixels.Size.x*m_pixels.Size.y * pxSize;
 
-	if (m_pixels[0].imageData && dataSize != (int)size){
+	if (m_pixels.imageData && dataSize != (int)size){
 		GstVideoInfo vinfo = getVideoInfo(sample.get());
 		stride = vinfo.stride[0];
 
-		if (stride != (m_pixels[0].Size.x * pxSize)) {
+		if (stride == (m_pixels.Size.x * pxSize)) {
 			gst_buffer_unmap(_buffer, &mapinfo);
+
 			std::stringstream ss;
 			ss << "VideoAppSinkHandler::process_sample(): error on new buffer, buffer size: " << size << "!= init size: " << dataSize;
 			LogMessage(ss.str(), ELL_WARNING);
@@ -133,17 +113,17 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	m_mutex->lock();
 	buffer = sample;
 
-	if (m_pixels[0].imageData){
+	if (m_pixels.imageData){
 		++m_frameID;
 		//if (stride > 0) {
-		m_backPixels[0].setData(mapinfo.data, m_pixels[0].Size, m_pixels[0].format);
+			m_backPixels.setData(mapinfo.data, m_pixels.Size, m_pixels.format);
 // 		}
 // 		else {
-// 			m_backPixels[0].setData(mapinfo.data, m_pixels[0].Size, m_pixels[0].format);
-// 			m_eventPixels.setData(mapinfo.data, m_pixels[0].Size, m_pixels[0].format);
+// 			m_backPixels.setData(mapinfo.data, m_pixels.Size, m_pixels.format);
+// 			m_eventPixels.setData(mapinfo.data, m_pixels.Size, m_pixels.format);
 // 		}
 
-			m_BackPixelsChanged = true;
+		m_BackPixelsChanged = true;
 		m_mutex->unlock();
 		if (stride == 0) {
 		//	ofNotifyEvent(prerollEvent, eventPixels);
@@ -151,10 +131,7 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	}
 	else{
 
-		if (isI420)
-			_Allocate(vinfo.width, vinfo.height*1.5, fmt);
-		else 
-			_Allocate(vinfo.width, vinfo.height, fmt);
+		_Allocate(vinfo.width, vinfo.height, fmt);
 
 		m_mutex->unlock();
 		FIRE_LISTENR_METHOD(OnStreamPrepared, (this));
@@ -171,17 +148,12 @@ bool VideoAppSinkHandler::_Allocate(int width, int height, video::EPixelFormat f
 	m_frameSize.x = width;
 	m_frameSize.y = height;
 
-	m_pixels[0].createData(Vector2d(width, height), fmt);
-	m_backPixels[0].createData(Vector2d(width, height), fmt);
+	m_pixels.createData(Vector2d(width, height), fmt);
+	m_backPixels.createData(Vector2d(width, height), fmt);
 
 	m_HavePixelsChanged = false;
 	m_BackPixelsChanged = true;
 	m_IsAllocated = true;
-
-	m_frameCount = 0;
-	m_timeAcc = 0;
-	m_lastT = 0;
-	m_captureFPS = 0;
 
 	return m_IsAllocated;
 }
@@ -194,24 +166,9 @@ bool VideoAppSinkHandler::GrabFrame(){
 	m_HavePixelsChanged = m_BackPixelsChanged;
 	if (m_HavePixelsChanged){
 		m_BackPixelsChanged = false;
-		Swap(m_pixels[0].imageData, m_backPixels[0].imageData);
+		Swap(m_pixels.imageData, m_backPixels.imageData);
 
 		prevBuffer = buffer;
-
-
-	//	float t = gEngine.getTimer()->getSeconds();
-	//	m_timeAcc += (t - m_lastT)*0.001f;
-
-		++m_frameCount;
-		if (m_timeAcc > 1)
-		{
-			m_captureFPS = m_frameCount;
-			m_timeAcc = m_timeAcc - (int)m_timeAcc;
-			m_frameCount = 0;
-			//	printf("Capture FPS: %d\n", m_captureFPS);
-		}
-
-	//	m_lastT = t;
 	}
 
 	m_mutex->unlock();
@@ -222,10 +179,7 @@ bool VideoAppSinkHandler::GrabFrame(){
 
 
 
-float VideoAppSinkHandler::GetCaptureFrameRate()
-{
-	return m_captureFPS;
-}
+
 
 
 GstFlowReturn VideoAppSinkHandler::preroll_cb(std::shared_ptr<GstSample> sample)
@@ -240,8 +194,6 @@ GstFlowReturn VideoAppSinkHandler::preroll_cb(std::shared_ptr<GstSample> sample)
 }
 GstFlowReturn VideoAppSinkHandler::buffer_cb(std::shared_ptr<GstSample> sample)
 {
-
-
 	GstFlowReturn ret = process_sample(sample);
 	if (ret == GST_FLOW_OK){
 		return GST_FLOW_OK;
