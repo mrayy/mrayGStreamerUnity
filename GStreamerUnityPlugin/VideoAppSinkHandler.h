@@ -30,8 +30,8 @@ protected:
 
 	video::EPixelFormat m_pixelFormat;
 	//quick hack for YUV support: maximum of 3 surfaces
-	video::ImageInfo m_pixels[3];				// 24 bit: rgb
-	video::ImageInfo m_backPixels[3];
+	video::ImageInfo m_pixels[1];				// 24 bit: rgb
+	video::ImageInfo m_backPixels[1];
 	bool			m_IsFrameNew;			// if we are new
 	bool			m_HavePixelsChanged;
 	bool			m_BackPixelsChanged;

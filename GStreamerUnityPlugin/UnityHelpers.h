@@ -23,10 +23,12 @@ enum ELogLevel{
 };
 
 extern void LogMessage(const std::string& msg, ELogLevel level);
+extern float GetEngineTime();
 extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
 
 typedef void(*FuncPtr)(const char*);
+typedef float(*FuncFloatRetPtr)();
 
 struct Vector2d
 {

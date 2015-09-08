@@ -86,7 +86,7 @@ public:
 				"rtph264depay ! h264parse !  avdec_h264 ! "
 				// " videorate  ! "//"video/x-raw,framerate=60/1 ! "
 				//	"videoconvert ! video/x-raw,format=RGB  !" // Very slow!!
-				"videoconvert ! video/x-raw,format=RGB  !"
+				"videoconvert ! video/x-raw,format=I420  !"
 			//	" timeoverlay halignment=right text=\"Local Time =\"! "
 			" appsink name=videoSink sync=false  emit-signals=false";
 				//"fpsdisplaysink sync=false";

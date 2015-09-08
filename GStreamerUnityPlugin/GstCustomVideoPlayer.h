@@ -52,6 +52,7 @@ public:
 	virtual ulong GetBufferID();// incremented once per frame
 
 	virtual const ImageInfo* GetLastFrame();
+	virtual float GetCaptureFrameRate();
 
 };
 

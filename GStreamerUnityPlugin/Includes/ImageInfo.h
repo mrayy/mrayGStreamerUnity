@@ -48,6 +48,8 @@ public:
 	EPixelFormat format;
 	ulong	imageDataSize;
 	uchar* imageData;
+
+	ImageInfo* tmpBuffer;
 };
 
 

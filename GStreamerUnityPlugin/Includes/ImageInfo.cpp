@@ -14,10 +14,14 @@ ImageInfo::ImageInfo():format(EPixel_LUMINANCE8),
 		imageData(0),imageDataSize(0)
 {
 	autoDel=true;
+	tmpBuffer = 0;
 }
 ImageInfo::~ImageInfo(){
 	if(imageData && autoDel)
 		delete [] imageData;
+
+	if (tmpBuffer)
+		delete tmpBuffer;
 }
 
 int ImageInfo::getPitch()const{

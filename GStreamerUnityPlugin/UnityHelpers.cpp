@@ -11,6 +11,7 @@ using namespace mray;
 using namespace video;
 
 FuncPtr Debug;
+FuncFloatRetPtr GetEngineTimePtr;
 
 void LogMessage(const std::string& msg, ELogLevel level)
 {
@@ -33,17 +34,33 @@ void LogMessage(const std::string& msg, ELogLevel level)
 // 	if (Debug)
 // 		Debug(m.c_str());
 }
-
+float GetEngineTime()
+{
+	if (GetEngineTimePtr)
+	{
+		return GetEngineTimePtr();
+	}
+	return 0;
+}
 extern "C" EXPORT_API void mray_SetDebugFunction(FuncPtr f)
 {
 	Debug = f;
+}
+extern "C" EXPORT_API void mray_SetGetEngineTime(FuncFloatRetPtr f)
+{
+	GetEngineTimePtr = f;
 }
 
 
 
 
-void CopyToTexture(const ImageInfo* src, uchar* dst)
+void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 {
+	if (fmt == video::EPixel_I420)
+	{
+		memcpy(dst, src->imageData, src->imageDataSize);
+		return;
+	}
 	int len = src->Size.x*src->Size.y * 3;
 	uchar* ptr = dst;
 	uchar* srcPtr = src->imageData;
@@ -64,6 +81,9 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 	if (!ifo || !_TextureNativePtr)
 		return;
 
+	if (ifo->tmpBuffer == 0)
+		((video::ImageInfo*)ifo)->tmpBuffer = new ImageInfo();
+
 
 #if SUPPORT_D3D9
 	// D3D9 case
@@ -81,7 +101,7 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 			//uchar* data = new uchar[desc.Width*desc.Height * 4];
 
 			//memcpy((unsigned char*)lr.pBits, ifo->imageData, desc.Width*desc.Height * 3);
-			CopyToTexture(ifo, (uchar*)lr.pBits);
+			CopyToTexture(ifo, (uchar*)lr.pBits,ifo->format);
 
 			d3dtex->UnlockRect(0);
 			//delete [] data;
@@ -103,12 +123,28 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 			D3D11_TEXTURE2D_DESC desc;
 			d3dtex->GetDesc(&desc);
 			//ctx->UpdateSubresource(d3dtex, 0, nullptr, ifo->imageData, desc.Width * 3, 0);
+			
+			uchar* data = 0;
+			int pitch = 0;
+			if (ifo->tmpBuffer->Size != ifo->Size)
+			{
+				ifo->tmpBuffer->createData(ifo->Size, ifo->format);
+			}
+			data = ifo->tmpBuffer->imageData;
+			if (ifo->format == video::EPixel_I420)
+			{
+				//data = new uchar[ifo->imageDataSize];
+				pitch = _UnityTextureWidth;
+			}
+			else
+			{
+				//data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];
+				pitch = _UnityTextureWidth * 4;
+			}
 
-			uchar* data = new uchar[desc.Width*desc.Height * 4];
-
-			CopyToTexture(ifo, (uchar*)data);
-			ctx->UpdateSubresource(d3dtex, 0, nullptr, data, desc.Width * 4, 0);
-			delete[] data;
+			CopyToTexture(ifo, (uchar*)data, ifo->format);
+			ctx->UpdateSubresource(d3dtex, 0, nullptr, data, pitch, 0);
+			//delete[] data;
 
 		}
 

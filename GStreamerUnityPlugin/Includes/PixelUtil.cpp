@@ -578,7 +578,7 @@ EPixelType_Byte,
 },
 {
 	//name
-	mT("YUYV"),
+	mT("I420"),
 	//elemSizeB
 	1,
 	//flags

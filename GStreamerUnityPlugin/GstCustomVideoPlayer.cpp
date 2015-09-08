@@ -122,6 +122,10 @@ public:
 	{
 		return m_videoHandler.getPixelsRef()->format;
 	}
+	virtual float GetCaptureFrameRate()
+	{
+		return m_videoHandler.GetCaptureFrameRate();
+	}
 
 	virtual bool GrabFrame(){ return m_videoHandler.GrabFrame(); }
 	virtual bool HasNewFrame(){ return m_videoHandler.isFrameNew(); }
@@ -212,7 +216,11 @@ ulong GstCustomVideoPlayer::GetBufferID()
 {
 	return m_impl->GetBufferID();
 }
+float GstCustomVideoPlayer::GetCaptureFrameRate()
+{
+	return m_impl->GetCaptureFrameRate();
 
+}
 
 const ImageInfo* GstCustomVideoPlayer::GetLastFrame()
 {

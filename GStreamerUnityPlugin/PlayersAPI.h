@@ -15,26 +15,28 @@ using namespace video;
 extern "C" EXPORT_API void* mray_gst_createNetworkPlayer();
 extern "C" EXPORT_API void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, const char* ip, int videoPort, bool rtcp);
 extern "C" EXPORT_API bool mray_gst_netPlayerCreateStream(GstNetworkVideoPlayer* p);
-extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components);
 extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h);
 extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+extern "C" EXPORT_API int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p);
 
 
 extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer();
 extern "C" EXPORT_API void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoPlayer* p, const char* ip, int baseVideoPort,int count, bool rtcp);
 extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipleVideoPlayer* p);
-extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h);
-extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int& components);
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h,int index);
 extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index);
-extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p);
+extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index);
 
 
 extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer();
 extern "C" EXPORT_API void mray_gst_customPlayerSetPipeline(GstCustomVideoPlayer* p, const char* pipeline);
 extern "C" EXPORT_API bool mray_gst_customPlayerCreateStream(GstCustomVideoPlayer* p);
-extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components);
 extern "C" EXPORT_API bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* p, int &w, int &h);
 extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+extern "C" EXPORT_API int mray_gst_customPlayerFrameCount(GstCustomVideoPlayer* p);
 
 
 

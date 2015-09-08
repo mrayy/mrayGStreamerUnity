@@ -2,6 +2,7 @@
 #include "PlayersAPI.h"
 #include "GStreamerCore.h"
 #include "GraphicsInclude.h"
+#include "PixelUtil.h"
 
 extern "C" EXPORT_API void* mray_gst_createNetworkPlayer()
 {
@@ -56,15 +57,17 @@ extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p,
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h)
+extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != nullptr)
 	{
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
-	}else
-		w = h = 0;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
+	}
+	else
+		w = h = components = 0;
 }
 extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
@@ -77,6 +80,13 @@ extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p,
 	{
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
+
+}
+extern "C" EXPORT_API int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p)
+{
+	if (p == nullptr)
+		return 0;
+	return p->GetCaptureFrameRate();
 }
 //////////////////////////////////////////////////////////////////////////
 extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer()
@@ -106,22 +116,23 @@ extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipl
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h)
+extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != nullptr)
 	{
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
 	}
 	else
-		w = h = 0;
+		w = h = components = 0;
 }
-extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h)
+extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int index)
 {
 	if (p != nullptr)
 	{
-		if (p->GrabFrame())
+		if (p->GrabFrame(index))
 		{
 			Vector2d sz = p->GetFrameSize();
 			w = sz.x;
@@ -145,11 +156,11 @@ extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVi
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
 }
-extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p)
+extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index)
 {
 	if (p == nullptr)
 		return 0;
-	return p->GetFramesCount();
+	return p->GetCaptureFrameRate(index);
 }
 
 
@@ -200,16 +211,17 @@ extern "C" EXPORT_API bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* 
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h)
+extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != nullptr)
 	{
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
 	}
 	else
-		w = h = 0;
+		w = h = components=0;
 }
 extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
@@ -222,6 +234,12 @@ extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* 
 	{
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
+}
+extern "C" EXPORT_API int mray_gst_customPlayerFrameCount(GstCustomVideoPlayer* p)
+{
+	if (p == nullptr)
+		return 0;
+	return p->GetCaptureFrameRate();
 }
 
 //////////////////////////////////////////////////////////////////////////

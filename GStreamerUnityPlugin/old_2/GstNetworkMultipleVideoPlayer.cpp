@@ -16,13 +16,14 @@
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
 #include <vector>
+
 namespace mray
 {
 namespace video
 {
 
 
-class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineListener
+class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler,public IPipelineListener
 {
 	GstNetworkMultipleVideoPlayer* m_owner;
 	std::string m_ipAddr;
@@ -71,26 +72,25 @@ public:
 
 	}
 
-
 	std::string _BuildPipelineH264(int i)
 	{
 		std::stringstream ss;
 		std::string videoStr;
-		ss << "myudpsrc name=videoSrc" << i << " !"
+		ss<<"myudpsrc name=videoSrc"<<i<<" !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
 			"application/x-rtp ";
 		videoStr = ss.str();
 		ss = std::stringstream();
 		if (m_rtcp)
 		{
-			ss <<
+			ss<<
 				"rtpbin "
 				"name=rtpbin "
 				<< videoStr <<
 				"! rtpbin.recv_rtp_sink_0 "
 				"rtpbin. ! rtph264depay !  avdec_h264 ! "
 				"videoconvert ! video/x-raw,format=RGB  !"
-				" appsink name=videoSink" << i <<
+				" appsink name=videoSink" <<i<<
 				//video rtcp
 				"myudpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 "
 				"rtpbin.send_rtcp_src_0 !  myudpsink name=videoRtcpSink sync=false async=false ";
@@ -98,7 +98,7 @@ public:
 		}
 		else
 		{
-			ss << videoStr << "! queue !"
+			ss<<videoStr <<"! queue !"
 				"rtpjitterbuffer !  "
 				"rtph264depay ! h264parse !  avdec_h264 ! "
 				// " videorate  ! "//"video/x-raw,framerate=60/1 ! "
@@ -106,9 +106,9 @@ public:
 				"videorate ! "
 				" videoconvert ! video/x-raw,format=I420  !"
 				//"videoconvert ! video/x-raw,format=RGB  !"
-				//	" timeoverlay halignment=right text=\"Local Time =\"! "
-				" appsink name=videoSink" << i << " sync=false  emit-signals=false ";
-			//"fpsdisplaysink sync=false";
+			//	" timeoverlay halignment=right text=\"Local Time =\"! "
+			" appsink name=videoSink" <<i<< " sync=false  emit-signals=false ";
+				//"fpsdisplaysink sync=false";
 
 			videoStr = ss.str();
 
@@ -121,7 +121,7 @@ public:
 	{
 		m_pipeLineString = "";
 		for (int i = 0; i < m_playersCount; ++i)
-			m_pipeLineString += _BuildPipelineH264(i) + " ";
+			m_pipeLineString+= _BuildPipelineH264(i)+" ";
 	}
 
 	void _UpdatePorts()
@@ -134,18 +134,18 @@ public:
 		for (int i = 0; i < m_playersCount; ++i)
 		{
 			std::stringstream ss;
-			ss << "videoSrc" << i;
+			ss<<"videoSrc"<<i;
 			SET_SRC(i, ss.str().c_str(), m_videoHandler[i].videoPort);
-			// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i].videoPort + 1));
-			// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i].videoPort + 2));
+// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i].videoPort + 1));
+// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i].videoPort + 2));
 		}
 	}
 
-	void SetIPAddress(const std::string& ip, uint videoPort, int count, uint clockPort, bool rtcp)
+	void SetIPAddress(const std::string& ip, uint videoPort, int count,uint clockPort, bool rtcp)
 	{
 		m_playersCount = count;
 		m_ipAddr = ip;
-		m_baseVideoSrc = videoPort;
+		m_baseVideoSrc= videoPort;
 		m_clockPort = clockPort;
 		m_rtcp = rtcp;
 
@@ -159,12 +159,13 @@ public:
 		_UpdatePorts();
 	}
 
-
+	
 	static GstFlowReturn new_buffer(GstElement *sink, void *data) {
 		GstBuffer *buffer;
 		GstMapInfo map;
 		GstSample *sample;
 		//gsize size;
+
 
 
 		g_signal_emit_by_name(sink, "pull-sample", &sample, NULL);
@@ -174,7 +175,7 @@ public:
 
 			gst_buffer_map(buffer, &map, GST_MAP_READ);
 
-			//	fwrite(map.data, 1, map.size, data->audio_file);
+		//	fwrite(map.data, 1, map.size, data->audio_file);
 
 			gst_buffer_unmap(buffer, &map);
 			gst_sample_unref(sample);
@@ -194,7 +195,7 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage("GstNetworkMultipleVideoPlayer: Pipeline error: " + std::string(err->message), ELL_WARNING);
+			LogMessage("GstNetworkMultipleVideoPlayer: Pipeline error: "+ std::string(err->message),ELL_WARNING);
 		}
 		if (!p)
 			return false;
@@ -206,7 +207,7 @@ public:
 		for (int i = 0; i < m_playersCount; ++i)
 		{
 			std::stringstream ss;
-			ss << "videoSink" << i;
+			ss<<"videoSink" <<i;
 
 			m_videoHandler[i].videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 
@@ -216,15 +217,15 @@ public:
 			GstAppSinkCallbacks gstCallbacks;
 			gstCallbacks.eos = &VideoAppSinkHandler::on_eos_from_source;
 			gstCallbacks.new_preroll = &VideoAppSinkHandler::on_new_preroll_from_source;
-#if GST_VERSION_MAJOR==0
+	#if GST_VERSION_MAJOR==0
 			gstCallbacks.new_buffer = &VideoAppSinkHandler::on_new_buffer_from_source;
-#else
+	#else
 			gstCallbacks.new_sample = &VideoAppSinkHandler::on_new_buffer_from_source;
-#endif
+	#endif
 			gst_app_sink_set_callbacks(GST_APP_SINK(m_videoHandler[i].videoSink), &gstCallbacks, &m_videoHandler[i].handler, NULL);
 			//gst_app_sink_set_emit_signals(GST_APP_SINK(m_videoSink), true);
 
-
+		
 			// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
 			gst_base_sink_set_sync(GST_BASE_SINK(m_videoHandler[i].videoSink), false);
 			gst_app_sink_set_drop(GST_APP_SINK(m_videoHandler[i].videoSink), TRUE);
@@ -233,11 +234,11 @@ public:
 			/*
 			GstCaps* caps;
 			caps = gst_caps_new_simple("video/x-raw",
-			"format", G_TYPE_STRING, "RGB",
-			"pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
-			"width", G_TYPE_INT, 1280,
-			"height", G_TYPE_INT, 720,
-			NULL);
+				"format", G_TYPE_STRING, "RGB",
+				"pixel-aspect-ratio", GST_TYPE_FRACTION, 1, 1,
+				"width", G_TYPE_INT, 1280,
+				"height", G_TYPE_INT, 720,
+				NULL);
 
 			gst_app_sink_set_caps(GST_APP_SINK(m_videoSink), caps);
 			gst_caps_unref(caps);
@@ -249,7 +250,7 @@ public:
 
 		}
 
-		return CreatePipeline(false, m_ipAddr, m_clockPort);
+		return CreatePipeline(false,m_ipAddr,m_clockPort);
 
 	}
 
@@ -297,37 +298,33 @@ public:
 	{
 		return m_playersCount;
 	}
-	virtual bool GrabFrame(int i)
-	{
-		if (i >= m_playersCount)
-			return false;
-		return m_videoHandler[i].handler.GrabFrame();
+	virtual bool GrabFrame()
+	{ 
+		bool ret = false;
+		for (int i = 0; i < m_videoHandler.size();++i) 
+			ret |= m_videoHandler[i].handler.GrabFrame();
+		return ret;
 	}
-	virtual bool HasNewFrame(int i)
+	virtual bool HasNewFrame()
 	{
-		if (i >= m_playersCount)
-			return false;
-		return m_videoHandler[i].handler.isFrameNew();
+		bool ret = false;
+		for (int i = 0; i < m_videoHandler.size(); ++i)
+			ret |= m_videoHandler[i].handler.isFrameNew();
+		return ret;
 	}
-	virtual ulong GetBufferID(int i)
+	virtual ulong GetBufferID()
 	{
-		if (i >= m_playersCount)
-			return 0;
-		return m_videoHandler[i].handler.GetFrameID();
+		return m_videoHandler[0].handler.GetFrameID();
 	}
 
-	virtual float GetCaptureFrameRate(int i){
-		if (i>m_videoHandler.size())
-			return 0;
-		return m_videoHandler[i].handler.GetCaptureFrameRate();
-	}
+	virtual float GetCaptureFrameRate(){ return m_videoHandler[0].handler.GetCaptureFrameRate(); }
 
 	virtual const ImageInfo* GetLastFrame(int i)
-	{
+	{ 
 		if (i > m_playersCount)
 			return 0;
 		else
-			return m_videoHandler[i].handler.getPixelsRef();
+			return m_videoHandler[i].handler.getPixelsRef(); 
 	}
 
 
@@ -349,7 +346,7 @@ GstNetworkMultipleVideoPlayer::~GstNetworkMultipleVideoPlayer()
 }
 void GstNetworkMultipleVideoPlayer::SetIPAddress(const std::string& ip, uint videoPort, uint count, uint clockPort, bool rtcp)
 {
-	m_impl->SetIPAddress(ip, videoPort, count, clockPort, rtcp);
+	m_impl->SetIPAddress(ip, videoPort,count, clockPort,rtcp);
 }
 bool GstNetworkMultipleVideoPlayer::CreateStream()
 {
@@ -411,24 +408,24 @@ int GstNetworkMultipleVideoPlayer::GetFramesCount()
 	return m_impl->GetFramesCount();
 }
 
-bool GstNetworkMultipleVideoPlayer::GrabFrame(int i)
+bool GstNetworkMultipleVideoPlayer::GrabFrame()
 {
-	return m_impl->GrabFrame(i);
+	return m_impl->GrabFrame();
 }
 
-bool GstNetworkMultipleVideoPlayer::HasNewFrame(int i)
+bool GstNetworkMultipleVideoPlayer::HasNewFrame()
 {
-	return m_impl->HasNewFrame(i);
+	return m_impl->HasNewFrame();
 }
 
-ulong GstNetworkMultipleVideoPlayer::GetBufferID(int i)
+ulong GstNetworkMultipleVideoPlayer::GetBufferID()
 {
-	return m_impl->GetBufferID(i);
+	return m_impl->GetBufferID();
 }
 
-float GstNetworkMultipleVideoPlayer::GetCaptureFrameRate(int i)
+float GstNetworkMultipleVideoPlayer::GetCaptureFrameRate()
 {
-	return m_impl->GetCaptureFrameRate(i);
+	return m_impl->GetCaptureFrameRate();
 }
 
 const ImageInfo* GstNetworkMultipleVideoPlayer::GetLastFrame(int i)

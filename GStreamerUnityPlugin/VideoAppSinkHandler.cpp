@@ -22,6 +22,8 @@ VideoAppSinkHandler::VideoAppSinkHandler()
 	m_IsAllocated = false;
 	m_frameID = 0;
 	m_surfaceCount = 1;
+	m_captureFPS = 0;
+	m_frameCount = 0;
 
 	m_mutex = OS::IThreadManager::getInstance().createMutex();
 }
@@ -72,7 +74,7 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 		return EPixel_R5G6B5;
 
 	case GST_VIDEO_FORMAT_I420:
-		return EPixel_YUYV;
+		return EPixel_I420;
 
 	default:
 		return EPixel_Unkown;
@@ -93,7 +95,7 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	bool isI420 = false;;
 
 	int height = vinfo.height;
-	if (fmt == video::EPixel_YUYV)
+	if (fmt == video::EPixel_I420)
 	{
 		isI420 = true;
 		//fmt = video::EPixel_LUMINANCE8;
@@ -199,10 +201,11 @@ bool VideoAppSinkHandler::GrabFrame(){
 		prevBuffer = buffer;
 
 
-	//	float t = gEngine.getTimer()->getSeconds();
-	//	m_timeAcc += (t - m_lastT)*0.001f;
-
 		++m_frameCount;
+		/*
+ 		float t = GetEngineTime();
+ 		m_timeAcc += (t - m_lastT);// *0.001f;
+
 		if (m_timeAcc > 1)
 		{
 			m_captureFPS = m_frameCount;
@@ -211,7 +214,7 @@ bool VideoAppSinkHandler::GrabFrame(){
 			//	printf("Capture FPS: %d\n", m_captureFPS);
 		}
 
-	//	m_lastT = t;
+		m_lastT = t;*/
 	}
 
 	m_mutex->unlock();
@@ -224,7 +227,7 @@ bool VideoAppSinkHandler::GrabFrame(){
 
 float VideoAppSinkHandler::GetCaptureFrameRate()
 {
-	return m_captureFPS;
+	return m_frameCount;
 }
 
 
