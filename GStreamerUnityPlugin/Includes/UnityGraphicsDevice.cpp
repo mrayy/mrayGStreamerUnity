@@ -40,12 +40,14 @@ extern "C" void EXPORT_API UnitySetGraphicsDevice( void* device, int deviceType,
 
 			switch (g_GraphicsDeviceType)
 			{
+#if SUPPORT_D3D9
 			case kGfxRendererD3D9:
 				{
 					DebugLog ("Set D3D9 graphics device\n");
 					g_D3D9GraphicsDevice = (IDirect3DDevice9*)g_GraphicsDevice;
 					break;
-				}
+			}
+#endif
 			case kGfxRendererD3D11:
 				{
 					DebugLog ("Set D3D11 graphics device\n");

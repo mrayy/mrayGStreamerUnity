@@ -126,23 +126,28 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 			
 			uchar* data = 0;
 			int pitch = 0;
-			if (ifo->tmpBuffer->Size != ifo->Size)
-			{
-				ifo->tmpBuffer->createData(ifo->Size, ifo->format);
-			}
-			data = ifo->tmpBuffer->imageData;
 			if (ifo->format == video::EPixel_I420)
 			{
 				//data = new uchar[ifo->imageDataSize];
 				pitch = _UnityTextureWidth;
+
+				data = ifo->imageData;
 			}
 			else
 			{
-				//data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];
+//				data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];
+// 				pitch = _UnityTextureWidth * 3;
+// 				data = ifo->imageData;
+				
+				if (ifo->tmpBuffer->Size != ifo->Size)
+				{
+					ifo->tmpBuffer->createData(ifo->Size, video::EPixel_R8G8B8A8);
+				}
 				pitch = _UnityTextureWidth * 4;
+				data = ifo->tmpBuffer->imageData;
+				CopyToTexture(ifo, (uchar*)data, ifo->format);
 			}
 
-			CopyToTexture(ifo, (uchar*)data, ifo->format);
 			ctx->UpdateSubresource(d3dtex, 0, nullptr, data, pitch, 0);
 			//delete[] data;
 
