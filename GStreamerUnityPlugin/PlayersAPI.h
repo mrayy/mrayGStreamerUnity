@@ -7,6 +7,7 @@
 #include "GstNetworkVideoPlayer.h"
 #include "GstCustomVideoPlayer.h"
 #include "GstNetworkMultipleVideoPlayer.h"
+#include "GstNetworkAudioPlayer.h"
 
 
 using namespace mray;
@@ -48,3 +49,26 @@ extern "C" EXPORT_API void mray_gst_PlayerStop(IGStreamerPlayer* p);
 extern "C" EXPORT_API bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p);
 extern "C" EXPORT_API bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p);
 extern "C" EXPORT_API void mray_gst_PlayerClose(IGStreamerPlayer* p);
+
+
+
+
+extern "C" EXPORT_API void* mray_gst_createCustomVideoStreamer();
+extern "C" EXPORT_API void mray_gst_CustomVideoStreamerSetIP(GstNetworkVideoPlayer* p, const char* ip, int videoPort, bool rtcp);
+extern "C" EXPORT_API bool mray_gst_CustomVideoStreamerSetBitrate(GstNetworkVideoPlayer* p, int bitrate);
+extern "C" EXPORT_API bool mray_gst_CustomVideoStreamerSetResolution(GstNetworkVideoPlayer* p, int w, int h);
+extern "C" EXPORT_API bool mray_gst_CustomVideoStreamerCreateStream(GstNetworkVideoPlayer* p);
+extern "C" EXPORT_API void mray_gst_CustomVideoStreamerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components);
+extern "C" EXPORT_API bool mray_gst_CustomVideoStreamerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h);
+extern "C" EXPORT_API void mray_gst_CustomVideoStreamerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+extern "C" EXPORT_API int  mray_gst_CustomVideoStreamerFrameCount(GstNetworkVideoPlayer* p);
+
+
+//////////////////////////////////////////////////////////////////////////
+// Audio Player
+
+
+extern "C" EXPORT_API void* mray_gst_createNetworkAudioPlayer();
+extern "C" EXPORT_API void mray_gst_netAudioPlayerSetIP(GstNetworkAudioPlayer* p, const char* ip, int audioPort, bool rtcp);
+extern "C" EXPORT_API bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p);
+extern "C" EXPORT_API void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v);

@@ -297,3 +297,34 @@ extern "C" EXPORT_API void mray_gst_PlayerClose(IGStreamerPlayer* p)
 }
 
 
+//////////////////////////////////////////////////////////////////////////
+
+
+
+extern "C" EXPORT_API void* mray_gst_createNetworkAudioPlayer()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		GstNetworkAudioPlayer* player = new GstNetworkAudioPlayer();
+		return player;
+	}
+	return 0;
+}
+extern "C" EXPORT_API void mray_gst_netAudioPlayerSetIP(GstNetworkAudioPlayer* p, const char* ip, int audioPort, bool rtcp)
+{
+	if (p!=nullptr)
+		p->SetIPAddress(ip, audioPort, 0, rtcp);
+}
+extern "C" EXPORT_API bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p)
+{
+	if (p != nullptr)
+		return p->CreateStream();
+	return false;
+}
+extern "C" EXPORT_API void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v)
+{
+	if (p != nullptr)
+		p->SetVolume(v);
+}

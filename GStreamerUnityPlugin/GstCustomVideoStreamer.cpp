@@ -10,8 +10,6 @@
 #include "CMyUDPSrc.h"
 #include "CMyUDPSink.h"
 
-#include "StringConverter.h"
-#include "ILogManager.h"
 #include "IThreadManager.h"
 
 #include <gst/app/gstappsrc.h>
@@ -26,7 +24,7 @@ protected:
 
 	GstCustomVideoStreamer* m_owner;
 
-	core::string m_ipAddr;
+	std::string m_ipAddr;
 	uint m_videoPort;
 	uint m_clockPort;
 
@@ -34,13 +32,13 @@ protected:
 	int m_bitRate;
 	bool m_rtcp;
 
-	core::string m_pipeLineString;
+	std::string m_pipeLineString;
 	GstMyUDPSink* m_videoSink;
 	GstMyUDPSink* m_videoRtcpSink;
 	GstMyUDPSrc* m_videoRtcpSrc;
 
 	int m_fps;
-	math::vector2di m_frameSize;
+	Vector2d m_frameSize;
 
 	video::ImageInfo m_tmp;
 
@@ -74,7 +72,7 @@ public:
 		m_videoSrc[0].sourceID = 0;
 		m_videoSrc[1].sourceID = 0;
 
-		m_frameSize.set(1280, 720);
+		m_frameSize = Vector2d(1280, 720);
 		m_fps = 30;
 
 		AddListener(this);
@@ -91,14 +89,14 @@ public:
 	}
 	void  SetResolution(int width, int height, int fps)
 	{
-		m_frameSize.set(width, height);
+		m_frameSize = Vector2d(width, height);
 		m_fps = fps;
 	}
 
-	core::string GetFormatStr(EPixelFormat fmt)
+	std::string GetFormatStr(EPixelFormat fmt)
 	{
 
-		core::string format = "RGB";
+		std::string format = "RGB";
 		switch (fmt)
 		{
 		case EPixel_R8G8B8:
@@ -120,7 +118,7 @@ public:
 		case EPixel_X8B8G8R8:
 			format = "xBGR";
 			break;
-		case EPixel_YUYV:
+		case EPixel_I420:
 			format = "Y41B";
 			break;
 
@@ -132,46 +130,47 @@ public:
 		return format;
 	}
 
-	core::string BuildGStr(int i)
+	std::string BuildGStr(int i)
 	{
 
-		core::string videoStr;
+		std::stringstream ss;
 		if (m_grabber[i])
 		{
 			if (i == 0)
 			{
-				core::string format = GetFormatStr(m_grabber[i]->GetImageFormat());
+				std::string format = GetFormatStr(m_grabber[i]->GetImageFormat());
 				//ksvideosrc
-
-				videoStr = "appsrc";
-				videoStr += " name=src" + core::StringConverter::toString(i) +
-					" do-timestamp=true is-live=true block=true"
-					" ! video/x-raw,format=" + format + ",width=" + core::StringConverter::toString(m_grabber[i]->GetFrameSize().x) +
-					",height=" + core::StringConverter::toString(m_grabber[i]->GetFrameSize().y) + ",framerate=" + core::StringConverter::toString(m_fps) + "/1 ";
-
-				videoStr += "! videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
-				//videoStr += "! videorate ";//" max-rate=" + core::StringConverter::toString(m_fps) + " ";
+				ss<< "appsrc"
+					 " name=src" << i 
+					<< " do-timestamp=true is-live=true block=true"
+					" ! video/x-raw,format=" + format + ",width=" << m_grabber[i]->GetFrameSize().x <<
+					",height=" << m_grabber[i]->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
+				<<  "! videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
+				//videoStr += "! videorate ";//" max-rate=" + std::stringConverter::toString(m_fps) + " ";
 				//	videoStr += " ! queue ";
 				//	if (m_grabber[i]->GetImageFormat()!=video::EPixel_YUYV)
+
+
 			}
 			else
 			{
-				videoStr = "videotestsrc name=src2 ! video/x-raw,format=I420,width=640,height=480,framerate=60/1 ! videoconvert  ";
+				ss<< "videotestsrc name=src2 ! video/x-raw,format=I420,width=640,height=480,framerate=60/1 ! videoconvert  ";
 
 			}
 		}
 		else{
-			videoStr = "mysrc name=src" + core::StringConverter::toString(i) +
+			ss<< "mysrc name=src" <<i<<
 				" ! video/x-raw,format=RGB  ";// !videoflip method = 1  ";
 		}
 		//add time stamp
 
-		return videoStr;
+		return ss.str();
 	}
 
 	void BuildString()
 	{
-		core::string videoStr;
+		std::string videoStr;
+		std::stringstream ss;
 
 		bool mixer = false;
 		int height = m_frameSize.y;
@@ -186,13 +185,13 @@ public:
 		if (m_grabber[0] != 0 && m_grabber[1] != 0 )
 		{
 			mixer = true;
-			videoStr = "videomixer name=mix ";
+			ss<< "videomixer name=mix "
 
 				"  sink_0::xpos=0 sink_0::ypos=0  sink_0::zorder=0 sink_0::alpha=1  "
 				"  sink_1::xpos=0 sink_1::ypos=0  sink_1::zorder=1  "
-				"  sink_2::xpos=" + core::StringConverter::toString(halfW) + "   sink_2::ypos=0  sink_2::zorder=1  ";
+				"  sink_2::xpos=" <<halfW<< "   sink_2::ypos=0  sink_2::zorder=1  ";
 
-// 			core::string fmt = "video/x-raw,format=I420,width=" + core::StringConverter::toString(width) + ",height=" + core::StringConverter::toString(height);
+// 			std::string fmt = "video/x-raw,format=I420,width=" + std::stringConverter::toString(width) + ",height=" + std::stringConverter::toString(height);
 // 			videoStr += "videotestsrc pattern=\"black\"  ! "+fmt+ " !  mix.sink_0 ";
 
 		}
@@ -206,13 +205,13 @@ public:
 				{
 					if (m_grabber[i] && (halfW != m_grabber[i]->GetFrameSize().x || height != m_grabber[i]->GetFrameSize().y))
 					{
-						videoStr += "! videoscale ! video/x-raw,width=" + core::StringConverter::toString(halfW) +
-						",height=" + core::StringConverter::toString(height) ;
+						ss<< "! videoscale ! video/x-raw,width=" <<halfW<<
+						",height=" <<height;
 					}
 					//videoStr += " ! autovideosink sync=false ";
 
-					videoStr += " ! videobox left=-" + core::StringConverter::toString(i*halfW) + " ";
-					videoStr += +" ! mix.sink_" + core::StringConverter::toString(i ) + " ";
+					ss<< " ! videobox left=-" <<i*halfW<< " ";
+					ss << " ! mix.sink_" <<i<< " ";
 				}
 				else
 				{
@@ -222,23 +221,23 @@ public:
 		}
 		if (!mixer && (width < m_grabber[0]->GetFrameSize().x || height < m_grabber[0]->GetFrameSize().y))
 		{
-			videoStr += "! videoscale ! video/x-raw,width=" + core::StringConverter::toString(width) +
-				",height=" + core::StringConverter::toString(height) + ",framerate=" + core::StringConverter::toString(m_fps) + "/1";
+			ss << "! videoscale ! video/x-raw,width=" << width <<
+				",height=" << height << ",framerate=" << m_fps << "/1";
 		}
 		if (mixer)
 		{
-			videoStr += " mix. ";
+			ss<< " mix. ";
 		//	videoStr += " ! timeoverlay halignment=right valignment=position ypos=0.15 text=\"Remote Time =\" ";
 		}
 		else
 		{
 		}
 
-		//videoStr = "mysrc name=src0 ! video/x-raw,format=RGB,width=640,height=480,framerate="+core::StringConverter::toString(m_fps)+"/1 ! videoconvert ";
+		//videoStr = "mysrc name=src0 ! video/x-raw,format=RGB,width=640,height=480,framerate="+std::stringConverter::toString(m_fps)+"/1 ! videoconvert ";
 		//encoder string
 
 
-		videoStr += "! x264enc name=videoEnc bitrate=" + core::StringConverter::toString(m_bitRate) + 
+		ss << "! x264enc name=videoEnc bitrate=" << m_bitRate <<
 			" speed-preset=superfast tune=zerolatency sync-lookahead=0  pass=qual ! rtph264pay ";
 		if (m_rtcp)
 		{
@@ -256,7 +255,7 @@ public:
 		else
 		{
 
-			m_pipeLineString = videoStr + " ! "
+			m_pipeLineString = ss.str() + " ! "
 				"myudpsink name=videoSink sync=false";
 			//"udpsink host=127.0.0.1 port=7000";
 		}
@@ -278,7 +277,7 @@ public:
 	{
 		if (!m_grabber[index])
 		{
-			gLogManager.log("No video grabber is assigned to CustomVideoStreamer", ELL_WARNING);
+			LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
 			return GST_FLOW_ERROR;
 		}
 // 		do 
@@ -365,7 +364,9 @@ public:
 
 		for (int i = 0; i < 2; ++i)
 		{
-			core::string name = "src" + core::StringConverter::toString(i);
+			std::stringstream ss;
+			ss << "src" << i;
+			std::string name = ss.str();
 #if 1
 			m_videoSrc[i].videoSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN(GetPipeline()), name.c_str()));
 			m_videoSrc[i].o = this;
@@ -406,7 +407,7 @@ public:
 
 	}
 
-	void BindPorts(const core::string& addr, int videoPort, uint clockPort, bool rtcp)
+	void BindPorts(const std::string& addr, int videoPort, uint clockPort, bool rtcp)
 	{
 		if (m_ipAddr == addr && m_videoPort == videoPort && m_rtcp == rtcp)
 			return;
@@ -424,7 +425,7 @@ public:
 		GstElement* pipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			gLogManager.log("GstCustomVideoStreamer: Pipeline error: " + core::string(err->message),ELL_WARNING);
+			LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
 		}
 		if (!pipeline)
 			return false;
@@ -474,7 +475,7 @@ void GstCustomVideoStreamer::Stop()
 }
 
 
-void GstCustomVideoStreamer::BindPorts(const core::string& addr, uint videoPort, uint clockPort, bool rtcp)
+void GstCustomVideoStreamer::BindPorts(const std::string& addr, uint videoPort, uint clockPort, bool rtcp)
 {
 	m_impl->BindPorts(addr, videoPort, clockPort, rtcp);
 }
