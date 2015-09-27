@@ -77,36 +77,36 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-app-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-video-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-video-1.0.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-app-1.0.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-base-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-app-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-video-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-video-1.0.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\gstreamer\1.0\x86_64\share\vs\2010\libs\gstreamer-app-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-video-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-video-1.0.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='X64|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-base-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-app-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-1.0.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='X64|X64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-base-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-app-1.0.props" />
-    <Import Project="$(GSTREAMER_SDK_ROOT_X86)\share\vs\2010\libs\gstreamer-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-base-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-app-1.0.props" />
+    <Import Project="$(GSTREAMER_SDK_ROOT_X64)\share\vs\2010\libs\gstreamer-1.0.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -158,6 +158,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>gstvideo-1.0.lib;ws2_32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -275,6 +276,7 @@
     <ClInclude Include="IStreamListener.h" />
     <ClInclude Include="PlayersAPI.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreamersAPI.h" />
     <ClInclude Include="UnityHelpers.h" />
     <ClInclude Include="UnityImageGrabber.h" />
     <ClInclude Include="UnityPlugin.h" />
@@ -307,7 +309,9 @@
     <ClCompile Include="Includes\WinThread.cpp" />
     <ClCompile Include="Includes\WinThreadManager.cpp" />
     <ClCompile Include="PlayersAPI.cpp" />
+    <ClCompile Include="StreamersAPI.cpp" />
     <ClCompile Include="UnityHelpers.cpp" />
+    <ClCompile Include="UnityImageGrabber.cpp" />
     <ClCompile Include="VideoAppSinkHandler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

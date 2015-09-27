@@ -28,7 +28,7 @@ protected:
 	uint m_videoPort;
 	uint m_clockPort;
 
-	IVideoGrabber* m_grabber[2];
+	IVideoGrabber* m_grabber;
 	int m_bitRate;
 	bool m_rtcp;
 
@@ -51,7 +51,7 @@ protected:
 		GstCustomVideoStreamerImpl* o;
 		int sourceID;
 	};
-	VideoSrcData m_videoSrc[2];
+	VideoSrcData m_videoSrc;
 
 
 public:
@@ -63,16 +63,15 @@ public:
 		m_clockPort = 5010;
 
 		m_bitRate = 5000;
-		m_grabber[0] = m_grabber[1] = 0;
+		m_grabber= 0;
 
 		m_videoSink = 0;
 		m_videoRtcpSink = 0;
 		m_videoRtcpSrc = 0;
 
-		m_videoSrc[0].sourceID = 0;
-		m_videoSrc[1].sourceID = 0;
+		m_videoSrc.sourceID = 0;
 
-		m_frameSize = Vector2d(1280, 720);
+		m_frameSize = Vector2d(640,480);
 		m_fps = 30;
 
 		AddListener(this);
@@ -130,36 +129,26 @@ public:
 		return format;
 	}
 
-	std::string BuildGStr(int i)
+	std::string BuildGStr()
 	{
 
 		std::stringstream ss;
-		if (m_grabber[i])
+		if (m_grabber)
 		{
-			if (i == 0)
-			{
-				std::string format = GetFormatStr(m_grabber[i]->GetImageFormat());
+				std::string format = GetFormatStr(m_grabber->GetImageFormat());
 				//ksvideosrc
 				ss<< "appsrc"
-					 " name=src" << i 
+					 " name=src"  
 					<< " do-timestamp=true is-live=true block=true"
-					" ! video/x-raw,format=" + format + ",width=" << m_grabber[i]->GetFrameSize().x <<
-					",height=" << m_grabber[i]->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
+					" ! video/x-raw,format=" + format + ",width=" << m_grabber->GetFrameSize().x <<
+					",height=" << m_grabber->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
 				<<  "! videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
 				//videoStr += "! videorate ";//" max-rate=" + std::stringConverter::toString(m_fps) + " ";
 				//	videoStr += " ! queue ";
-				//	if (m_grabber[i]->GetImageFormat()!=video::EPixel_YUYV)
-
-
-			}
-			else
-			{
-				ss<< "videotestsrc name=src2 ! video/x-raw,format=I420,width=640,height=480,framerate=60/1 ! videoconvert  ";
-
-			}
+				//	if (m_grabber->GetImageFormat()!=video::EPixel_YUYV)
 		}
 		else{
-			ss<< "mysrc name=src" <<i<<
+			ss<< "mysrc name=src" <<
 				" ! video/x-raw,format=RGB  ";// !videoflip method = 1  ";
 		}
 		//add time stamp
@@ -172,72 +161,24 @@ public:
 		std::string videoStr;
 		std::stringstream ss;
 
-		bool mixer = false;
 		int height = m_frameSize.y;
 		int width = m_frameSize.x;
-		if (m_grabber[0]->GetFrameSize().x * 2 < width)
-			width = m_grabber[0]->GetFrameSize().x*2;
+		if (m_grabber->GetFrameSize().x < width)
+			width = m_grabber->GetFrameSize().x;
 
-		if (m_grabber[0]->GetFrameSize().y < height)
-			height = m_grabber[0]->GetFrameSize().y;
+		if (m_grabber->GetFrameSize().y < height)
+			height = m_grabber->GetFrameSize().y;
 
-		int halfW = width / 2;
-		if (m_grabber[0] != 0 && m_grabber[1] != 0 )
-		{
-			mixer = true;
-			ss<< "videomixer name=mix "
-
-				"  sink_0::xpos=0 sink_0::ypos=0  sink_0::zorder=0 sink_0::alpha=1  "
-				"  sink_1::xpos=0 sink_1::ypos=0  sink_1::zorder=1  "
-				"  sink_2::xpos=" <<halfW<< "   sink_2::ypos=0  sink_2::zorder=1  ";
-
-// 			std::string fmt = "video/x-raw,format=I420,width=" + std::stringConverter::toString(width) + ",height=" + std::stringConverter::toString(height);
-// 			videoStr += "videotestsrc pattern=\"black\"  ! "+fmt+ " !  mix.sink_0 ";
-
-		}
-		for (int i = 0; i < 2; ++i)
-		{
-			if (m_grabber[i])
-			{
-				videoStr += BuildGStr(i);
-
-				if (mixer )
-				{
-					if (m_grabber[i] && (halfW != m_grabber[i]->GetFrameSize().x || height != m_grabber[i]->GetFrameSize().y))
-					{
-						ss<< "! videoscale ! video/x-raw,width=" <<halfW<<
-						",height=" <<height;
-					}
-					//videoStr += " ! autovideosink sync=false ";
-
-					ss<< " ! videobox left=-" <<i*halfW<< " ";
-					ss << " ! mix.sink_" <<i<< " ";
-				}
-				else
-				{
-				//	videoStr += " ! timeoverlay halignment=right valignment=position ypos=0.15 text=\"Remote Time =\" ";
-				}
-			}
-		}
-		if (!mixer && (width < m_grabber[0]->GetFrameSize().x || height < m_grabber[0]->GetFrameSize().y))
+		if ( (width < m_grabber->GetFrameSize().x || height < m_grabber->GetFrameSize().y))
 		{
 			ss << "! videoscale ! video/x-raw,width=" << width <<
 				",height=" << height << ",framerate=" << m_fps << "/1";
 		}
-		if (mixer)
-		{
-			ss<< " mix. ";
-		//	videoStr += " ! timeoverlay halignment=right valignment=position ypos=0.15 text=\"Remote Time =\" ";
-		}
-		else
-		{
-		}
-
 		//videoStr = "mysrc name=src0 ! video/x-raw,format=RGB,width=640,height=480,framerate="+std::stringConverter::toString(m_fps)+"/1 ! videoconvert ";
 		//encoder string
 
 
-		ss << "! x264enc name=videoEnc bitrate=" << m_bitRate <<
+		ss << BuildGStr() << "! x264enc name=videoEnc bitrate=" << m_bitRate <<
 			" speed-preset=superfast tune=zerolatency sync-lookahead=0  pass=qual ! rtph264pay ";
 		if (m_rtcp)
 		{
@@ -266,16 +207,15 @@ public:
 	{
 		m_bitRate = bitRate;
 	}
-	void SetVideoGrabber(IVideoGrabber* grabber0, IVideoGrabber* grabber1)
+	void SetVideoGrabber(IVideoGrabber* grabber0)
 	{
-		m_grabber[0] = grabber0;
-		m_grabber[1] = grabber1;
+		m_grabber = grabber0;
 	}
 
 
 	GstFlowReturn NeedBuffer(GstMySrc * sink, GstBuffer ** buffer,int index)
 	{
-		if (!m_grabber[index])
+		if (!m_grabber)
 		{
 			LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
 			return GST_FLOW_ERROR;
@@ -283,14 +223,14 @@ public:
 // 		do 
 // 		{
 // 			OS::IThreadManager::getInstance().sleep (1);
-// 		} while (!m_grabber[index]->GrabFrame());
- 		if (!m_grabber[index]->GrabFrame())
+// 		} while (!m_grabber->GrabFrame());
+ 		if (!m_grabber->GrabFrame())
   		{
   			return GST_FLOW_ERROR;
   		}
-		m_grabber[index]->Lock();
+		m_grabber->Lock();
 
-		const video::ImageInfo* ifo = m_grabber[index]->GetLastFrame();
+		const video::ImageInfo* ifo = m_grabber->GetLastFrame();
 		int len = ifo->imageDataSize;
 		GstMapInfo map;
 		GstBuffer* outbuf = gst_buffer_new_and_alloc(len);
@@ -299,7 +239,7 @@ public:
 
 
 		gst_buffer_unmap(outbuf, &map);
-		m_grabber[index]->Unlock();
+		m_grabber->Unlock();
 		*buffer = outbuf;
 		return GST_FLOW_OK;
 	}
@@ -362,38 +302,37 @@ public:
 #define SET_SRC(name,p) m_##name=GST_MyUDPSrc(gst_bin_get_by_name(GST_BIN(GetPipeline()), #name)); if(m_##name){m_##name->SetPort(p);}
 #define SET_SINK(name,p) m_##name=GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), #name)); if(m_##name){m_##name->SetPort(m_ipAddr,p);}
 
-		for (int i = 0; i < 2; ++i)
 		{
 			std::stringstream ss;
-			ss << "src" << i;
+			ss << "src" ;
 			std::string name = ss.str();
 #if 1
-			m_videoSrc[i].videoSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN(GetPipeline()), name.c_str()));
-			m_videoSrc[i].o = this;
-			m_videoSrc[i].index = i;
-			if (m_videoSrc[i].videoSrc){
+			m_videoSrc.videoSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN(GetPipeline()), name.c_str()));
+			m_videoSrc.o = this;
+			m_videoSrc.index = 0;
+			if (m_videoSrc.videoSrc){
 
-				gst_base_src_set_blocksize(GST_BASE_SRC(m_videoSrc[i].videoSrc), 640 * 480 * 3);
-				gst_base_src_set_live(GST_BASE_SRC(m_videoSrc[i].videoSrc), false);
-				gst_base_src_set_async(GST_BASE_SRC(m_videoSrc[i].videoSrc), false);
-				gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc[i].videoSrc), true);
+				gst_base_src_set_blocksize(GST_BASE_SRC(m_videoSrc.videoSrc), 640 * 480 * 3);
+				gst_base_src_set_live(GST_BASE_SRC(m_videoSrc.videoSrc), false);
+				gst_base_src_set_async(GST_BASE_SRC(m_videoSrc.videoSrc), false);
+				gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc.videoSrc), true);
 
-				gst_app_src_set_max_bytes(m_videoSrc[i].videoSrc, 640 * 480 * 3);
-				gst_app_src_set_emit_signals(m_videoSrc[i].videoSrc, false);
+				gst_app_src_set_max_bytes(m_videoSrc.videoSrc, 640 * 480 * 3);
+				gst_app_src_set_emit_signals(m_videoSrc.videoSrc, false);
 
-				m_videoSrc[i].srcCB.need_data = &start_feed;
-				m_videoSrc[i].srcCB.enough_data = &stop_feed;
-				m_videoSrc[i].srcCB.seek_data = &seek_data;
-				gst_app_src_set_callbacks(m_videoSrc[i].videoSrc, &m_videoSrc[i].srcCB, &m_videoSrc[i], NULL);
+				m_videoSrc.srcCB.need_data = &start_feed;
+				m_videoSrc.srcCB.enough_data = &stop_feed;
+				m_videoSrc.srcCB.seek_data = &seek_data;
+				gst_app_src_set_callbacks(m_videoSrc.videoSrc, &m_videoSrc.srcCB, &m_videoSrc, NULL);
 			}
 #else
 
-			m_videoSrc[i].videoSrc = GST_MySRC(gst_bin_get_by_name(GST_BIN(m_gstPipeline), name.c_str()));
-			m_videoSrc[i].o = this;
-			m_videoSrc[i].index = i;
-			if (m_videoSrc[i].videoSrc){
-				m_videoSrc[i].videoSrc->need_buffer = need_buffer;
-				m_videoSrc[i].videoSrc->data = &m_videoSrc[i];
+			m_videoSrc.videoSrc = GST_MySRC(gst_bin_get_by_name(GST_BIN(m_gstPipeline), name.c_str()));
+			m_videoSrc.o = this;
+			m_videoSrc.index = i;
+			if (m_videoSrc.videoSrc){
+				m_videoSrc.videoSrc->need_buffer = need_buffer;
+				m_videoSrc.videoSrc->data = &m_videoSrc;
 			}
 #endif
 		}
@@ -504,9 +443,9 @@ void GstCustomVideoStreamer::SetResolution(int width, int height, int fps)
 	m_impl->SetResolution(width, height, fps);
 }
 
-void GstCustomVideoStreamer::SetVideoGrabber(IVideoGrabber* grabber0, IVideoGrabber* grabber1)
+void GstCustomVideoStreamer::SetVideoGrabber(IVideoGrabber* grabber0)
 {
-	m_impl->SetVideoGrabber(grabber0,grabber1);
+	m_impl->SetVideoGrabber(grabber0);
 }
 void GstCustomVideoStreamer::SetPaused(bool paused)
 {

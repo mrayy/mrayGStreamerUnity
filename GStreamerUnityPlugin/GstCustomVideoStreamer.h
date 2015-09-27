@@ -50,7 +50,7 @@ public:
 	void Stop();
 	virtual void Close();
 
-	void SetVideoGrabber(IVideoGrabber* grabber0, IVideoGrabber* grabber1);
+	void SetVideoGrabber(IVideoGrabber* grabber0);
 
 	virtual void SetPaused(bool paused);
 	virtual bool IsPaused();

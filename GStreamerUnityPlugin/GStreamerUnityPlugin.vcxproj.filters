@@ -162,6 +162,9 @@
     <ClInclude Include="GstNetworkAudioPlayer.h">
       <Filter>Source Files\Players</Filter>
     </ClInclude>
+    <ClInclude Include="StreamersAPI.h">
+      <Filter>Source Files\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GStreamerCore.cpp">
@@ -247,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="GstNetworkAudioPlayer.cpp">
       <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="UnityImageGrabber.cpp">
+      <Filter>Source Files\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamersAPI.cpp">
+      <Filter>Source Files\API</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
