@@ -28,7 +28,8 @@ extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipl
 extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int& components);
 extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h,int index);
 extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index);
-extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index);
+extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p, int index);
+extern "C" EXPORT_API uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultipleVideoPlayer* p, int index);
 
 
 extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer();
@@ -72,3 +73,4 @@ extern "C" EXPORT_API void* mray_gst_createNetworkAudioPlayer();
 extern "C" EXPORT_API void mray_gst_netAudioPlayerSetIP(GstNetworkAudioPlayer* p, const char* ip, int audioPort, bool rtcp);
 extern "C" EXPORT_API bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p);
 extern "C" EXPORT_API void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v);
+extern "C" EXPORT_API uint mray_gst_netAudioPlayerGetAudioPort(GstNetworkAudioPlayer* p);

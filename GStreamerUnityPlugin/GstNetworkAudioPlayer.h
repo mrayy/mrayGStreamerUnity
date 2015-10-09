@@ -29,6 +29,8 @@ public:
 	void SetIPAddress(const std::string& ip, uint audioPort,uint clockPort, bool rtcp);
 	bool CreateStream();
 
+	uint GetAudioPort();
+
 	virtual bool IsStream();
 
 	void SetVolume(float vol);

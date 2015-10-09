@@ -162,6 +162,12 @@ extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVi
 		return 0;
 	return p->GetCaptureFrameRate(index);
 }
+extern "C" EXPORT_API uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultipleVideoPlayer* p, int index)
+{
+	if (!p)
+		return 0;
+	return p->GetVideoPort(index);
+}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -327,4 +333,11 @@ extern "C" EXPORT_API void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlaye
 {
 	if (p != nullptr)
 		p->SetVolume(v);
+}
+
+extern "C" EXPORT_API uint  mray_gst_netAudioPlayerGetAudioPort(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->GetAudioPort();
 }

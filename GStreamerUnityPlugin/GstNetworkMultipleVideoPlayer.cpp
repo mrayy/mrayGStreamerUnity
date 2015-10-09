@@ -78,7 +78,7 @@ public:
 		std::string videoStr;
 		ss << "myudpsrc name=videoSrc" << i << " !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
-			"application/x-rtp ";
+			"application/x-rtp,media=video ";
 		videoStr = ss.str();
 		ss = std::stringstream();
 		if (m_rtcp)
@@ -99,8 +99,11 @@ public:
 		else
 		{
 			ss << videoStr << "! queue !"
-				"rtpjitterbuffer !  "
+				"rtpjitterbuffer latency=500 !  "
 				"rtph264depay ! h264parse !  avdec_h264 ! "
+			//"rtpvp8depay ! vp8dec ! "
+			//"rtptheoradepay ! theoradec ! "
+
 				// " videorate  ! "//"video/x-raw,framerate=60/1 ! "
 				//	"videoconvert ! video/x-raw,format=RGB  !" // Very slow!!
 				"videorate ! "
@@ -152,7 +155,10 @@ public:
 		m_videoHandler.resize(m_playersCount);
 		for (int i = 0; i < m_playersCount; ++i)
 		{
-			m_videoHandler[i].videoPort = m_baseVideoSrc + i;
+			if (m_baseVideoSrc != 0)
+				m_videoHandler[i].videoPort = m_baseVideoSrc + i;
+			else
+				m_videoHandler[i].videoPort = 0;
 		}
 
 		//set src and sinks elements
@@ -252,7 +258,15 @@ public:
 		return CreatePipeline(false, m_ipAddr, m_clockPort);
 
 	}
-
+	uint GetVideoPort(int i)
+	{
+		if (i >= m_videoHandler.size())
+			return 0;
+		if (m_videoHandler[i].videoSrc){
+			return m_videoHandler[i].videoSrc->port;
+		}
+		else return m_videoHandler[i].videoPort;
+	}
 	bool IsStream()
 	{
 		return true;
@@ -358,6 +372,10 @@ bool GstNetworkMultipleVideoPlayer::CreateStream()
 GstPipelineHandler*GstNetworkMultipleVideoPlayer::GetPipeline()
 {
 	return m_impl;
+}
+uint GstNetworkMultipleVideoPlayer::GetVideoPort(int i)
+{
+	return m_impl->GetVideoPort(i);
 }
 
 

@@ -32,6 +32,8 @@ public:
 	void SetIPAddress(const std::string& ip, uint baseVideoPort, uint count, uint clockPort, bool rtcp);
 	bool CreateStream();
 
+	uint GetVideoPort(int i);
+
 	virtual bool IsStream();
 
 	void SetVolume(float vol);

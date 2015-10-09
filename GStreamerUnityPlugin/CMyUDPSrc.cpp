@@ -176,6 +176,7 @@ gst_MyUDPSrc_Open(GstMyUDPSrc * src)
 		GST_DEBUG_OBJECT(src, "binding socket");
 		if (src->m_client->Open(src->port) == network::UDP_SOCKET_ERROR_NONE)
 		{
+			src->port = src->m_client->Port();
 			GST_DEBUG_OBJECT(src, "UDP Socket bound to %d", src->port);
 		}
 		else

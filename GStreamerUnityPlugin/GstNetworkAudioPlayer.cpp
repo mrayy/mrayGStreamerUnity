@@ -105,7 +105,7 @@ public:
 		else
 		{
 			m_pipeLineString =
-				"myudpsrc name=audioSrc " + audiocaps +"!"+ audioStr  + " !directsoundsink ";
+				"myudpsrc name=audioSrc " + audiocaps +"!"+ audioStr  + " ! directsoundsink buffer-time=200000 latency-time=100 sync=false";
 
 		}
 
@@ -156,6 +156,12 @@ public:
 		return CreatePipeline(false,m_ipAddr,m_clockPort);
 
 	}
+	uint GetAudioPort()
+	{
+		if (m_audioSrc)
+			return m_audioSrc->port;
+		else return m_audioPort;
+	}
 
 	bool IsStream()
 	{
@@ -203,6 +209,10 @@ void GstNetworkAudioPlayer::SetIPAddress(const std::string& ip, uint audioPort,u
 bool GstNetworkAudioPlayer::CreateStream()
 {
 	return m_impl->CreateStream();
+}
+uint GstNetworkAudioPlayer::GetAudioPort()
+{
+	return m_impl->GetAudioPort();
 }
 
 void GstNetworkAudioPlayer::SetVolume(float vol)
