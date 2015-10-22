@@ -84,7 +84,7 @@ void GStreamerCore::_Init()
 	_gst_debug_enabled = false; 
 	if (!gst_init_check(0,0, &err))
 	{
-		LogMessage("GStreamerCore - Failed to init GStreamer!"+ std::string(err->message), ELL_ERROR);
+		LogManager::Instance()->LogMessage("GStreamerCore - Failed to init GStreamer!");
 	}
 	else
 	{
@@ -95,7 +95,7 @@ void GStreamerCore::_Init()
 		fclose(stderr);
 
 		//register plugin path
-		std::string gst_path = g_getenv("GSTREAMER_1_0_ROOT_X86");
+		std::string gst_path = g_getenv("GSTREAMER_1_0_ROOT_X86_64");
 		//putenv(("GST_PLUGIN_PATH_1_0=" + gst_path + "lib\\gstreamer-1.0" + ";.").c_str());
 		//add our custom src/sink elements
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
@@ -156,7 +156,9 @@ void GStreamerCore::Ref()
 	m_refCount++;
 	if (m_refCount==1)
 	{
+		LogManager::Instance()->LogMessage("Initializing GStreamer");
 		m_instance = new GStreamerCore();
+		LogManager::Instance()->LogMessage("Initializing GStreamer - Done");
 	}
 
 }
@@ -168,7 +170,7 @@ void GStreamerCore::Unref()
 		LogMessage("GStreamerCore::Unref() - unreferencing GStreamer with no reference! ", ELL_ERROR);
 		return;
 	}
-	//m_refCount--;
+	m_refCount--;
 	if (m_refCount == 0)
 	{
 		delete m_instance;

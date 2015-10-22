@@ -30,6 +30,18 @@ extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr
 typedef void(*FuncPtr)(const char*);
 typedef float(*FuncFloatRetPtr)();
 
+class LogManager
+{
+	static LogManager* s_instance;;
+	FILE* m_logFile;
+public:
+	LogManager();
+	~LogManager();
+	void LogMessage(const std::string& msg);
+
+	static LogManager* Instance();
+};
+
 struct Vector2d
 {
 	int x, y;

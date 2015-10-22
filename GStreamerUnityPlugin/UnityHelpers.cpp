@@ -51,6 +51,28 @@ extern "C" EXPORT_API void mray_SetGetEngineTime(FuncFloatRetPtr f)
 	GetEngineTimePtr = f;
 }
 
+LogManager* LogManager::s_instance=0;
+LogManager* LogManager::Instance()
+{
+	if (!s_instance)
+	{
+		s_instance = new LogManager();
+	}
+	return s_instance;
+}
+
+LogManager::LogManager()
+{
+	m_logFile = fopen("GStreamerLog.txt", "w");
+}
+LogManager::~LogManager()
+{
+	fclose(m_logFile);
+}
+void LogManager::LogMessage(const std::string& msg)
+{
+	fprintf(m_logFile, "%s\n", msg.c_str());
+}
 
 
 
