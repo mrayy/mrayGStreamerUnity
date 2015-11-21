@@ -1,6 +1,7 @@
 # mrayGStreamerUnity
 GStreamer Integration with Unity using a Native plugin 
 
+>>Updated 22/Nov/2015:
 Currently designed to run under Unity 64bit version - Windows
 The current integration implements a GStreamer H264 UDP receiver texture inside Unity. 
 
