@@ -2,14 +2,19 @@
 
 #include "UnityHelpers.h"
 
-#include "UnityPlugin.h"
+#include "Unity/IUnityInterface.h"
 #ifdef WIN32
-    #include <windows.h>
+#include <windows.h>
 #endif
-#include "GraphicsInclude.h"
-#include "ImageInfo.h"
 
 #include <gl/gl.h>
+
+
+#include "GraphicsInclude.h"
+#include "PlatformBase.h"
+#include "PixelUtil.h"
+#include "ImageInfo.h"
+#include "UnityGraphicsDevice.h"
 
 using namespace mray;
 using namespace video;
@@ -35,6 +40,7 @@ void LogMessage(const std::string& msg, ELogLevel level)
 #else
 	printf("%s", m.c_str());
 #endif
+	LogManager::Instance()->LogMessage(m);
 // 	if (Debug)
 // 		Debug(m.c_str());
 }
@@ -46,11 +52,11 @@ float GetEngineTime()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_SetDebugFunction(FuncPtr f)
+extern "C" UNITY_INTERFACE_EXPORT void mray_SetDebugFunction(FuncPtr f)
 {
 	Debug = f;
 }
-extern "C" EXPORT_API void mray_SetGetEngineTime(FuncFloatRetPtr f)
+extern "C" UNITY_INTERFACE_EXPORT void mray_SetGetEngineTime(FuncFloatRetPtr f)
 {
 	GetEngineTimePtr = f;
 }
@@ -67,8 +73,10 @@ LogManager* LogManager::Instance()
 
 LogManager::LogManager()
 {
+	fileName = "GStreamerLog.txt";
 	m_logFile = fopen("GStreamerLog.txt", "w");
-    fclose(m_logFile);
+	fclose(m_logFile);
+	m_logFile = 0;
 }
 LogManager::~LogManager()
 {
@@ -76,16 +84,19 @@ LogManager::~LogManager()
 }
 void LogManager::LogMessage(const std::string& msg)
 {
-    m_logFile = fopen("GStreamerLog.txt", "a");
-    fprintf(m_logFile, "%s\n", msg.c_str());
-    fclose(m_logFile);
+	m_logFile = fopen("GStreamerLog.txt", "a");
+	fprintf(m_logFile, "%s\n", msg.c_str());
+	fclose(m_logFile);
+	m_logFile = 0;
 }
 
 
 
 void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 {
-	if (fmt == video::EPixel_I420)
+	if (fmt == video::EPixel_I420 || fmt==video::EPixelFormat::EPixel_LUMINANCE8
+		|| fmt == video::EPixelFormat::EPixel_R8G8B8 || fmt == video::EPixelFormat::EPixel_B8G8R8
+		)
 	{
 		memcpy(dst, src->imageData, src->imageDataSize);
 		return;
@@ -98,17 +109,19 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 		ptr[0] = srcPtr[0];
 		ptr[1] = srcPtr[1];
 		ptr[2] = srcPtr[2];
-		ptr[3] = 1;
+		ptr[3] = 255;
 		ptr += 4;
 		srcPtr += 3;
 	}
 }
 
-void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHeight,uchar** data,int* pitch)
+void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHeight,uchar** data,int* pitch,int* comps)
 {
     
-    if (ifo->format == video::EPixel_I420)
+    if (ifo->format == video::EPixel_I420 ||
+        ifo->format == video::EPixel_NV12)
     {
+        *comps=1;
         //data = new uchar[ifo->imageDataSize];
         *pitch = _UnityTextureWidth;
         
@@ -126,90 +139,82 @@ void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHe
         }
         *pitch = _UnityTextureWidth * 4;
         *data = ifo->tmpBuffer->imageData;
-        CopyToTexture(ifo, (uchar*)*data, ifo->format);
+        *comps=4;
+        CopyToTexture(ifo, (uchar*)*data, video::EPixel_R8G8B8A8);//ifo->format);
     }
 }
 
 void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
-
-	if (!ifo || !_TextureNativePtr)
-		return;
-
-	if (ifo->tmpBuffer == 0)
-		((video::ImageInfo*)ifo)->tmpBuffer = new ImageInfo();
-
+    
+    if (!ifo || !_TextureNativePtr)
+        return;
+    
+    if (ifo->tmpBuffer == 0)
+        ((video::ImageInfo*)ifo)->tmpBuffer = new ImageInfo();
+    
     
     uchar* data = 0;
     int pitch = 0;
+    int comps=1;
 #if SUPPORT_D3D9
-	// D3D9 case
-	if (g_GraphicsDeviceType == kGfxRendererD3D9)
-	{
-		// Update native texture from code
-		if (_TextureNativePtr)
-		{
-			IDirect3DTexture9* d3dtex = (IDirect3DTexture9*)_TextureNativePtr;
-			D3DSURFACE_DESC desc;
-			d3dtex->GetLevelDesc(0, &desc);
-			D3DLOCKED_RECT lr;
-			d3dtex->LockRect(0, &lr, nullptr, 0);
-
-			//uchar* data = new uchar[desc.Width*desc.Height * 4];
-
-			//memcpy((unsigned char*)lr.pBits, ifo->imageData, desc.Width*desc.Height * 3);
-			CopyToTexture(ifo, (uchar*)lr.pBits,ifo->format);
-
-			d3dtex->UnlockRect(0);
-			//delete [] data;
-		}
-	}
-#endif
-
-#if SUPPORT_D3D11
-	// D3D11 case
-	if (g_GraphicsDeviceType == kGfxRendererD3D11)
-	{
-		ID3D11DeviceContext* ctx = nullptr;
-		g_D3D11GraphicsDevice->GetImmediateContext(&ctx);
-
-		// update native texture from code
-		if (_TextureNativePtr)
-		{
-			ID3D11Texture2D* d3dtex = (ID3D11Texture2D*)_TextureNativePtr;
-			D3D11_TEXTURE2D_DESC desc;
-			d3dtex->GetDesc(&desc);
-			//ctx->UpdateSubresource(d3dtex, 0, nullptr, ifo->imageData, desc.Width * 3, 0);
-			
-            CheckData(ifo,_UnityTextureWidth,_UnityTextureWidth,&data,&pitch);
-			ctx->UpdateSubresource(d3dtex, 0, nullptr, data, pitch, 0);
-			//delete[] data;
-
-		}
-
-		ctx->Release();
-	}
-#endif
-
-
-#if SUPPORT_OPENGL
-	// OpenGL case
-	if (g_GraphicsDeviceType == kGfxRendererOpenGL ||
-        g_GraphicsDeviceType == kGfxRendererOpenGLCore)
-	{
-		// update native texture from code
-		if (_TextureNativePtr)
-		{
-			GLuint gltex = (GLuint)(size_t)(_TextureNativePtr);
-			glBindTexture(GL_TEXTURE_2D, gltex);
-			int texWidth, texHeight;
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
-            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
-            CheckData(ifo,_UnityTextureWidth,_UnityTextureWidth,&data,&pitch);
+    // D3D9 case
+    if (g_GraphicsDeviceType == kGfxRendererD3D9)
+    {
+        // Update native texture from code
+        if (_TextureNativePtr)
+        {
+            IDirect3DTexture9* d3dtex = (IDirect3DTexture9*)_TextureNativePtr;
+            D3DSURFACE_DESC desc;
+            d3dtex->GetLevelDesc(0, &desc);
+            D3DLOCKED_RECT lr;
+            d3dtex->LockRect(0, &lr, nullptr, 0);
             
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _UnityTextureWidth, _UnityTextureHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-		}
-	}
+            //uchar* data = new uchar[desc.Width*desc.Height * 4];
+            
+            //memcpy((unsigned char*)lr.pBits, ifo->imageData, desc.Width*desc.Height * 3);
+            CopyToTexture(ifo, (uchar*)lr.pBits,ifo->format);
+            
+            d3dtex->UnlockRect(0);
+            //delete [] data;
+        }
+    }
 #endif
+    
+#if SUPPORT_D3D11
+    // D3D11 case
+    if (g_GraphicsDeviceType == kGfxRendererD3D11)
+    {
+        ID3D11DeviceContext* ctx = nullptr;
+        g_D3D11GraphicsDevice->GetImmediateContext(&ctx);
+        
+        // update native texture from code
+        if (_TextureNativePtr)
+        {
+            ID3D11Texture2D* d3dtex = (ID3D11Texture2D*)_TextureNativePtr;
+            D3D11_TEXTURE2D_DESC desc;
+            d3dtex->GetDesc(&desc);
+            //ctx->UpdateSubresource(d3dtex, 0, nullptr, ifo->imageData, desc.Width * 3, 0);
+            
+            CheckData(ifo,_UnityTextureWidth,_UnityTextureWidth,&data,&pitch);
+            ctx->UpdateSubresource(d3dtex, 0, nullptr, data, pitch, 0);
+            //delete[] data;
+            
+        }
+        
+        ctx->Release();
+    }
+#endif
+    
+    
+        if (_TextureNativePtr)
+        {
+            CheckData(ifo,_UnityTextureWidth,_UnityTextureHeight,&data,&pitch,&comps);
+            
+            GetRenderer()->BeginModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, &pitch);
+            GetRenderer()->EndModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight,comps, pitch, data);
+            
+        }
+
 }
+

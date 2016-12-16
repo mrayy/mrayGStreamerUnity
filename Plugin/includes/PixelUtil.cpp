@@ -593,7 +593,25 @@ EPixelType_Byte,
 	0, 0, 0, 0,
 	//shift
 	0, 0, 0, 0
-}
+},
+    {
+        //name
+        mT("NV12"),
+        //elemSizeB
+        1,
+        //flags
+        EPixelFlags_Compressed,
+        //type
+        EPixelType_Byte,
+        //componentsCount
+        1,
+        //bits
+        0, 0, 0, 0,
+        //mask
+        0, 0, 0, 0,
+        //shift
+        0, 0, 0, 0
+    }
 };
 
 int PixelUtil::getMaxMipmaps(uint w,uint h,uint d){

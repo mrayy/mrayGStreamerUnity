@@ -48,11 +48,18 @@ public:
 	virtual video::EPixelFormat GetImageFormat();
 
 	virtual bool GrabFrame();
+	virtual bool GrabAudioFrame();
 	virtual bool HasNewFrame();
 	virtual ulong GetBufferID();// incremented once per frame
 
 	virtual const ImageInfo* GetLastFrame();
 	virtual float GetCaptureFrameRate();
+
+	int GetAudioFrameSize();
+	bool CopyAudioFrame(float* output);
+	int GetAudioChannelsCount();
+
+	virtual int GetPort(int i){ return 0; }
 
 };
 

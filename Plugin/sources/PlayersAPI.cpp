@@ -4,8 +4,10 @@
 #include "GraphicsInclude.h"
 #include "PixelUtil.h"
 
+#include <vector>
+
 #ifdef USE_UNITY_NETWORK
-extern "C" EXPORT_API void* mray_gst_createNetworkPlayer()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkPlayer()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
@@ -15,7 +17,7 @@ extern "C" EXPORT_API void* mray_gst_createNetworkPlayer()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, const char* ip, int videoPort, bool rtcp)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, const char* ip, int videoPort, bool rtcp)
 {
 	if (p != NULL)
 	{
@@ -24,7 +26,7 @@ extern "C" EXPORT_API void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, con
 }
 
 
-extern "C" EXPORT_API bool mray_gst_netPlayerCreateStream(GstNetworkVideoPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netPlayerCreateStream(GstNetworkVideoPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -33,7 +35,7 @@ extern "C" EXPORT_API bool mray_gst_netPlayerCreateStream(GstNetworkVideoPlayer*
 	return false;
 
 }
-extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h)
 {
 	if (p != NULL)
 	{
@@ -49,7 +51,7 @@ extern "C" EXPORT_API bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p,
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)
 	{
@@ -61,7 +63,7 @@ extern "C" EXPORT_API void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer*
 	else
 		w = h = components = 0;
 }
-extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
 	if (p == NULL || !_TextureNativePtr)
 		return;
@@ -74,14 +76,14 @@ extern "C" EXPORT_API void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p,
 	}
 
 }
-extern "C" EXPORT_API int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p)
 {
 	if (p == NULL)
 		return 0;
 	return p->GetCaptureFrameRate();
 }
 //////////////////////////////////////////////////////////////////////////
-extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkMultiplePlayer()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
@@ -91,7 +93,7 @@ extern "C" EXPORT_API void* mray_gst_createNetworkMultiplePlayer()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoPlayer* p, const char* ip, int baseVideoPort, int count, bool rtcp)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoPlayer* p, const char* ip, int baseVideoPort, int count, bool rtcp)
 {
 	if (p != NULL)
 	{
@@ -99,7 +101,7 @@ extern "C" EXPORT_API void mray_gst_multiNetPlayerSetIP(GstNetworkMultipleVideoP
 	}
 }
 
-extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipleVideoPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipleVideoPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -108,7 +110,7 @@ extern "C" EXPORT_API bool mray_gst_multiNetPlayerCreateStream(GstNetworkMultipl
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int& components)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)
 	{
@@ -120,7 +122,7 @@ extern "C" EXPORT_API void mray_gst_multiNetPlayerGetFrameSize(GstNetworkMultipl
 	else
 		w = h = components = 0;
 }
-extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int index)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int index)
 {
 	if (p != NULL)
 	{
@@ -136,7 +138,7 @@ extern "C" EXPORT_API bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVi
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
 {
 	if (p == NULL || !_TextureNativePtr)
 		return;
@@ -148,13 +150,13 @@ extern "C" EXPORT_API void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVi
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
 }
-extern "C" EXPORT_API int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index)
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index)
 {
 	if (p == NULL)
 		return 0;
 	return p->GetCaptureFrameRate(index);
 }
-extern "C" EXPORT_API uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultipleVideoPlayer* p, int index)
+extern "C" UNITY_INTERFACE_EXPORT uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultipleVideoPlayer* p, int index)
 {
 	if (!p)
 		return 0;
@@ -164,7 +166,7 @@ extern "C" EXPORT_API uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultip
 
 //////////////////////////////////////////////////////////////////////////
 
-extern "C" EXPORT_API void mray_gst_PlayerDestroy(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerDestroy(IGStreamerPlayer* p)
 {
     
     if (p != NULL)
@@ -174,7 +176,7 @@ extern "C" EXPORT_API void mray_gst_PlayerDestroy(IGStreamerPlayer* p)
     }
 }
 
-extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createCustomVideoPlayer()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
@@ -184,7 +186,7 @@ extern "C" EXPORT_API void* mray_gst_createCustomVideoPlayer()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_gst_customPlayerSetPipeline(GstCustomVideoPlayer* p, const char* pipeline)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerSetPipeline(GstCustomVideoPlayer* p, const char* pipeline)
 {
 	if (p != NULL)
 	{
@@ -193,7 +195,7 @@ extern "C" EXPORT_API void mray_gst_customPlayerSetPipeline(GstCustomVideoPlayer
 }
 
 
-extern "C" EXPORT_API bool mray_gst_customPlayerCreateStream(GstCustomVideoPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCreateStream(GstCustomVideoPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -202,7 +204,7 @@ extern "C" EXPORT_API bool mray_gst_customPlayerCreateStream(GstCustomVideoPlaye
 	return false;
 
 }
-extern "C" EXPORT_API bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* p, int &w, int &h)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* p, int &w, int &h)
 {
 	if (p != NULL)
 	{
@@ -218,7 +220,7 @@ extern "C" EXPORT_API bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* 
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)
 	{
@@ -230,7 +232,7 @@ extern "C" EXPORT_API void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlaye
 	else
 		w = h = components=0;
 }
-extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
 	if (p == NULL || !_TextureNativePtr)
 		return;
@@ -242,17 +244,46 @@ extern "C" EXPORT_API void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* 
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
 }
-extern "C" EXPORT_API int mray_gst_customPlayerFrameCount(GstCustomVideoPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customPlayerFrameCount(GstCustomVideoPlayer* p)
 {
 	if (p == NULL)
 		return 0;
 	return p->GetCaptureFrameRate();
 }
 
+struct MultiNetRenderRequest
+{
+    void* p;
+    void* _TextureNativePtr;
+    int _UnityTextureWidth;
+    int _UnityTextureHeight;
+    int index;
+};
+std::vector<MultiNetRenderRequest> __multiNetRequests;
+//for GL.IssuePluginEvent
+static void mray_gst_customPlayerBlitImageNativeEvent(int eventID)
+{
+    if (__multiNetRequests.size() == 0)
+        return;
+    MultiNetRenderRequest r=__multiNetRequests[0];
+    __multiNetRequests.erase(__multiNetRequests.begin());
+    mray_gst_customPlayerBlitImage((GstCustomVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight);
+}
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative __stdcall mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+{
+    MultiNetRenderRequest r;
+    r.p = p;
+    r._TextureNativePtr = _TextureNativePtr;
+    r._UnityTextureWidth = _UnityTextureWidth;
+    r._UnityTextureHeight = _UnityTextureHeight;
+    r.index=0;
+    __multiNetRequests.push_back(r);
+    return mray_gst_customPlayerBlitImageNativeEvent;
+}
 //////////////////////////////////////////////////////////////////////////
 
 
-extern "C" EXPORT_API void mray_gst_PlayerPlay(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPlay(IGStreamerPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -260,7 +291,7 @@ extern "C" EXPORT_API void mray_gst_PlayerPlay(IGStreamerPlayer* p)
 	}
 
 }
-extern "C" EXPORT_API void mray_gst_PlayerPause(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPause(IGStreamerPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -269,7 +300,7 @@ extern "C" EXPORT_API void mray_gst_PlayerPause(IGStreamerPlayer* p)
 
 
 }
-extern "C" EXPORT_API void mray_gst_PlayerStop(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerStop(IGStreamerPlayer* p)
 {
 
 	if (p != NULL)
@@ -277,7 +308,7 @@ extern "C" EXPORT_API void mray_gst_PlayerStop(IGStreamerPlayer* p)
 		p->Stop();
 	}
 }
-extern "C" EXPORT_API bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -286,7 +317,7 @@ extern "C" EXPORT_API bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p)
 	return false;
 
 }
-extern "C" EXPORT_API bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -294,7 +325,7 @@ extern "C" EXPORT_API bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p)
 	}
 	return false;
 }
-extern "C" EXPORT_API void mray_gst_PlayerClose(IGStreamerPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerClose(IGStreamerPlayer* p)
 {
 	if (p != NULL)
 	{
@@ -309,7 +340,7 @@ extern "C" EXPORT_API void mray_gst_PlayerClose(IGStreamerPlayer* p)
 
 #ifdef USE_UNITY_NETWORK
 
-extern "C" EXPORT_API void* mray_gst_createNetworkAudioPlayer()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkAudioPlayer()
 {
 
 	GStreamerCore* c = GStreamerCore::Instance();
@@ -320,24 +351,24 @@ extern "C" EXPORT_API void* mray_gst_createNetworkAudioPlayer()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_gst_netAudioPlayerSetIP(GstNetworkAudioPlayer* p, const char* ip, int audioPort, bool rtcp)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetIP(GstNetworkAudioPlayer* p, const char* ip, int audioPort, bool rtcp)
 {
 	if (p!=NULL)
 		p->SetIPAddress(ip, audioPort, 0, rtcp);
 }
-extern "C" EXPORT_API bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p)
 {
 	if (p != NULL)
 		return p->CreateStream();
 	return false;
 }
-extern "C" EXPORT_API void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v)
 {
 	if (p != NULL)
 		p->SetVolume(v);
 }
 
-extern "C" EXPORT_API uint  mray_gst_netAudioPlayerGetAudioPort(GstNetworkAudioPlayer* p)
+extern "C" UNITY_INTERFACE_EXPORT uint  mray_gst_netAudioPlayerGetAudioPort(GstNetworkAudioPlayer* p)
 {
 	if (!p)
 		return 0;

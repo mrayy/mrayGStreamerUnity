@@ -4,6 +4,7 @@
 #include "OSXThreadManager.h"
 #include "OSXThread.h"
 #include "OSXMutex.h"
+#include <unistd.h>
 
 namespace mray{
 namespace OS{

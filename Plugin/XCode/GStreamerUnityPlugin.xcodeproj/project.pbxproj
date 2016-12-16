@@ -11,6 +11,18 @@
 		403DF7C71E037F0500FDBDF9 /* OSXThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7C51E037F0500FDBDF9 /* OSXThreadManager.cpp */; };
 		403DF7CA1E037F6500FDBDF9 /* OSXThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7C81E037F6500FDBDF9 /* OSXThread.cpp */; };
 		403DF7CD1E03829400FDBDF9 /* OSXMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7CB1E03829400FDBDF9 /* OSXMutex.cpp */; };
+		403DF7D01E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */; };
+		403DF7D31E03CD2500FDBDF9 /* IAppSinkHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */; };
+		403DF7E01E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */; };
+		403DF7E11E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */; };
+		403DF7E21E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */; };
+		403DF7E31E03DE3400FDBDF9 /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */; };
+		403DF7E41E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */; };
+		403DF7E51E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */; };
+		403DF7E61E03DE3400FDBDF9 /* RenderAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */; };
+		403DF7E81E03DE5900FDBDF9 /* Unity in Resources */ = {isa = PBXBuildFile; fileRef = 403DF7E71E03DE5900FDBDF9 /* Unity */; };
+		403DF7EA1E03E02C00FDBDF9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */; };
+		403DF7EF1E03E08000FDBDF9 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7EB1E03E08000FDBDF9 /* glew.c */; };
 		40428CF71E036DA8004F1D58 /* GStreamer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40428CF61E036DA8004F1D58 /* GStreamer.framework */; };
 		40F5F31B1E03652F006A010E /* CMySink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F01E03652F006A010E /* CMySink.cpp */; };
 		40F5F31C1E03652F006A010E /* CMySrc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F21E03652F006A010E /* CMySrc.cpp */; };
@@ -42,6 +54,26 @@
 		403DF7C91E037F6500FDBDF9 /* OSXThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXThread.h; path = ../includes/OSX/OSXThread.h; sourceTree = "<group>"; };
 		403DF7CB1E03829400FDBDF9 /* OSXMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSXMutex.cpp; path = ../includes/OSX/OSXMutex.cpp; sourceTree = "<group>"; };
 		403DF7CC1E03829400FDBDF9 /* OSXMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXMutex.h; path = ../includes/OSX/OSXMutex.h; sourceTree = "<group>"; };
+		403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioAppSinkHandler.cpp; path = ../sources/AudioAppSinkHandler.cpp; sourceTree = "<group>"; };
+		403DF7CF1E03CD0200FDBDF9 /* AudioAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAppSinkHandler.h; path = ../sources/AudioAppSinkHandler.h; sourceTree = "<group>"; };
+		403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IAppSinkHandler.cpp; path = ../sources/IAppSinkHandler.cpp; sourceTree = "<group>"; };
+		403DF7D21E03CD2500FDBDF9 /* IAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IAppSinkHandler.h; path = ../sources/IAppSinkHandler.h; sourceTree = "<group>"; };
+		403DF7D61E03DE3400FDBDF9 /* PlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlatformBase.h; path = ../includes/PlatformBase.h; sourceTree = "<group>"; };
+		403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D9.cpp; path = ../includes/RenderAPI_D3D9.cpp; sourceTree = "<group>"; };
+		403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D11.cpp; path = ../includes/RenderAPI_D3D11.cpp; sourceTree = "<group>"; };
+		403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D12.cpp; path = ../includes/RenderAPI_D3D12.cpp; sourceTree = "<group>"; };
+		403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderAPI_Metal.mm; path = ../includes/RenderAPI_Metal.mm; sourceTree = "<group>"; };
+		403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGL2.cpp; path = ../includes/RenderAPI_OpenGL2.cpp; sourceTree = "<group>"; };
+		403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGLCoreES.cpp; path = ../includes/RenderAPI_OpenGLCoreES.cpp; sourceTree = "<group>"; };
+		403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI.cpp; path = ../includes/RenderAPI.cpp; sourceTree = "<group>"; };
+		403DF7DE1E03DE3400FDBDF9 /* RenderAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderAPI.h; path = ../includes/RenderAPI.h; sourceTree = "<group>"; };
+		403DF7E71E03DE5900FDBDF9 /* Unity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Unity; path = ../includes/Unity; sourceTree = "<group>"; };
+		403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		403DF7EB1E03E08000FDBDF9 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = ../includes/GLEW/glew.c; sourceTree = "<group>"; };
+		403DF7EC1E03E08000FDBDF9 /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../includes/GLEW/glew.h; sourceTree = "<group>"; };
+		403DF7ED1E03E08000FDBDF9 /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = ../includes/GLEW/glxew.h; sourceTree = "<group>"; };
+		403DF7EE1E03E08000FDBDF9 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = ../includes/GLEW/wglew.h; sourceTree = "<group>"; };
+		403DF7F11E03EC5800FDBDF9 /* UnityGraphicsDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnityGraphicsDevice.h; path = ../includes/UnityGraphicsDevice.h; sourceTree = "<group>"; };
 		40428CF61E036DA8004F1D58 /* GStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GStreamer.framework; path = ../../../../../../../../Library/Frameworks/GStreamer.framework; sourceTree = "<group>"; };
 		40F5F2F01E03652F006A010E /* CMySink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CMySink.cpp; path = ../sources/CMySink.cpp; sourceTree = "<group>"; };
 		40F5F2F11E03652F006A010E /* CMySink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMySink.h; path = ../sources/CMySink.h; sourceTree = "<group>"; };
@@ -69,7 +101,6 @@
 		40F5F3131E03652F006A010E /* StreamersAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamersAPI.h; path = ../sources/StreamersAPI.h; sourceTree = "<group>"; };
 		40F5F3141E03652F006A010E /* UnityHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityHelpers.cpp; path = ../sources/UnityHelpers.cpp; sourceTree = "<group>"; };
 		40F5F3151E03652F006A010E /* UnityHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityHelpers.h; path = ../sources/UnityHelpers.h; sourceTree = "<group>"; };
-		40F5F3181E03652F006A010E /* UnityPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityPlugin.h; path = ../sources/UnityPlugin.h; sourceTree = "<group>"; };
 		40F5F3191E03652F006A010E /* VideoAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoAppSinkHandler.cpp; path = ../sources/VideoAppSinkHandler.cpp; sourceTree = "<group>"; };
 		40F5F31A1E03652F006A010E /* VideoAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoAppSinkHandler.h; path = ../sources/VideoAppSinkHandler.h; sourceTree = "<group>"; };
 		40F5F3301E03654D006A010E /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../includes/common.h; sourceTree = "<group>"; };
@@ -103,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				403DF7EA1E03E02C00FDBDF9 /* CoreFoundation.framework in Frameworks */,
 				403DF7C41E03757000FDBDF9 /* OpenGL.framework in Frameworks */,
 				40428CF71E036DA8004F1D58 /* GStreamer.framework in Frameworks */,
 			);
@@ -114,6 +146,7 @@
 		089C166AFE841209C02AAC07 /* XCodePlugin */ = {
 			isa = PBXGroup;
 			children = (
+				403DF7D41E03DE2200FDBDF9 /* Unity */,
 				40F5F32F1E036539006A010E /* Includes */,
 				08FB77ADFE841716C02AAC07 /* Source */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -149,8 +182,10 @@
 				40F5F2F11E03652F006A010E /* CMySink.h */,
 				40F5F2F21E03652F006A010E /* CMySrc.cpp */,
 				40F5F2F31E03652F006A010E /* CMySrc.h */,
-				40F5F2F81E03652F006A010E /* CoreAPI.cpp */,
-				40F5F2F91E03652F006A010E /* CoreAPI.h */,
+				403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */,
+				403DF7D21E03CD2500FDBDF9 /* IAppSinkHandler.h */,
+				403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */,
+				403DF7CF1E03CD0200FDBDF9 /* AudioAppSinkHandler.h */,
 				40F5F2FA1E03652F006A010E /* GstCustomVideoPlayer.cpp */,
 				40F5F2FB1E03652F006A010E /* GstCustomVideoPlayer.h */,
 				40F5F3041E03652F006A010E /* GstPipelineHandler.cpp */,
@@ -164,15 +199,7 @@
 				40F5F30C1E03652F006A010E /* IGStreamerStreamer.cpp */,
 				40F5F30D1E03652F006A010E /* IGStreamerStreamer.h */,
 				40F5F30E1E03652F006A010E /* IStreamListener.h */,
-				40F5F30F1E03652F006A010E /* PlayersAPI.cpp */,
-				40F5F3101E03652F006A010E /* PlayersAPI.h */,
 				40F5F3111E03652F006A010E /* stdafx.h */,
-				40F5F3121E03652F006A010E /* StreamersAPI.cpp */,
-				40F5F3131E03652F006A010E /* StreamersAPI.h */,
-				40F5F3141E03652F006A010E /* UnityHelpers.cpp */,
-				40F5F3151E03652F006A010E /* UnityHelpers.h */,
-				40F5F3431E03654D006A010E /* UnityGraphicsDevice.cpp */,
-				40F5F3181E03652F006A010E /* UnityPlugin.h */,
 				40F5F3191E03652F006A010E /* VideoAppSinkHandler.cpp */,
 				40F5F31A1E03652F006A010E /* VideoAppSinkHandler.h */,
 			);
@@ -187,9 +214,48 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		403DF7D41E03DE2200FDBDF9 /* Unity */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7E71E03DE5900FDBDF9 /* Unity */,
+				403DF7D61E03DE3400FDBDF9 /* PlatformBase.h */,
+				403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */,
+				403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */,
+				403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */,
+				403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */,
+				403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */,
+				403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */,
+				403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */,
+				403DF7DE1E03DE3400FDBDF9 /* RenderAPI.h */,
+				40F5F2F81E03652F006A010E /* CoreAPI.cpp */,
+				40F5F2F91E03652F006A010E /* CoreAPI.h */,
+				40F5F30F1E03652F006A010E /* PlayersAPI.cpp */,
+				40F5F3101E03652F006A010E /* PlayersAPI.h */,
+				40F5F3121E03652F006A010E /* StreamersAPI.cpp */,
+				40F5F3131E03652F006A010E /* StreamersAPI.h */,
+				40F5F3141E03652F006A010E /* UnityHelpers.cpp */,
+				40F5F3151E03652F006A010E /* UnityHelpers.h */,
+				40F5F3431E03654D006A010E /* UnityGraphicsDevice.cpp */,
+				403DF7F11E03EC5800FDBDF9 /* UnityGraphicsDevice.h */,
+			);
+			name = Unity;
+			sourceTree = "<group>";
+		};
+		403DF7F01E03E08B00FDBDF9 /* GLEW */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7EB1E03E08000FDBDF9 /* glew.c */,
+				403DF7EC1E03E08000FDBDF9 /* glew.h */,
+				403DF7ED1E03E08000FDBDF9 /* glxew.h */,
+				403DF7EE1E03E08000FDBDF9 /* wglew.h */,
+			);
+			name = GLEW;
+			sourceTree = "<group>";
+		};
 		40428CF51E036DA8004F1D58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */,
 				403DF7C31E03757000FDBDF9 /* OpenGL.framework */,
 				40428CF61E036DA8004F1D58 /* GStreamer.framework */,
 			);
@@ -199,6 +265,7 @@
 		40F5F32F1E036539006A010E /* Includes */ = {
 			isa = PBXGroup;
 			children = (
+				403DF7F01E03E08B00FDBDF9 /* GLEW */,
 				403DF7C81E037F6500FDBDF9 /* OSXThread.cpp */,
 				403DF7C91E037F6500FDBDF9 /* OSXThread.h */,
 				403DF7C51E037F0500FDBDF9 /* OSXThreadManager.cpp */,
@@ -277,6 +344,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				403DF7E81E03DE5900FDBDF9 /* Unity in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,24 +356,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				403DF7CD1E03829400FDBDF9 /* OSXMutex.cpp in Sources */,
+				403DF7D31E03CD2500FDBDF9 /* IAppSinkHandler.cpp in Sources */,
 				40F5F3451E03654D006A010E /* ImageInfo.cpp in Sources */,
+				403DF7E11E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp in Sources */,
 				403DF7C71E037F0500FDBDF9 /* OSXThreadManager.cpp in Sources */,
 				40F5F3471E03654D006A010E /* NetAddress.cpp in Sources */,
 				40F5F3251E03652F006A010E /* GstPipelineHandler.cpp in Sources */,
 				40F5F32E1E03652F006A010E /* VideoAppSinkHandler.cpp in Sources */,
 				40F5F32C1E03652F006A010E /* UnityHelpers.cpp in Sources */,
+				403DF7E01E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp in Sources */,
+				403DF7E31E03DE3400FDBDF9 /* RenderAPI_Metal.mm in Sources */,
 				40F5F31F1E03652F006A010E /* CoreAPI.cpp in Sources */,
 				40F5F3291E03652F006A010E /* IGStreamerStreamer.cpp in Sources */,
+				403DF7E51E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp in Sources */,
 				40F5F3491E03654D006A010E /* UnityGraphicsDevice.cpp in Sources */,
 				40F5F32A1E03652F006A010E /* PlayersAPI.cpp in Sources */,
 				40F5F31C1E03652F006A010E /* CMySrc.cpp in Sources */,
 				40F5F3271E03652F006A010E /* GStreamerCore.cpp in Sources */,
+				403DF7EF1E03E08000FDBDF9 /* glew.c in Sources */,
 				403DF7CA1E037F6500FDBDF9 /* OSXThread.cpp in Sources */,
+				403DF7E41E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp in Sources */,
+				403DF7E61E03DE3400FDBDF9 /* RenderAPI.cpp in Sources */,
 				40F5F32B1E03652F006A010E /* StreamersAPI.cpp in Sources */,
 				40F5F3261E03652F006A010E /* GstPlayerBin.cpp in Sources */,
 				40F5F3281E03652F006A010E /* IGStreamerPlayer.cpp in Sources */,
 				40F5F3461E03654D006A010E /* IThreadManager.cpp in Sources */,
+				403DF7D01E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp in Sources */,
 				40F5F3201E03652F006A010E /* GstCustomVideoPlayer.cpp in Sources */,
+				403DF7E21E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp in Sources */,
 				40F5F3481E03654D006A010E /* PixelUtil.cpp in Sources */,
 				40F5F31B1E03652F006A010E /* CMySink.cpp in Sources */,
 			);
@@ -358,11 +436,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LIBRARY = "libc++";
-				COPY_PHASE_STRIP = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_POSTPROCESSING = YES;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -371,23 +452,22 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"/Library/Frameworks/GStreamer.framework/Headers/**",
 					../includes,
+					../Sources,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = ./Deployment/;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrayy.GStreamerUnityPlugin;
 				PRODUCT_NAME = GStreamerUnityPlugin;
 				SYMROOT = ./build;
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -396,34 +476,35 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LIBRARY = "libc++";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_POSTPROCESSING = YES;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					"/Library/Frameworks/GStreamer.framework/Headers/**",
 					../includes,
+					../Sources,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = ./Deployment/;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrayy.GStreamerUnityPlugin;
 				PRODUCT_NAME = GStreamerUnityPlugin;
 				SYMROOT = ./build;
+				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};

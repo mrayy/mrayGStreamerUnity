@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include "mTypes.h"
+#include "Unity/IUnityInterface.h"
 
 namespace mray
 {
@@ -26,14 +27,17 @@ extern void LogMessage(const std::string& msg, ELogLevel level);
 extern float GetEngineTime();
 extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
+typedef void(__stdcall * UnityRenderNative)(int eventID);
 
 typedef void(*FuncPtr)(const char*);
 typedef float(*FuncFloatRetPtr)();
 
-class LogManager
+
+extern "C" class UNITY_INTERFACE_EXPORT LogManager
 {
 	static LogManager* s_instance;;
 	FILE* m_logFile;
+	std::string fileName;
 public:
 	LogManager();
 	~LogManager();

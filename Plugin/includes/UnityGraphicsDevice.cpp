@@ -1,92 +1,98 @@
 // Check out http://docs.unity3d.com/Documentation/Manual/NativePluginInterface.html
 // for additional documentation about this process.
 
-#include "UnityPlugin.h"
-#include "GraphicsInclude.h"
+#include "PlatformBase.h"
+#include "RenderAPI.h"
 
-void* g_GraphicsDevice = 0;
-int g_GraphicsDeviceType = -1;
-#if SUPPORT_D3D9
-IDirect3DDevice9* g_D3D9GraphicsDevice = 0;
-#endif
-#if SUPPORT_D3D11
-ID3D11Device* g_D3D11GraphicsDevice = 0;
-#endif
+#include <assert.h>
+#include <math.h>
+#include <vector>
 
-static void DebugLog (const char* str)
+
+// --------------------------------------------------------------------------
+// SetTimeFromUnity, an example function we export which is called by one of the scripts.
+
+static float g_Time;
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetTimeFromUnity (float t) { g_Time = t; }
+
+
+
+
+
+// --------------------------------------------------------------------------
+// UnitySetInterfaces
+
+static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType);
+
+static IUnityInterfaces* s_UnityInterfaces = NULL;
+static IUnityGraphics* s_Graphics = NULL;
+
+extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 {
-#if UNITY_WIN
-	OutputDebugStringA (str);
-#else
-	printf ("%s", str);
-#endif
+    s_UnityInterfaces = unityInterfaces;
+    s_Graphics = s_UnityInterfaces->Get<IUnityGraphics>();
+    s_Graphics->RegisterDeviceEventCallback(OnGraphicsDeviceEvent);
+    
+    // Run OnGraphicsDeviceEvent(initialize) manually on plugin load
+    OnGraphicsDeviceEvent(kUnityGfxDeviceEventInitialize);
 }
 
-// If exported by a plugin, this function will be called when graphics device is created, destroyed,
-// and before and after it is reset (ie, resolution changed).
-extern "C" void EXPORT_API UnitySetGraphicsDevice( void* device, int deviceType, int eventType )
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
 {
-	// Assign default values.
-	g_GraphicsDevice = 0;
-	g_GraphicsDeviceType = -1;
+    s_Graphics->UnregisterDeviceEventCallback(OnGraphicsDeviceEvent);
+}
 
-	switch (eventType)
-	{
-	case kGfxDeviceEventInitialize:
-	case kGfxDeviceEventAfterReset:
-		{
-			g_GraphicsDevice = device;
-			g_GraphicsDeviceType = deviceType;
+#if UNITY_WEBGL
+typedef void	(UNITY_INTERFACE_API * PluginLoadFunc)(IUnityInterfaces* unityInterfaces);
+typedef void	(UNITY_INTERFACE_API * PluginUnloadFunc)();
 
-			switch (g_GraphicsDeviceType)
-			{
-#if SUPPORT_D3D9
-			case kGfxRendererD3D9:
-				{
-					DebugLog ("Set D3D9 graphics device\n");
-					g_D3D9GraphicsDevice = (IDirect3DDevice9*)g_GraphicsDevice;
-					break;
-			}
+extern "C" void	UnityRegisterRenderingPlugin(PluginLoadFunc loadPlugin, PluginUnloadFunc unloadPlugin);
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API RegisterPlugin()
+{
+    UnityRegisterRenderingPlugin(UnityPluginLoad, UnityPluginUnload);
+}
 #endif
-#if SUPPORT_D3D11
-			case kGfxRendererD3D11:
-				{
-					DebugLog ("Set D3D11 graphics device\n");
-					g_D3D11GraphicsDevice = (ID3D11Device*)g_GraphicsDevice;
-					break;
-				}
-#endif
-			case kGfxRendererOpenGL:
-				{
-					DebugLog ("Set OpenGL graphics device\n");
-					break;
-				}
-			}
-			break;
-		}
-	case kGfxDeviceEventBeforeReset:
-		{
-			break;
-		}
-	case kGfxDeviceEventShutdown:
-		{
-			break;
-		}
-	}
-}
 
-// If exported by a plugin, this function will be called for GL.IssuePluginEvent script calls.
-// The function will be called on a rendering thread; note that when multithreaded rendering is used,
-// the rendering thread WILL BE DIFFERENT from the thread that all scripts & other game logic happens!
-// You have to ensure any synchronization with other plugin script calls is properly done by you.
-extern "C" void EXPORT_API UnityRenderEvent ( int eventID )
+// --------------------------------------------------------------------------
+// GraphicsDeviceEvent
+
+
+static RenderAPI* s_CurrentAPI = NULL;
+static UnityGfxRenderer s_DeviceType = kUnityGfxRendererNull;
+
+RenderAPI* GetRenderer()
 {
-
+    return s_CurrentAPI;
 }
 
-
-void* GetBufferPtrFromNativePtr( void* _NativePtr )
+UnityGfxRenderer GetDeviceType()
 {
-
-	return 0;
+    return s_DeviceType;
 }
+
+static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType)
+{
+    // Create graphics API implementation upon initialization
+    if (eventType == kUnityGfxDeviceEventInitialize)
+    {
+          s_DeviceType = s_Graphics->GetRenderer();
+        s_CurrentAPI = CreateRenderAPI(s_DeviceType);
+    }
+    
+    // Let the implementation process the device related events
+    if (s_CurrentAPI)
+    {
+        s_CurrentAPI->ProcessDeviceEvent(eventType, s_UnityInterfaces);
+    }
+    
+    // Cleanup graphics API implementation upon shutdown
+    if (eventType == kUnityGfxDeviceEventShutdown)
+    {
+        delete s_CurrentAPI;
+        s_CurrentAPI = NULL;
+        s_DeviceType = kUnityGfxRendererNull;
+    }
+}
+

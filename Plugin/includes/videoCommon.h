@@ -130,7 +130,8 @@ namespace video{
 		EPixel_DXT4,
 		EPixel_DXT5,
 
-		EPixel_I420,
+        EPixel_I420,
+        EPixel_NV12,
 
 		EPixelFormat_Count
 	};

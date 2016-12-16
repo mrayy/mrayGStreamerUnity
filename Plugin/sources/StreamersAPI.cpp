@@ -6,7 +6,7 @@
 #include "PixelUtil.h"
 
 #ifdef USE_UNITY_GRABBER
-extern "C" EXPORT_API void* mray_gst_createUnityImageGrabber()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityImageGrabber()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
@@ -17,7 +17,7 @@ extern "C" EXPORT_API void* mray_gst_createUnityImageGrabber()
 	return 0;
 }
 
-extern "C" EXPORT_API void mray_gst_UnityImageGrabberSetData(UnityImageGrabber* g, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int Format)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberSetData(UnityImageGrabber* g, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int Format)
 {
 	if (!g)
 		return;
@@ -25,7 +25,7 @@ extern "C" EXPORT_API void mray_gst_UnityImageGrabberSetData(UnityImageGrabber* 
 }
 #endif
 
-extern "C" EXPORT_API void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
 {
 	if (p != NULL)
 	{
@@ -34,7 +34,7 @@ extern "C" EXPORT_API void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
 	}
 
 }
-extern "C" EXPORT_API void mray_gst_StreamerStream(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerStream(IGStreamerStreamer* p)
 {
 
 	if (p != NULL)
@@ -42,14 +42,14 @@ extern "C" EXPORT_API void mray_gst_StreamerStream(IGStreamerStreamer* p)
 		p->Stream();
 	}
 }
-extern "C" EXPORT_API void mray_gst_StreamerPause(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerPause(IGStreamerStreamer* p)
 {
 	if (p != NULL)
 	{
 		p->SetPaused(true);
 	}
 }
-extern "C" EXPORT_API void mray_gst_StreamerStop(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerStop(IGStreamerStreamer* p)
 {
 	if (p != NULL)
 	{
@@ -57,7 +57,7 @@ extern "C" EXPORT_API void mray_gst_StreamerStop(IGStreamerStreamer* p)
 	}
 
 }
-extern "C" EXPORT_API bool mray_gst_StreamerIsStreaming(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_StreamerIsStreaming(IGStreamerStreamer* p)
 {
 	if (p != NULL)
 	{
@@ -66,7 +66,7 @@ extern "C" EXPORT_API bool mray_gst_StreamerIsStreaming(IGStreamerStreamer* p)
 	return false;
 
 }
-extern "C" EXPORT_API void mray_gst_StreamerClose(IGStreamerStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerClose(IGStreamerStreamer* p)
 {
 	if (p != NULL)
 	{
@@ -77,7 +77,7 @@ extern "C" EXPORT_API void mray_gst_StreamerClose(IGStreamerStreamer* p)
 
 #ifdef USE_UNITY_NETWORK
 
-extern "C" EXPORT_API void* mray_gst_createNetworkStreamer()
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkStreamer()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
@@ -87,14 +87,14 @@ extern "C" EXPORT_API void* mray_gst_createNetworkStreamer()
 	}
 	return 0;
 }
-extern "C" EXPORT_API void mray_gst_netStreamerSetIP(GstCustomVideoStreamer* p, const char* ip, int videoPort, bool rtcp)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetIP(GstCustomVideoStreamer* p, const char* ip, int videoPort, bool rtcp)
 {
 	if (p)
 	{
 		p->BindPorts(ip, videoPort, 0, rtcp);
 	}
 }
-extern "C" EXPORT_API bool mray_gst_netStreamerCreateStream(GstCustomVideoStreamer* p)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netStreamerCreateStream(GstCustomVideoStreamer* p)
 {
 	if (p)
 	{
@@ -102,7 +102,7 @@ extern "C" EXPORT_API bool mray_gst_netStreamerCreateStream(GstCustomVideoStream
 	}
 	return false;
 }
-extern "C" EXPORT_API void mray_gst_netStreamerSetGrabber(GstCustomVideoStreamer* p, UnityImageGrabber* g)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstCustomVideoStreamer* p, UnityImageGrabber* g)
 {
 	if (p)
 	{
@@ -110,7 +110,7 @@ extern "C" EXPORT_API void mray_gst_netStreamerSetGrabber(GstCustomVideoStreamer
 	}
 
 }
-extern "C" EXPORT_API void mray_gst_netStreamerSetBitRate(GstCustomVideoStreamer* p, int bitRate)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstCustomVideoStreamer* p, int bitRate)
 {
 	if (p)
 	{
@@ -118,7 +118,7 @@ extern "C" EXPORT_API void mray_gst_netStreamerSetBitRate(GstCustomVideoStreamer
 	}
 
 }
-extern "C" EXPORT_API void mray_gst_netStreamerSetResolution(GstCustomVideoStreamer* p, int width, int height, int fps)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetResolution(GstCustomVideoStreamer* p, int width, int height, int fps)
 {
 	if (p)
 	{

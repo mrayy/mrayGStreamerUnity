@@ -14,7 +14,7 @@
 
 using namespace mray;
 
-extern "C" EXPORT_API bool mray_gstreamer_initialize()
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 {
 	LogManager::Instance()->LogMessage("mray_gstreamer_initialize");
 	if (video::GStreamerCore::RefCount() == 0)
@@ -32,7 +32,7 @@ extern "C" EXPORT_API bool mray_gstreamer_initialize()
 	return true;
 }
 
-extern "C" EXPORT_API void mray_gstreamer_shutdown()
+extern "C" UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
 {
 	video::GStreamerCore::Unref();
 	if (video::GStreamerCore::RefCount() == 0)
@@ -48,7 +48,7 @@ extern "C" EXPORT_API void mray_gstreamer_shutdown()
 
 }
 
-extern "C" EXPORT_API bool mray_gstreamer_isActive()
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
 {
 	LogMessage("Checking is active", ELL_INFO);
 	return video::GStreamerCore::Instance()!=0;

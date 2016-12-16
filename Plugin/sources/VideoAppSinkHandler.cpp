@@ -75,6 +75,8 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 
 	case GST_VIDEO_FORMAT_I420:
 		return EPixel_I420;
+    case GST_VIDEO_FORMAT_NV12:
+            return EPixel_NV12;
 
 	default:
 		return EPixel_Unkown;
@@ -92,15 +94,21 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	{
 		return GST_FLOW_ERROR;
 	}
-	bool isI420 = false;;
 
+    bool RGBFormat=true;
 	int height = vinfo.height;
 	if (fmt == video::EPixel_I420)
 	{
-		isI420 = true;
+        RGBFormat=false;
 		//fmt = video::EPixel_LUMINANCE8;
 		height *= 1.5;
-	}
+    }else if (fmt == video::EPixel_NV12)
+    {
+        RGBFormat=false;
+        //fmt = video::EPixel_LUMINANCE8;
+        height *= 2;
+    }
+
 	if (m_pixels[0].imageData && (m_pixels[0].Size.x != vinfo.width || m_pixels[0].Size.y != height || m_pixels[0].format != fmt))
 	{
 		m_IsAllocated = false;
@@ -114,11 +122,8 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 
 	int stride = 0;
 	int dataSize = m_pixels[0].Size.x*m_pixels[0].Size.y;
-	if (isI420)
-	{
-	}
-	else
-		dataSize *= pxSize;
+	if (RGBFormat)
+        dataSize *= pxSize;
 
 	if (m_pixels[0].imageData && dataSize != (int)size){
 		GstVideoInfo vinfo = getVideoInfo(sample.get());
@@ -153,10 +158,10 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	}
 	else{
 
-		if (isI420)
-			_Allocate(vinfo.width, vinfo.height*1.5, fmt);
-		else 
+		if (RGBFormat)
 			_Allocate(vinfo.width, vinfo.height, fmt);
+		else 
+			_Allocate(vinfo.width, height, fmt);
 
 		m_mutex->unlock();
 		FIRE_LISTENR_METHOD(OnStreamPrepared, (this));
@@ -192,7 +197,7 @@ bool VideoAppSinkHandler::_Allocate(int width, int height, video::EPixelFormat f
 
 
 bool VideoAppSinkHandler::GrabFrame(){
-	m_mutex->lock();
+    m_mutex->lock();
 	m_HavePixelsChanged = m_BackPixelsChanged;
 	if (m_HavePixelsChanged){
 		m_BackPixelsChanged = false;

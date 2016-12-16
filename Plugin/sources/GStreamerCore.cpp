@@ -104,6 +104,7 @@ void GStreamerCore::_Init()
 		//std::string gst_path = g_getenv("GSTREAMER_1_0_ROOT_X86_64");
 		//putenv(("GST_PLUGIN_PATH_1_0=" + gst_path + "lib\\gstreamer-1.0" + ";.").c_str());
         //add our custom src/sink elements
+#ifdef USE_UNITY_NETWORK
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"appsink", (char*)"Element application sink",
 			appsink_plugin_init, "0.1", "LGPL", "ofVideoPlayer", "openFrameworks",
@@ -116,7 +117,6 @@ void GStreamerCore::_Init()
 			"mysink", (char*)"Element application sink",
 			_GstMySinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
                                    "");
-#ifdef USE_UNITY_NETWORK
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsrc", (char*)"Element udp src",
 			_GstMyUDPSrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",

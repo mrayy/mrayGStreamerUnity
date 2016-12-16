@@ -45,6 +45,7 @@ namespace video
 		std::string clockIP;
 		ulong baseTime;
 		bool isMasterClock;
+
 	};
 
 	GstPipelineHandler::GstPipelineHandler()
@@ -59,6 +60,7 @@ namespace video
 		Close();
 		GStreamerCore::Instance()->Unref();
 		delete m_data;
+		m_data = 0;
 	}
 
 	bool GstPipelineHandler::CreatePipeline(bool isMasterClock, const std::string& clockIP, uint clockPort)
@@ -170,14 +172,17 @@ namespace video
 	}
 	void GstPipelineHandler::Close()
 	{
-
+		m_data->closing = true;
+		if (m_data->busWatchID != 0)
+		{
+			g_source_remove(m_data->busWatchID);
+			m_data->busWatchID = 0;
+		}
 		Stop();
-
 		if (m_data->Loaded){
 			gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_NULL);
 			gst_element_get_state(m_data->gstPipeline, NULL, NULL, 2 * GST_SECOND);
 
-			if (m_data->busWatchID != 0) g_source_remove(m_data->busWatchID);
 
 			gst_object_unref(m_data->gstPipeline);
 			m_data->gstPipeline = NULL;
@@ -187,6 +192,8 @@ namespace video
 	}
 	bool GstPipelineHandler::HandleMessage(GstBus * bus, GstMessage * msg)
 	{
+// 		if (m_data->closing)
+// 			return true;
 		switch (GST_MESSAGE_TYPE(msg)) {
 
 		case GST_MESSAGE_BUFFERING:
@@ -265,8 +272,8 @@ namespace video
 			g_free(debug);
 
 			FIRE_LISTENR_METHOD(OnPipelineError, (this));
-
-			gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_NULL);
+			if (m_data)
+				gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_NULL);
 
 		}break;
 
