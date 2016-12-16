@@ -12,8 +12,6 @@
 
 #endif
 
-using namespace mray;
-
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 {
 	LogManager::Instance()->LogMessage("mray_gstreamer_initialize");
@@ -53,4 +51,29 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
 	LogMessage("Checking is active", ELL_INFO);
 	return video::GStreamerCore::Instance()!=0;
 
+}
+
+/////////////////
+
+extern "C" UNITY_INTERFACE_EXPORT video::ImageInfo* mray_createImageData(int width,int height,video::EPixelFormat format)
+{
+    video::ImageInfo* ifo=new video::ImageInfo();
+    ifo->createData(Vector2d(width,height), format);
+    return ifo;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_resizeImageData(video::ImageInfo* ifo,int width,int height,video::EPixelFormat format)
+{
+    ifo->createData(Vector2d(width,height), format);
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_getImageDataInfo(video::ImageInfo* ifo,int& width,int& height,video::EPixelFormat&  format)
+{
+    width=ifo->Size.x;
+    height=ifo->Size.y;
+    format=ifo->format;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_deleteImageData(video::ImageInfo* ifo)
+{
+    if(ifo!=NULL)
+        delete ifo;
+    ifo=NULL;
 }

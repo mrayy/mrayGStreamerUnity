@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "UnityImageGrabber.h"
+#include "IThreadManager.h"
 
 
 
@@ -15,10 +16,12 @@ UnityImageGrabber::UnityImageGrabber()
 {
 	m_hasNewFrame = false;
 	m_bufferID = 0;
+    m_mutex=OS::IThreadManager::getInstance().createMutex();
 }
 
 UnityImageGrabber::~UnityImageGrabber()
 {
+    delete m_mutex;
 }
 
 

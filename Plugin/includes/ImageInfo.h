@@ -36,6 +36,7 @@ public:
 	void clear();
 	void setData(const void*data, const Vector2d&size, EPixelFormat format);
 	void createData(const Vector2d& size,EPixelFormat format);
+    void copyFrom(const ImageInfo* i);
 
 	uchar*getSurface(int d);
 	const uchar*getSurface(int d)const;

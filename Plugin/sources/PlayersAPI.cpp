@@ -220,6 +220,18 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerGrabFrame(GstCustomV
 	return false;
 
 }
+
+
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyFrame(GstCustomVideoPlayer* p, video::ImageInfo* target)
+{
+    if(p!=NULL && target!=NULL)
+    {
+        target->copyFrom(p->GetLastFrame());
+        return true;
+    }
+    return false;
+}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)

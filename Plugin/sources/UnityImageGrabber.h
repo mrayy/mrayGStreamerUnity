@@ -4,7 +4,7 @@
 #define __UNITYIMAGEGRABBER__
 
 #include "IVideoGrabber.h"
-#include "WinMutex.h"
+#include "IMutex.h"
 
 namespace mray
 {
@@ -14,7 +14,7 @@ namespace video
 class UnityImageGrabber:public video::IVideoGrabber
 {
 protected:
-	OS::WinMutex m_mutex;
+	OS::IMutex* m_mutex;
 	ImageInfo m_backBuffer;
 	ImageInfo m_imageInfo;
 	bool m_hasNewFrame;
@@ -38,8 +38,8 @@ public:
 
 	void SetData(void* ptr, int w, int h, int FORMAT);
 
-	virtual void Lock(){ m_mutex.lock(); }
-	virtual void Unlock(){ m_mutex.unlock(); }
+	virtual void Lock(){ m_mutex->lock(); }
+	virtual void Unlock(){ m_mutex->unlock(); }
 };
 
 }

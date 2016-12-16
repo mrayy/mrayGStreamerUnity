@@ -23,6 +23,7 @@
 		403DF7E81E03DE5900FDBDF9 /* Unity in Resources */ = {isa = PBXBuildFile; fileRef = 403DF7E71E03DE5900FDBDF9 /* Unity */; };
 		403DF7EA1E03E02C00FDBDF9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */; };
 		403DF7EF1E03E08000FDBDF9 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7EB1E03E08000FDBDF9 /* glew.c */; };
+		403DF7F41E0493F700FDBDF9 /* UnityImageGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */; };
 		40428CF71E036DA8004F1D58 /* GStreamer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40428CF61E036DA8004F1D58 /* GStreamer.framework */; };
 		40F5F31B1E03652F006A010E /* CMySink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F01E03652F006A010E /* CMySink.cpp */; };
 		40F5F31C1E03652F006A010E /* CMySrc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F21E03652F006A010E /* CMySrc.cpp */; };
@@ -74,6 +75,8 @@
 		403DF7ED1E03E08000FDBDF9 /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = ../includes/GLEW/glxew.h; sourceTree = "<group>"; };
 		403DF7EE1E03E08000FDBDF9 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = ../includes/GLEW/wglew.h; sourceTree = "<group>"; };
 		403DF7F11E03EC5800FDBDF9 /* UnityGraphicsDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnityGraphicsDevice.h; path = ../includes/UnityGraphicsDevice.h; sourceTree = "<group>"; };
+		403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityImageGrabber.cpp; path = ../sources/UnityImageGrabber.cpp; sourceTree = "<group>"; };
+		403DF7F31E0493F700FDBDF9 /* UnityImageGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityImageGrabber.h; path = ../sources/UnityImageGrabber.h; sourceTree = "<group>"; };
 		40428CF61E036DA8004F1D58 /* GStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GStreamer.framework; path = ../../../../../../../../Library/Frameworks/GStreamer.framework; sourceTree = "<group>"; };
 		40F5F2F01E03652F006A010E /* CMySink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CMySink.cpp; path = ../sources/CMySink.cpp; sourceTree = "<group>"; };
 		40F5F2F11E03652F006A010E /* CMySink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMySink.h; path = ../sources/CMySink.h; sourceTree = "<group>"; };
@@ -178,6 +181,8 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */,
+				403DF7F31E0493F700FDBDF9 /* UnityImageGrabber.h */,
 				40F5F2F01E03652F006A010E /* CMySink.cpp */,
 				40F5F2F11E03652F006A010E /* CMySink.h */,
 				40F5F2F21E03652F006A010E /* CMySrc.cpp */,
@@ -378,6 +383,7 @@
 				403DF7E41E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp in Sources */,
 				403DF7E61E03DE3400FDBDF9 /* RenderAPI.cpp in Sources */,
 				40F5F32B1E03652F006A010E /* StreamersAPI.cpp in Sources */,
+				403DF7F41E0493F700FDBDF9 /* UnityImageGrabber.cpp in Sources */,
 				40F5F3261E03652F006A010E /* GstPlayerBin.cpp in Sources */,
 				40F5F3281E03652F006A010E /* IGStreamerPlayer.cpp in Sources */,
 				40F5F3461E03654D006A010E /* IThreadManager.cpp in Sources */,

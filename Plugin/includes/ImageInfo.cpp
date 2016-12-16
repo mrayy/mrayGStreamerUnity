@@ -51,6 +51,11 @@ void ImageInfo::setData(const void*data, const Vector2d&size, EPixelFormat forma
 	}
 	memcpy(imageData,data,imageDataSize);
 }
+    
+void ImageInfo::copyFrom(const ImageInfo* i)
+{
+    setData(i->imageData,i->Size,i->format);
+}
 
 void ImageInfo::createData(const Vector2d& size, EPixelFormat format){
 	if(Size==size && format == this->format)
