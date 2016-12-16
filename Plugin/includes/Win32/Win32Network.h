@@ -7,7 +7,9 @@
 #include "INetwork.h"
 #include "NetAddress.h"
 
+#ifdef WIN32
 #include <winsock2.h>
+#endif
 
 namespace mray{
 namespace network{

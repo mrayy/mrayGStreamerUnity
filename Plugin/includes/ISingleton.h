@@ -4,6 +4,7 @@
 #define ___ISingleton___
 
 #include "UnityHelpers.h"
+#include <exception>
 
 namespace mray{
 
@@ -17,7 +18,7 @@ public:
 		if (m_instance != 0)
 		{
 			LogMessage("Instance is already created!", ELL_ERROR);
-			throw new std::exception("Instance is already created");
+			//throw new std::exception("Instance is already created");
 		}
 
 #if defined( _MSC_VER ) && _MSC_VER < 1200	 
@@ -34,7 +35,7 @@ public:
 		if (m_instance == 0)
 		{
 			LogMessage("Instance object not created!", ELL_ERROR);
-			throw new std::exception("Instance object not created");
+			//throw new std::exception("Instance object not created");
 		}
 		return *m_instance;
 	}

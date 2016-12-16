@@ -56,7 +56,7 @@ public:
 	}
 	void RemoveListener(const ListenerType&l)
 	{
-		std::list<ListenerType>::iterator it= m_listeners.begin();
+		typename std::list<ListenerType>::iterator it= m_listeners.begin();
 		for(;it!=m_listeners.end();++it)
 		{
 			if(*it==l)

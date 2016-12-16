@@ -267,7 +267,7 @@ GstFlowReturn VideoAppSinkHandler::on_new_buffer_from_source(GstAppSink * elt, v
 
 GstFlowReturn VideoAppSinkHandler::on_new_preroll_from_source(GstAppSink * elt, void * data){
 #if GST_VERSION_MAJOR==0
-	shared_ptr<GstBuffer> buffer(gst_app_sink_pull_preroll(GST_APP_SINK(elt)), &gst_buffer_unref);
+	GstBuffer* buffer=(gst_app_sink_pull_preroll(GST_APP_SINK(elt)), &gst_buffer_unref);
 #else
 	std::shared_ptr<GstSample> buffer(gst_app_sink_pull_preroll(GST_APP_SINK(elt)), &gst_sample_unref);
 #endif

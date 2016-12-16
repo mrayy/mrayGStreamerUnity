@@ -14,8 +14,12 @@
 #include <algorithm>
 #include "CMySrc.h"
 #include "CMySink.h"
+
+#ifdef USE_UNITY_NETWORK
 #include "CMyUDPSrc.h"
 #include "CMyUDPSink.h"
+#endif
+
 
 namespace mray
 {
@@ -87,21 +91,23 @@ void GStreamerCore::_Init()
 		LogManager::Instance()->LogMessage("GStreamerCore - Failed to init GStreamer!");
 	}
 	else
-	{
+    {
 		g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
 		g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
 		g_log_set_default_handler(g_logFunction, 0);
-
-		fclose(stderr);
-
+        
+        LogManager::Instance()->LogMessage("GStreamerCore - Registering Elements!");
+		//fclose(stderr);
+        
 		//register plugin path
-		std::string gst_path = g_getenv("GSTREAMER_1_0_ROOT_X86_64");
+        
+		//std::string gst_path = g_getenv("GSTREAMER_1_0_ROOT_X86_64");
 		//putenv(("GST_PLUGIN_PATH_1_0=" + gst_path + "lib\\gstreamer-1.0" + ";.").c_str());
-		//add our custom src/sink elements
+        //add our custom src/sink elements
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"appsink", (char*)"Element application sink",
 			appsink_plugin_init, "0.1", "LGPL", "ofVideoPlayer", "openFrameworks",
-			"http://openframeworks.cc/");
+                                   "http://openframeworks.cc/");
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysrc", (char*)"Element application src",
 			_GstMySrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
@@ -109,7 +115,8 @@ void GStreamerCore::_Init()
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysink", (char*)"Element application sink",
 			_GstMySinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
-			"");
+                                   "");
+#ifdef USE_UNITY_NETWORK
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsrc", (char*)"Element udp src",
 			_GstMyUDPSrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
@@ -118,7 +125,8 @@ void GStreamerCore::_Init()
 			"myudpsink", (char*)"Element udp sink",
 			_GstMyUDPSinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
 			"");
-		LogMessage("GStreamerCore - GStreamer inited", ELL_INFO);
+#endif
+		LogManager::Instance()->LogMessage("GStreamerCore - GStreamer inited");
 	}
 
 #if GLIB_MINOR_VERSION<32
@@ -170,7 +178,7 @@ void GStreamerCore::Unref()
 		LogMessage("GStreamerCore::Unref() - unreferencing GStreamer with no reference! ", ELL_ERROR);
 		return;
 	}
-	m_refCount--;
+	//m_refCount--;
 	if (m_refCount == 0)
 	{
 		delete m_instance;

@@ -3,9 +3,13 @@
 #include "UnityHelpers.h"
 
 #include "UnityPlugin.h"
-#include <windows.h>
+#ifdef WIN32
+    #include <windows.h>
+#endif
 #include "GraphicsInclude.h"
 #include "ImageInfo.h"
+
+#include <gl/gl.h>
 
 using namespace mray;
 using namespace video;
@@ -64,6 +68,7 @@ LogManager* LogManager::Instance()
 LogManager::LogManager()
 {
 	m_logFile = fopen("GStreamerLog.txt", "w");
+    fclose(m_logFile);
 }
 LogManager::~LogManager()
 {
@@ -71,7 +76,9 @@ LogManager::~LogManager()
 }
 void LogManager::LogMessage(const std::string& msg)
 {
-	fprintf(m_logFile, "%s\n", msg.c_str());
+    m_logFile = fopen("GStreamerLog.txt", "a");
+    fprintf(m_logFile, "%s\n", msg.c_str());
+    fclose(m_logFile);
 }
 
 
@@ -97,6 +104,32 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 	}
 }
 
+void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHeight,uchar** data,int* pitch)
+{
+    
+    if (ifo->format == video::EPixel_I420)
+    {
+        //data = new uchar[ifo->imageDataSize];
+        *pitch = _UnityTextureWidth;
+        
+        *data = ifo->imageData;
+    }
+    else
+    {
+        //				data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];
+        // 				pitch = _UnityTextureWidth * 3;
+        // 				data = ifo->imageData;
+        
+        if (ifo->tmpBuffer->Size != ifo->Size)
+        {
+            ifo->tmpBuffer->createData(ifo->Size, video::EPixel_R8G8B8A8);
+        }
+        *pitch = _UnityTextureWidth * 4;
+        *data = ifo->tmpBuffer->imageData;
+        CopyToTexture(ifo, (uchar*)*data, ifo->format);
+    }
+}
+
 void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
 
@@ -106,7 +139,9 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 	if (ifo->tmpBuffer == 0)
 		((video::ImageInfo*)ifo)->tmpBuffer = new ImageInfo();
 
-
+    
+    uchar* data = 0;
+    int pitch = 0;
 #if SUPPORT_D3D9
 	// D3D9 case
 	if (g_GraphicsDeviceType == kGfxRendererD3D9)
@@ -146,30 +181,7 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 			d3dtex->GetDesc(&desc);
 			//ctx->UpdateSubresource(d3dtex, 0, nullptr, ifo->imageData, desc.Width * 3, 0);
 			
-			uchar* data = 0;
-			int pitch = 0;
-			if (ifo->format == video::EPixel_I420)
-			{
-				//data = new uchar[ifo->imageDataSize];
-				pitch = _UnityTextureWidth;
-
-				data = ifo->imageData;
-			}
-			else
-			{
-//				data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];
-// 				pitch = _UnityTextureWidth * 3;
-// 				data = ifo->imageData;
-				
-				if (ifo->tmpBuffer->Size != ifo->Size)
-				{
-					ifo->tmpBuffer->createData(ifo->Size, video::EPixel_R8G8B8A8);
-				}
-				pitch = _UnityTextureWidth * 4;
-				data = ifo->tmpBuffer->imageData;
-				CopyToTexture(ifo, (uchar*)data, ifo->format);
-			}
-
+            CheckData(ifo,_UnityTextureWidth,_UnityTextureWidth,&data,&pitch);
 			ctx->UpdateSubresource(d3dtex, 0, nullptr, data, pitch, 0);
 			//delete[] data;
 
@@ -182,7 +194,8 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 
 #if SUPPORT_OPENGL
 	// OpenGL case
-	if (g_GraphicsDeviceType == kGfxRendererOpenGL)
+	if (g_GraphicsDeviceType == kGfxRendererOpenGL ||
+        g_GraphicsDeviceType == kGfxRendererOpenGLCore)
 	{
 		// update native texture from code
 		if (_TextureNativePtr)
@@ -191,8 +204,10 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
 			glBindTexture(GL_TEXTURE_2D, gltex);
 			int texWidth, texHeight;
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight, GL_RGB, GL_UNSIGNED_BYTE, ifo->imageData);
+            glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
+            CheckData(ifo,_UnityTextureWidth,_UnityTextureWidth,&data,&pitch);
+            
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, _UnityTextureWidth, _UnityTextureHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 		}
 	}

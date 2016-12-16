@@ -7,6 +7,10 @@
 #ifdef WIN32
 #include <winsock2.h>
 //#pragma comment (lib,"ws2_32.lib")
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+
 #endif
 
 
@@ -61,9 +65,9 @@ std::string NetAddress::toString() const{
 	int ip[4];
 	getIP(ip);
 
-	char ipStr[32];
+	char ipStr[512];
 	std::string str;
-	sprintf_s(ipStr,32,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
+	sprintf(ipStr,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
 	str = ipStr;
 	return str;
 }
@@ -91,7 +95,7 @@ void NetAddress::setIP(const std::string& ipStr){
 	if(ipStr=="")return;
 	int ip[4];
 
-	if (sscanf_s(ipStr.c_str(), "%d.%d.%d.%d", &ip[0], &ip[1], &ip[2], &ip[3]) != 4)return;
+	if (sscanf(ipStr.c_str(), "%d.%d.%d.%d", &ip[0], &ip[1], &ip[2], &ip[3]) != 4)return;
 
 	setIP(ip);
 }

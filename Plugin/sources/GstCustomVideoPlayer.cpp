@@ -36,8 +36,7 @@ public:
 
 	void _BuildPipeline()
 	{
-		m_pipeLineString = m_inputPipeline + 
-			" ! appsink name=videoSink ";
+        m_pipeLineString = m_inputPipeline ;//+" ! appsink name=videoSink ";
 
 	}
 

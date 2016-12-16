@@ -15,6 +15,10 @@
 #define EXPORT_API
 #endif
 
+#ifdef WIN32
+    #define USE_UNITY_GRABBER
+    #define USE_UNITY_NETWORK
+#endif
 
 // Which graphics device APIs we possibly support?
 #if UNITY_WIN
@@ -40,6 +44,7 @@ enum GfxDeviceRenderer
 	kGfxRendererOpenGLES20Mobile = 8,    // OpenGL ES 2.0 mobile variant
 	kGfxRendererMolehill = 9,            // Flash 11 Stage3D
 	kGfxRendererOpenGLES20Desktop = 10,  // OpenGL ES 2.0 desktop variant (i.e. NaCl)
+    kGfxRendererOpenGLCore=17
 };
 
 enum GfxDeviceEventType

@@ -5,6 +5,7 @@
 #include "GraphicsInclude.h"
 #include "PixelUtil.h"
 
+#ifdef USE_UNITY_GRABBER
 extern "C" EXPORT_API void* mray_gst_createUnityImageGrabber()
 {
 	GStreamerCore* c = GStreamerCore::Instance();
@@ -22,10 +23,11 @@ extern "C" EXPORT_API void mray_gst_UnityImageGrabberSetData(UnityImageGrabber* 
 		return;
 	g->SetData(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, Format);
 }
+#endif
 
 extern "C" EXPORT_API void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
 {
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		p->Close();
 		delete p;
@@ -35,21 +37,21 @@ extern "C" EXPORT_API void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
 extern "C" EXPORT_API void mray_gst_StreamerStream(IGStreamerStreamer* p)
 {
 
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		p->Stream();
 	}
 }
 extern "C" EXPORT_API void mray_gst_StreamerPause(IGStreamerStreamer* p)
 {
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		p->SetPaused(true);
 	}
 }
 extern "C" EXPORT_API void mray_gst_StreamerStop(IGStreamerStreamer* p)
 {
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		p->Stop();
 	}
@@ -57,7 +59,7 @@ extern "C" EXPORT_API void mray_gst_StreamerStop(IGStreamerStreamer* p)
 }
 extern "C" EXPORT_API bool mray_gst_StreamerIsStreaming(IGStreamerStreamer* p)
 {
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		return p->IsStreaming();
 	}
@@ -66,13 +68,14 @@ extern "C" EXPORT_API bool mray_gst_StreamerIsStreaming(IGStreamerStreamer* p)
 }
 extern "C" EXPORT_API void mray_gst_StreamerClose(IGStreamerStreamer* p)
 {
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		return p->Close();
 	}
 
 }
 
+#ifdef USE_UNITY_NETWORK
 
 extern "C" EXPORT_API void* mray_gst_createNetworkStreamer()
 {
@@ -123,3 +126,4 @@ extern "C" EXPORT_API void mray_gst_netStreamerSetResolution(GstCustomVideoStrea
 	}
 
 }
+#endif

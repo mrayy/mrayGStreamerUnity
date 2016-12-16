@@ -2,8 +2,15 @@
 
 #include "stdafx.h"
 #include "CoreAPI.h"
-#include "WinThreadManager.h"
-#include "Win32Network.h"
+#include "UnityHelpers.h"
+
+#ifdef WIN32
+#include "Win32/WinThreadManager.h"
+#include "Win32/Win32Network.h"
+#else
+#include "OSX/OSXThreadManager.h"
+
+#endif
 
 using namespace mray;
 
@@ -13,9 +20,12 @@ extern "C" EXPORT_API bool mray_gstreamer_initialize()
 	if (video::GStreamerCore::RefCount() == 0)
 	{
 		LogManager::Instance()->LogMessage("Initializing GStreamer Engine");
-		
+#ifdef WIN32
 		new OS::WinThreadManager();
 		new network::Win32Network();
+#else
+        new OS::OSXThreadManager();
+#endif
 		LogManager::Instance()->LogMessage("Initializing GStreamer Engine - Done");
 	}
 	video::GStreamerCore::Ref();
@@ -26,9 +36,14 @@ extern "C" EXPORT_API void mray_gstreamer_shutdown()
 {
 	video::GStreamerCore::Unref();
 	if (video::GStreamerCore::RefCount() == 0)
-	{
+    {
+#ifdef WIN32
+
 		delete OS::WinThreadManager::getInstancePtr();
 		delete network::Win32Network::getInstancePtr();
+#else
+        delete OS::OSXThreadManager::getInstancePtr();
+#endif
 	}
 
 }
