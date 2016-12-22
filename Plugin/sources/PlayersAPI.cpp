@@ -232,6 +232,16 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyFrame(GstCustomV
     }
     return false;
 }
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCropFrame(GstCustomVideoPlayer* p, video::ImageInfo* target,int x,int y,int width,int height)
+{
+    if(p!=NULL && target!=NULL)
+    {
+        target->copyCroppedFrom(p->GetLastFrame(),Vector2d(x,y),Vector2d(width,height),false,video::EPixel_LUMINANCE8);
+        return true;
+    }
+
+}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)

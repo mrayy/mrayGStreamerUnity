@@ -15,6 +15,14 @@
       </ContextState>
       <ContextState
          contextName = "CopyToTexture(mray::video::ImageInfo const*, unsigned char*, mray::video::EPixelFormat):UnityHelpers.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(char*)ptr">
+            </PersistentString>
+            <PersistentString
+               value = "(char*)srcPtr">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "BlitImage(mray::video::ImageInfo const*, void*, int, int):UnityHelpers.cpp">

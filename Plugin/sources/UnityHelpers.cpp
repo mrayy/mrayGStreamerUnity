@@ -96,7 +96,8 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 {
 	if (fmt == video::EPixel_I420 || fmt==video::EPixelFormat::EPixel_LUMINANCE8
 		|| fmt == video::EPixelFormat::EPixel_R8G8B8 || fmt == video::EPixelFormat::EPixel_B8G8R8
-		)
+        || (fmt==video::EPixel_LUMINANCE8 || fmt==video::EPixel_Alpha8 ) &&
+        (src->format==video::EPixel_LUMINANCE8 || src->format==video::EPixel_Alpha8 ))
 	{
 		memcpy(dst, src->imageData, src->imageDataSize);
 		return;
@@ -106,12 +107,23 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 	uchar* srcPtr = src->imageData;
 	for (int i = 0; i < len; i += 3)
 	{
-		ptr[0] = srcPtr[0];
-		ptr[1] = srcPtr[1];
-		ptr[2] = srcPtr[2];
-		ptr[3] = 255;
+        if(src->format==video::EPixelFormat::EPixel_R8G8B8 ||
+           src->format == video::EPixelFormat::EPixel_B8G8R8)
+        {
+            ptr[0] = srcPtr[0];
+            ptr[1] = srcPtr[1];
+            ptr[2] = srcPtr[2];
+            srcPtr += 3;
+        }else if(src->format==video::EPixelFormat::EPixel_Alpha8 ||
+                 src->format == video::EPixelFormat::EPixel_LUMINANCE8)
+        {
+            ptr[0] = srcPtr[0];
+            ptr[1] = srcPtr[0];
+            ptr[2] = srcPtr[0];
+            srcPtr ++;
+        }
+        ptr[3] = 255;
 		ptr += 4;
-		srcPtr += 3;
 	}
 }
 
@@ -119,7 +131,8 @@ void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHe
 {
     
     if (ifo->format == video::EPixel_I420 ||
-        ifo->format == video::EPixel_NV12)
+        ifo->format == video::EPixel_NV12 ||
+        (ifo->format==video::EPixel_LUMINANCE8 || ifo->format==video::EPixel_Alpha8 ))
     {
         *comps=1;
         //data = new uchar[ifo->imageDataSize];

@@ -37,6 +37,9 @@ public:
 	void setData(const void*data, const Vector2d&size, EPixelFormat format);
 	void createData(const Vector2d& size,EPixelFormat format);
     void copyFrom(const ImageInfo* i);
+    void copyCroppedFrom(const ImageInfo* i,Vector2d pos,Vector2d size,bool clamp,EPixelFormat targetFormat);
+    
+    void FlipImage(bool horizontal,bool vertical);
 
 	uchar*getSurface(int d);
 	const uchar*getSurface(int d)const;
