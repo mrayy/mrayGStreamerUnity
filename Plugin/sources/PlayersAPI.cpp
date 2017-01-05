@@ -356,6 +356,34 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerClose(IGStreamerPlayer* p)
 
 }
 
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerSetPosition(IGStreamerPlayer* p,unsigned int pos)
+{
+    if (p != NULL)
+    {
+        return p->SetPosition(pos);
+    }
+    return false;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetPosition(IGStreamerPlayer* p)
+{
+    
+    if (p != NULL)
+    {
+        return p->GetPosition();
+    }
+    return -1;
+}
+extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetDuration(IGStreamerPlayer* p)
+{
+    
+    if (p != NULL)
+    {
+        return p->GetDuration();
+    }
+    return -1;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 

@@ -47,7 +47,10 @@ public:
 	virtual bool IsLoaded();
 	virtual bool IsPlaying();
 	virtual void Close();
-	virtual bool HandleMessage(GstBus * bus, GstMessage * msg);
+    virtual bool HandleMessage(GstBus * bus, GstMessage * msg);
+    virtual bool SetPosition(signed long pos);
+    virtual signed long  GetPosition();
+    virtual signed long GetDuration();
 
 	virtual bool QueryLatency(bool &isLive,ulong& minLatency,ulong& maxLatency);
 

@@ -78,7 +78,14 @@ void g_logFunction(const gchar   *log_domain,
 	const gchar   *message,
 	gpointer       user_data)
 {
-	LogMessage(message, ELL_INFO);
+    if(log_level==G_LOG_LEVEL_INFO || log_level==G_LOG_LEVEL_DEBUG)
+        LogMessage(message, ELL_INFO);
+    else if(log_level==G_LOG_LEVEL_WARNING)
+        LogMessage(message, ELL_WARNING);
+    else if(log_level==G_LOG_LEVEL_CRITICAL || log_level==G_LOG_FLAG_FATAL)
+        LogMessage(message, ELL_ERROR);
+    else
+        LogMessage(message, ELL_INFO);
 }
 
 void GStreamerCore::_Init()
@@ -92,7 +99,11 @@ void GStreamerCore::_Init()
 	}
 	else
     {
-		g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
+        g_log_set_handler(0,  G_LOG_LEVEL_WARNING, g_logFunction, 0);
+        g_log_set_handler(0,  G_LOG_LEVEL_MESSAGE, g_logFunction, 0);
+        g_log_set_handler(0,  G_LOG_LEVEL_INFO, g_logFunction, 0);
+        g_log_set_handler(0,  G_LOG_LEVEL_DEBUG, g_logFunction, 0);
+        g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
 		g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
 		g_log_set_default_handler(g_logFunction, 0);
         

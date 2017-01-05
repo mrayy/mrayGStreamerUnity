@@ -48,7 +48,10 @@ public:
 	virtual void Stop() = 0;
 	virtual bool IsLoaded() = 0;
 	virtual bool IsPlaying() = 0;
-	virtual void Close() = 0;
+    virtual void Close() = 0;
+    virtual bool SetPosition(signed long pos)=0;
+    virtual signed long  GetPosition()=0;
+    virtual signed long GetDuration()=0;
 
 	virtual bool QueryLatency(bool &isLive, ulong& minLatency, ulong& maxLatency);
 

@@ -130,8 +130,7 @@ namespace mray
             {
                 SetPaused(false);
             }
-            
-            void Pause()
+                        void Pause()
             {
                 SetPaused(true);
             }
@@ -277,6 +276,19 @@ namespace mray
             return m_impl->GetCaptureFrameRate();
             
         }
+        bool GstCustomVideoPlayer::SetPosition(signed long pos)
+        {
+            return m_impl->SetPosition(pos);
+        }
+        signed long GstCustomVideoPlayer::GetPosition()
+        {
+            return  m_impl->GetPosition();
+        }
+        signed long GstCustomVideoPlayer::GetDuration()
+        {
+            return m_impl->GetDuration();
+        }
+
         
         const ImageInfo* GstCustomVideoPlayer::GetLastFrame()
         {

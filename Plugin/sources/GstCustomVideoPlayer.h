@@ -37,7 +37,10 @@ public:
 	virtual void Stop();
 	virtual bool IsLoaded();
 	virtual bool IsPlaying();
-	virtual void Close();
+    virtual void Close();
+    virtual bool SetPosition(signed long pos);
+    virtual signed long  GetPosition();
+    virtual signed long GetDuration();
 
 	//defined by the source video stream
 	virtual void SetFrameSize(int w, int h) {}

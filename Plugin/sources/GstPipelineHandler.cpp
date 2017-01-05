@@ -90,44 +90,68 @@ namespace video
 
 
 		if (gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_READY) == GST_STATE_CHANGE_FAILURE) {
-			LogMessage("GStreamerNetworkPlayer::Play(): unable to set pipeline to ready",ELL_WARNING);
+			LogMessage("GstPipelineHandler::Play(): unable to set pipeline to ready",ELL_WARNING);
 			return false;
 		}
 		if (gst_element_get_state(GST_ELEMENT(m_data->gstPipeline), NULL, NULL, 10 * GST_SECOND) == GST_STATE_CHANGE_FAILURE){
-			LogMessage("GStreamerNetworkPlayer::Play(): unable to get pipeline ready status", ELL_WARNING);
+			LogMessage("GstPipelineHandler::Play(): unable to get pipeline ready status", ELL_WARNING);
 			return false;
 		}
 
 		// pause the pipeline
 		if (gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE) {
-			LogMessage("GStreamerNetworkPlayer::Play(): unable to pause pipeline", ELL_WARNING);
+			LogMessage("GstPipelineHandler::Play(): unable to pause pipeline", ELL_WARNING);
 			return false;
 		}
 
 		return true;
 	}
-
+    bool GstPipelineHandler::SetPosition(signed long pos)
+    {
+        if(!gst_element_seek(m_data->gstPipeline, 1.0, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET, pos*1000, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+            return false;
+        return true;
+    }
+    signed long  GstPipelineHandler::GetPosition()
+    {
+        gint64 p;
+        if(!gst_element_query_position(m_data->gstPipeline, GST_FORMAT_TIME, &p))
+            return -1;
+        return (p/1000);
+    }
+    signed long GstPipelineHandler::GetDuration()
+    {
+        gint64 p;
+        if(!gst_element_query_duration(m_data->gstPipeline, GST_FORMAT_TIME, &p))
+            return -1;
+        return (p/1000);
+    }
 	void GstPipelineHandler::SetPaused(bool p)
 	{
 		m_data->paused = p;
 		if (m_data->Loaded)
-		{
-			if (m_data->playing)
-			{
+        {
+            if (m_data->paused)
+                gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
+            else
+                gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
+
+            /*if (m_data->playing)
+            {
 				if (m_data->paused)
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
 				else
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
 			}
 			else
-			{
-				GstState state = GST_STATE_PAUSED;
+            {
+              	GstState state = GST_STATE_PAUSED;
 				gst_element_set_state(m_data->gstPipeline, state);
 				gst_element_get_state(m_data->gstPipeline, &state, NULL, 2 * GST_SECOND);
 				if (!m_data->paused)
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
 				m_data->playing = true;
-			}
+			}*/
 		}
 	}
 	void GstPipelineHandler::Stop()
@@ -210,7 +234,6 @@ namespace video
 		case GST_MESSAGE_DURATION_CHANGED:
 			//gst_element_query_duration(m_data->gstPipeline, GST_FORMAT_TIME, &durationNanos);
 			break;
-
 #endif
 
 		case GST_MESSAGE_STATE_CHANGED:{
@@ -219,9 +242,9 @@ namespace video
 			if (newstate == GST_STATE_PAUSED && !m_data->playing){
 				m_data->Loaded = true;
 				m_data->playing = true;
-				if (!m_data->paused){
+				/*if (!m_data->paused){
 					SetPaused(false);
-				}
+				}*/
 			}
 			else if (newstate == GST_STATE_READY)
 			{
@@ -248,7 +271,7 @@ namespace video
 			gst_message_parse_warning(msg, &err, &debug);
 			gchar * name = gst_element_get_name(GST_MESSAGE_SRC(msg));
 
-			LogMessage(std::string("GStreamerNetworkPlayer::HandleMessage(): warning in module ") + name + std::string("  reported: ") + err->message, ELL_WARNING);
+			LogMessage(std::string("GstPipelineHandler::HandleMessage(): warning in module ") + name + std::string("  reported: ") + err->message, ELL_WARNING);
 
 			g_free(name);
 			g_error_free(err);
@@ -264,7 +287,7 @@ namespace video
 			gst_message_parse_error(msg, &err, &debug);
 			gchar * name = gst_element_get_name(GST_MESSAGE_SRC(msg));
 
-			LogMessage(std::string("GStreamerNetworkPlayer::HandleMessage(): error in module ")
+			LogMessage(std::string("GstPipelineHandler::HandleMessage(): error in module ")
 				+ name + std::string("  reported: ") + err->message + std::string(" - ") + debug, ELL_WARNING);
 
 			g_free(name);
