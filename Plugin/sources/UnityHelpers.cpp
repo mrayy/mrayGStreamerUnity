@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-#include <gl/gl.h>
+#include <gl.h>
 
 
 #include "GraphicsInclude.h"

@@ -97,6 +97,13 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_BlitImageDataInfo(video::ImageInfo* 
 
 }
 
+extern "C" UNITY_INTERFACE_EXPORT void* mray_getImageDataPtr(video::ImageInfo* ifo)
+{
+    
+    if (ifo == NULL)
+        return 0;
+    return ifo->imageData;
+}
 
 extern "C" UNITY_INTERFACE_EXPORT void mray_FlipImageData(video::ImageInfo* ifo,bool horizontal,bool vertical)
 {

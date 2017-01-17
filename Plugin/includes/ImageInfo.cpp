@@ -106,6 +106,9 @@ void ImageInfo::copyCroppedFrom(const ImageInfo* src,Vector2d pos,Vector2d sz,bo
         const uchar* srcPtr0=src->imageData;
         uchar* dstPtr=imageData;
         
+        //flip contents Vertically
+       // dstPtr+=rowpitch*(sz.y-1);
+        
         int y0=pos.y;
         int srcOffset=y0*srcRowpitch;
         for(int i=0;i<sz.y;++i)
@@ -142,6 +145,7 @@ void ImageInfo::copyCroppedFrom(const ImageInfo* src,Vector2d pos,Vector2d sz,bo
             }
             
             y0++;
+            //dstPtr-=rowpitch;
             dstPtr+=rowpitch;
             
         }
