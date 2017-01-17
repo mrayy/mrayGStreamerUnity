@@ -114,7 +114,7 @@ struct ImageBlitData
 
 std::vector<ImageBlitData> _data;
 
-static void mray_gst_customPlayerBlitImageNativeEvent(int eventID)
+static void  __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
 {
     if (_data.size() == 0)
         return;

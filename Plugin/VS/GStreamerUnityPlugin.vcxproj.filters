@@ -33,229 +33,220 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UnityPlugin.h">
+    <ClInclude Include="../source/CMySink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/CMySrc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/CoreAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstCustomVideoPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstNetworkAudioPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstNetworkMultipleVideoPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstNetworkVideoPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstPipelineHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GstPlayerBin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/GStreamerCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/IGStreamerPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/IGStreamerStreamer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/IStreamListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/PlayersAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/StreamersAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/UnityHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/UnityImageGrabber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/UnityPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../sources/VideoAppSinkHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/GraphicsInclude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/ImageInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IMutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/INetwork.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/ISingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IThreadFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IThreadManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IUDPClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/IVideoGrabber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/ListenerContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/mTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/NetAddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/PixelUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/videoCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/Win32/Win32Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/Win32/Win32UDPClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/Win32/WinMutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/Win32/WinThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../includes/Win32/WinThreadManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\RenderAPI.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GStreamerCore.h">
+    <ClInclude Include="..\includes\UnityGraphicsDevice.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IThread.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IThreadFunction.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IThreadManager.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="UnityHelpers.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CMySink.h">
-      <Filter>Source Files\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="CMySrc.h">
-      <Filter>Source Files\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="CMyUDPSink.h">
-      <Filter>Source Files\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="CMyUDPSrc.h">
-      <Filter>Source Files\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\INetwork.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\ISingleton.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\mTypes.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\NetAddress.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IUDPClient.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\WinThread.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\WinThreadManager.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\WinMutex.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IMutex.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GstNetworkVideoPlayer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="GstPipelineHandler.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="GstPlayerBin.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="IGStreamerPlayer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\IVideoGrabber.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\ImageInfo.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\videoCommon.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\common.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\PixelUtil.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="VideoAppSinkHandler.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\ListenerContainer.h">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="CoreAPI.h">
-      <Filter>Source Files\API</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayersAPI.h">
-      <Filter>Source Files\API</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\GraphicsInclude.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\Win32Network.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\Win32UDPClient.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="GstCustomVideoPlayer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="GstNetworkMultipleVideoPlayer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="IStreamListener.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="IGStreamerStreamer.h">
-      <Filter>Source Files\Streamer</Filter>
-    </ClInclude>
-    <ClInclude Include="GstCustomVideoStreamer.h">
-      <Filter>Source Files\Streamer</Filter>
-    </ClInclude>
-    <ClInclude Include="UnityImageGrabber.h">
-      <Filter>Source Files\Streamer</Filter>
-    </ClInclude>
-    <ClInclude Include="GstNetworkAudioPlayer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
-    <ClInclude Include="StreamersAPI.h">
-      <Filter>Source Files\API</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GStreamerCore.cpp">
+    <ClCompile Include="../sources/CoreAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CMySink.cpp">
-      <Filter>Source Files\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="CMySrc.cpp">
-      <Filter>Source Files\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="CMyUDPSink.cpp">
-      <Filter>Source Files\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="CMyUDPSrc.cpp">
-      <Filter>Source Files\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\NetAddress.cpp">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClCompile>
-    <ClCompile Include="UnityHelpers.cpp">
+    <ClCompile Include="../sources/GstCustomVideoPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Includes\WinThread.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\WinThreadManager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\WinMutex.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\IThreadManager.cpp">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClCompile>
-    <ClCompile Include="GstNetworkVideoPlayer.cpp">
-      <Filter>Source Files\Players</Filter>
-    </ClCompile>
-    <ClCompile Include="GstPipelineHandler.cpp">
-      <Filter>Source Files\Players</Filter>
-    </ClCompile>
-    <ClCompile Include="GstPlayerBin.cpp">
-      <Filter>Source Files\Players</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\ImageInfo.cpp">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\PixelUtil.cpp">
-      <Filter>Source Files\Engine\Headers</Filter>
-    </ClCompile>
-    <ClCompile Include="VideoAppSinkHandler.cpp">
-      <Filter>Source Files\Players</Filter>
-    </ClCompile>
-    <ClCompile Include="CoreAPI.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayersAPI.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
-    <ClCompile Include="Includes\UnityGraphicsDevice.cpp">
+    <ClCompile Include="../sources/GstPipelineHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Includes\Win32Network.cpp">
-      <Filter>Source Files\Engine</Filter>
+    <ClCompile Include="../sources/GstPlayerBin.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Includes\Win32UDPClient.cpp">
-      <Filter>Source Files\Engine</Filter>
+    <ClCompile Include="../sources/GStreamerCore.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GstCustomVideoPlayer.cpp">
-      <Filter>Source Files\Players</Filter>
+    <ClCompile Include="../sources/IGStreamerPlayer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GstNetworkMultipleVideoPlayer.cpp">
-      <Filter>Source Files\Players</Filter>
+    <ClCompile Include="../sources/IGStreamerStreamer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IGStreamerPlayer.cpp">
-      <Filter>Source Files\Players</Filter>
+    <ClCompile Include="../includes/ImageInfo.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IGStreamerStreamer.cpp">
-      <Filter>Source Files\Streamer</Filter>
+    <ClCompile Include="../includes/IThreadManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GstCustomVideoStreamer.cpp">
-      <Filter>Source Files\Streamer</Filter>
+    <ClCompile Include="../includes/NetAddress.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GstNetworkAudioPlayer.cpp">
-      <Filter>Source Files\Players</Filter>
+    <ClCompile Include="../includes/PixelUtil.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnityImageGrabber.cpp">
-      <Filter>Source Files\Streamer</Filter>
+    <ClCompile Include="../includes/UnityGraphicsDevice.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StreamersAPI.cpp">
-      <Filter>Source Files\API</Filter>
+    <ClCompile Include="../includes/Win32/Win32Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/Win32UDPClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinMutex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinThreadManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/PlayersAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/StreamersAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/UnityHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/UnityImageGrabber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/VideoAppSinkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\IAppSinkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\AudioAppSinkHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\RenderAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\RenderAPI_D3D9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\RenderAPI_OpenGL2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\RenderAPI_D3D11.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -241,6 +241,7 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCropFrame(GstCustomV
         return true;
     }
 
+	return false;
 }
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerGetFrameSize(GstCustomVideoPlayer* p, int &w, int &h, int& components)
 {
@@ -283,15 +284,16 @@ struct MultiNetRenderRequest
 };
 std::vector<MultiNetRenderRequest> __multiNetRequests;
 //for GL.IssuePluginEvent
-static void mray_gst_customPlayerBlitImageNativeEvent(int eventID)
+static void __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
 {
-    if (__multiNetRequests.size() == 0)
-        return;
-    MultiNetRenderRequest r=__multiNetRequests[0];
-    __multiNetRequests.erase(__multiNetRequests.begin());
-    mray_gst_customPlayerBlitImage((GstCustomVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight);
+	for (int i = 0; i<__multiNetRequests.size(); ++i)
+	{
+		MultiNetRenderRequest r = __multiNetRequests[i];
+		mray_gst_customPlayerBlitImage((GstCustomVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight);
+	}
+	__multiNetRequests.clear();
 }
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative __stdcall mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
     MultiNetRenderRequest r;
     r.p = p;

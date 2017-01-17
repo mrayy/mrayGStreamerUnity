@@ -170,6 +170,8 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
     uchar* data = 0;
     int pitch = 0;
     int comps=1;
+
+#if 0
 #if SUPPORT_D3D9
     // D3D9 case
     if (g_GraphicsDeviceType == kGfxRendererD3D9)
@@ -218,7 +220,7 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
         ctx->Release();
     }
 #endif
-    
+#endif
     
         if (_TextureNativePtr)
         {
