@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "mray::video::VideoAppSinkHandler::process_sample(std::__1::shared_ptr&lt;_GstSample&gt;):VideoAppSinkHandler.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "&amp;((char*)mapinfo.data)[100]">
+            </PersistentString>
+            <PersistentString
+               value = "vinfo">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CopyToTexture(mray::video::ImageInfo const*, unsigned char*, mray::video::EPixelFormat):UnityHelpers.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(char*)ptr">
+            </PersistentString>
+            <PersistentString
+               value = "(char*)srcPtr">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BlitImage(mray::video::ImageInfo const*, void*, int, int):UnityHelpers.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "RenderAPI_OpenGLCoreES::EndModifyTexture(void*, int, int, int, int, void*):RenderAPI_OpenGLCoreES.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "fmt">
+            </PersistentString>
+            <PersistentString
+               value = "(char*)dataPtr">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
