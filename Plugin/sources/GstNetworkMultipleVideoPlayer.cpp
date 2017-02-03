@@ -32,9 +32,11 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 
 	std::string m_pipeLineString;
 
+	std::string m_intermidateElems;
+	std::string m_encoderType;
 
-	GstMyUDPSrc* m_videoRtcpSrc;
-	GstMyUDPSink* m_videoRtcpSink;
+	video::EPixelFormat m_targetFormat;
+
 	bool m_rtcp;
 
 	struct VideoHandler
@@ -44,12 +46,17 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 			videoPort = 5000;
 			videoSrc = 0;
 			videoSink = 0;
+			videoRtcpSrc = 0;
+			videoRtcpSink = 0;
 		}
 		VideoAppSinkHandler handler;
 		uint videoPort;
 
-		GstMyUDPSrc* videoSrc;
+		GstElement* videoSrc;
 		GstAppSink* videoSink;
+
+		GstElement* videoRtcpSrc;
+		GstElement* videoRtcpSink;
 	};
 
 	std::vector<VideoHandler> m_videoHandler;
@@ -60,62 +67,128 @@ public:
 		m_owner = o;
 		m_ipAddr = "127.0.0.1";
 		m_clockPort = 5010;
-		m_videoRtcpSrc = 0;
-		m_videoRtcpSink = 0;
 		m_playersCount = 0;
 		m_videoHandler.resize(1);
+		m_encoderType = "H264";
 		AddListener(this);
+
+		m_targetFormat = EPixel_B8G8R8;
 	}
 	virtual ~GstNetworkMultipleVideoPlayerImpl()
 	{
 
 	}
+	void AddIntermidateElement(const std::string& elems)
+	{
+		m_intermidateElems = elems;
+	}
+	void SetDecoderType(std::string type)
+	{
+		m_encoderType = type;
+	}
 
-
-	std::string _BuildPipelineH264(int i)
+	std::string _BuildPipeline(int i)
 	{
 		std::stringstream ss;
 		std::string videoStr;
-		ss << "myudpsrc name=videoSrc" << i << " !"
+		ss << "udpsrc name=videoSrc" << i << " port=" << m_videoHandler[i].videoPort << " !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
-			"application/x-rtp,media=video ";
+			"application/x-rtp ";
 		videoStr = ss.str();
+
+		std::string format;
+		std::string extraElem="";
+
+		switch (m_targetFormat)
+		{
+		case mray::video::EPixel_LUMINANCE8:
+		case EPixel_Alpha8:
+			format = "GRAY8";
+			extraElem = " ! videoconvert ";
+			break;
+		case mray::video::EPixel_R8G8B8:
+			format = "RGB";
+			extraElem = " ! videoconvert ";
+			break;
+		case mray::video::EPixel_R8G8B8A8:
+			format = "RGBA";
+			extraElem = " ! videoconvert ";
+			break;
+		case mray::video::EPixel_B8G8R8:
+			format = "BGR";
+			extraElem = " ! videoconvert ";
+			break;
+		case mray::video::EPixel_B8G8R8A8:
+			format = "BGRA";
+			extraElem = " ! videoconvert ";
+			break;
+		case mray::video::EPixel_I420:
+			format = "I420";
+			break;
+		default:
+			format = "RGB";
+			extraElem = " ! videoconvert ";
+			break;
+		}
+
 		ss = std::stringstream();
+		ss << videoStr;
+
 		if (m_rtcp)
 		{
-			ss <<
-				"rtpbin "
-				"name=rtpbin "
-				<< videoStr <<
-				"! rtpbin.recv_rtp_sink_0 "
-				"rtpbin. ! rtph264depay !  avdec_h264 ! "
-				"videoconvert ! video/x-raw,format=RGB  !"
-				" appsink name=videoSink" << i <<
+			ss << "! rtpbin.recv_rtp_sink_" << i <<
+				" rtpbin. ";
+		}
+		else{
+			ss << " ! rtpjitterbuffer latency=500  ";
+		}
+
+		if (m_encoderType == "H264")
+		{
+			ss << "  ! rtph264depay ! h264parse !  avdec_h264 ! "
+				" videoconvert !"
+				;
+		//	ss << " videoflip method=5 !";
+		}
+		else if (m_encoderType == "JPEG")
+		{
+			ss << ",media=video,encoding-name=JPEG,payload=96 ! queue ! rtpjpegdepay ! jpegdec ! videoconvert !";
+		}
+		else if (m_encoderType == "VP8")
+		{
+			ss << "  ! rtpvp8depay ! vp8dec ! videoconvert !";
+		}
+		else
+			return "";
+		//"rtpvp8depay ! vp8dec ! "
+		//"rtptheoradepay ! theoradec ! "
+
+			// " videorate  ! "//"video/x-raw,framerate=60/1 ! "
+			//	"videoconvert ! video/x-raw,format=RGB  !" // Very slow!!
+
+		if (m_intermidateElems != "")
+		{
+			ss << m_intermidateElems << " ! ";
+		}
+		//"videorate ! "
+		ss<< "  video/x-raw,format=" + format + extraElem + "  !";
+		//"videoconvert ! video/x-raw,format=RGB  !"
+		//	" timeoverlay halignment=right text=\"Local Time =\"! "
+
+		if (m_rtcp)
+		{
+			ss << " appsink name=videoSink" << i <<
 				//video rtcp
-				"myudpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 "
-				"rtpbin.send_rtcp_src_0 !  myudpsink name=videoRtcpSink sync=false async=false ";
-			videoStr = ss.str();
+				"udpsrc name=videoRtcpSrc" << i << " ! rtpbin.recv_rtcp_sink_" << i << " "
+				"rtpbin.send_rtcp_src_" << i << " ! udpsink name=videoRtcpSink" << i << " sync=false async=false ";
 		}
 		else
 		{
-			ss << videoStr << "! queue !"
-				"rtpjitterbuffer latency=500 !  "
-				"rtph264depay ! h264parse !  avdec_h264 ! "
-			//"rtpvp8depay ! vp8dec ! "
-			//"rtptheoradepay ! theoradec ! "
-
-				// " videorate  ! "//"video/x-raw,framerate=60/1 ! "
-				//	"videoconvert ! video/x-raw,format=RGB  !" // Very slow!!
-				"videorate ! "
-				" videoconvert ! video/x-raw,format=I420  !"
-				//"videoconvert ! video/x-raw,format=RGB  !"
-				//	" timeoverlay halignment=right text=\"Local Time =\"! "
-				" appsink name=videoSink" << i << " sync=false  emit-signals=false ";
-			//"fpsdisplaysink sync=false";
-
-			videoStr = ss.str();
-
+			ss << " appsink name=videoSink" << i <<" sync=true  emit-signals=false ";
 		}
+		//"fpsdisplaysink sync=false";
+
+		videoStr = ss.str();
 		return videoStr;
 	}
 
@@ -123,8 +196,14 @@ public:
 	void _BuildPipeline()
 	{
 		m_pipeLineString = "";
+		if (m_rtcp)
+		{
+			m_pipeLineString = "rtpbin name=rtpbin ";
+		}
 		for (int i = 0; i < m_playersCount; ++i)
-			m_pipeLineString += _BuildPipelineH264(i) + " ";
+		{
+				m_pipeLineString += _BuildPipeline(i) + " ";
+		}
 	}
 
 	void _UpdatePorts()
@@ -138,7 +217,10 @@ public:
 		{
 			std::stringstream ss;
 			ss << "videoSrc" << i;
-			SET_SRC(i, ss.str().c_str(), m_videoHandler[i].videoPort);
+			m_videoHandler[i].videoSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), ss.str().c_str());
+			if (m_videoHandler[i].videoPort!=0)
+				g_object_set(m_videoHandler[i].videoSrc, "port", m_videoHandler[i].videoPort);
+		//	SET_SRC(i, ss.str().c_str(), m_videoHandler[i].videoPort);
 			// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i].videoPort + 1));
 			// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i].videoPort + 2));
 		}
@@ -216,6 +298,15 @@ public:
 
 			m_videoHandler[i].videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 
+			if (m_rtcp)
+			{
+				std::stringstream rtcpSink, rtcpSrc;
+				rtcpSink << "videoRtcpSink" << i;
+				rtcpSrc << "videoRtcpSrc" << i;
+				m_videoHandler[i].videoRtcpSink = gst_bin_get_by_name(GST_BIN(p), rtcpSink.str().c_str());
+				m_videoHandler[i].videoRtcpSrc = gst_bin_get_by_name(GST_BIN(p), rtcpSrc.str().c_str());
+			}
+
 			m_videoHandler[i].handler.SetSink(m_videoHandler[i].videoSink);
 			g_signal_connect(m_videoHandler[i].videoSink, "new-sample", G_CALLBACK(new_buffer), this);
 			//attach videosink callbacks
@@ -234,7 +325,7 @@ public:
 			// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
 			gst_base_sink_set_sync(GST_BASE_SINK(m_videoHandler[i].videoSink), false);
 			gst_app_sink_set_drop(GST_APP_SINK(m_videoHandler[i].videoSink), TRUE);
-			gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoHandler[i].videoSink), 8);
+			gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoHandler[i].videoSink), 2);
 			gst_base_sink_set_max_lateness(GST_BASE_SINK(m_videoHandler[i].videoSink), 0);
 			/*
 			GstCaps* caps;
@@ -263,7 +354,10 @@ public:
 		if (i >= m_videoHandler.size())
 			return 0;
 		if (m_videoHandler[i].videoSrc){
-			return m_videoHandler[i].videoSrc->port;
+			//return m_videoHandler[i].videoSrc->port;
+			gint port=0;
+			g_object_get(m_videoHandler[i].videoSrc, "port", &port, 0);
+			return port;
 		}
 		else return m_videoHandler[i].videoPort;
 	}
@@ -276,8 +370,8 @@ public:
 	{
 		for (int i = 0; i < m_playersCount; ++i)
 		{
-			if (m_videoHandler[i].videoSrc && m_videoHandler[i].videoSrc->m_client)
-				m_videoHandler[i].videoSrc->m_client->Close();
+			//if (m_videoHandler[i].videoSrc && m_videoHandler[i].videoSrc->m_client)
+			//	m_videoHandler[i].videoSrc->m_client->Close();
 			m_videoHandler[i].handler.Close();
 		}
 		GstPipelineHandler::Close();
@@ -302,7 +396,10 @@ public:
 	{
 		return m_videoHandler[i].handler.GetFrameSize();
 	}
-
+	void SetImageFormat(video::EPixelFormat fmt)
+	{
+		m_targetFormat = fmt;
+	}
 	virtual video::EPixelFormat GetImageFormat(int i)
 	{
 		return m_videoHandler[i].handler.getPixelsRef()->format;
@@ -344,11 +441,25 @@ public:
 			return m_videoHandler[i].handler.getPixelsRef();
 	}
 
+	virtual int GetPort(int i)
+	{
+		return GetVideoPort(i);
+	}
+
 
 	virtual void OnPipelineReady(GstPipelineHandler* p){ m_owner->__FIRE_OnPlayerReady(m_owner); }
 	virtual void OnPipelinePlaying(GstPipelineHandler* p){ m_owner->__FIRE_OnPlayerStarted(m_owner); }
 	virtual void OnPipelineStopped(GstPipelineHandler* p){ m_owner->__FIRE_OnPlayerStopped(m_owner); }
 
+	ulong GetNetworkUsage()
+	{
+		ulong usage = 0;
+		for (int i = 0; i < m_playersCount; ++i)
+		{
+//			usage+=m_videoHandler[i].videoSrc->m_client->GetReceiverNetworkUsage();
+		}
+		return usage;
+	}
 };
 
 
@@ -369,6 +480,12 @@ bool GstNetworkMultipleVideoPlayer::CreateStream()
 {
 	return m_impl->CreateStream();
 }
+
+void GstNetworkMultipleVideoPlayer::AddIntermidateElement(const std::string& elems)
+{
+	m_impl->AddIntermidateElement(elems);
+}
+
 GstPipelineHandler*GstNetworkMultipleVideoPlayer::GetPipeline()
 {
 	return m_impl;
@@ -413,12 +530,20 @@ void GstNetworkMultipleVideoPlayer::Close()
 	m_impl->Close();
 
 }
+void GstNetworkMultipleVideoPlayer::SetDecoderType(std::string type)
+{
+	m_impl->SetDecoderType(type);
+}
 
 const Vector2d& GstNetworkMultipleVideoPlayer::GetFrameSize()
 {
 	return m_impl->GetFrameSize(0);
 }
 
+void GstNetworkMultipleVideoPlayer::SetImageFormat(video::EPixelFormat fmt)
+{
+	m_impl->SetImageFormat(fmt);
+}
 video::EPixelFormat GstNetworkMultipleVideoPlayer::GetImageFormat()
 {
 	return m_impl->GetImageFormat(0);
@@ -454,6 +579,16 @@ const ImageInfo* GstNetworkMultipleVideoPlayer::GetLastFrame(int i)
 	return m_impl->GetLastFrame(i);
 }
 
+int GstNetworkMultipleVideoPlayer::GetPort(int i)
+{
+	return m_impl->GetPort(i);
+}
+
+ulong GstNetworkMultipleVideoPlayer::GetNetworkUsage()
+{
+	return m_impl->GetNetworkUsage();
+
+}
 
 }
 }

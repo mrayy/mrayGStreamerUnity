@@ -8,6 +8,7 @@
 #include "UnityImageGrabber.h"
 #endif
 #include "GstCustomVideoStreamer.h"
+#include "GstNetworkAudioStreamer.h"
 
 
 
@@ -34,4 +35,16 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netStreamerCreateStream(GstCusto
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstCustomVideoStreamer* p, UnityImageGrabber* g);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstCustomVideoStreamer* p, int bitRate);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetResolution(GstCustomVideoStreamer* p, int width, int height, int fps);
+
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createAudioNetworkStreamer();
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerAddClient(GstNetworkAudioStreamer* p, const char* ip, int port);
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_audioStreamerGetClientCount(GstNetworkAudioStreamer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerRemoveClient(GstNetworkAudioStreamer* p, int i);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerClearClients(GstNetworkAudioStreamer* p);
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_audioStreamerGetClient(GstNetworkAudioStreamer* p, int i);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetClientVolume(GstNetworkAudioStreamer* p, int i, float vol);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_audioStreamerCreateStream(GstNetworkAudioStreamer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetChannels(GstNetworkAudioStreamer* p, int c);
+
 #endif

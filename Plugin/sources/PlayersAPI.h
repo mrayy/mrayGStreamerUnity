@@ -21,6 +21,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerGetFrameSize(GstNetwork
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerGetPort(GstNetworkVideoPlayer* p, int i);
 
 
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkMultiplePlayer();
@@ -31,6 +32,10 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetPlayerGrabFrame(GstNetwo
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index);
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p, int index);
 extern "C" UNITY_INTERFACE_EXPORT uint  mray_gst_multiNetPlayerGetVideoPort(GstNetworkMultipleVideoPlayer* p, int index);
+extern "C" UNITY_INTERFACE_EXPORT void  mray_gst_multiNetPlayerSetFormat(GstNetworkMultipleVideoPlayer* p, int format);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_multiNetPlayerGetFormat(GstNetworkMultipleVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT ulong  mray_gst_multiNetPlayerGetNetworkUsage(GstNetworkMultipleVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT void  mray_gst_multiNetPlayerSetDecoderType(GstNetworkMultipleVideoPlayer* p, const char* decoder);
 #endif
 
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createCustomVideoPlayer();
@@ -42,6 +47,10 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyFrame(GstCustomV
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCropFrame(GstCustomVideoPlayer* p, video::ImageInfo* target,int x,int y,int width,int height);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerBlitImage(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customPlayerFrameCount(GstCustomVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerGrabAudioFrame(GstCustomVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerGetAudioFrameSize(GstCustomVideoPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyAudioFrame(GstCustomVideoPlayer* p, float*data);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerChannelsCount(GstCustomVideoPlayer* p);
 
 
 
@@ -80,4 +89,11 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetIP(GstNetworkAu
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerCreateStream(GstNetworkAudioPlayer* p);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetVolume(GstNetworkAudioPlayer* p, float v);
 extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_netAudioPlayerGetAudioPort(GstNetworkAudioPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_netAudioPlayerChannelsCount(GstNetworkAudioPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_netAudioPlayerSampleRate(GstNetworkAudioPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetSampleRate(GstNetworkAudioPlayer* p, int rate);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerUseCustomOutput(GstNetworkAudioPlayer* p, bool use);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerGrabFrame(GstNetworkAudioPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_netAudioPlayerGetFrameSize(GstNetworkAudioPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerCopyAudioFrame(GstNetworkAudioPlayer* p, float*data);
 #endif

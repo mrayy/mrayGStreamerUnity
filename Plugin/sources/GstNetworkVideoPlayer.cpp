@@ -30,7 +30,7 @@ class GstNetworkVideoPlayerImpl :public GstPipelineHandler,IPipelineListener
 
 	std::string m_pipeLineString;
 
-	GstMyUDPSrc* m_videoSrc;
+	GstElement* m_videoSrc;
 	GstMyUDPSrc* m_videoRtcpSrc;
 	GstMyUDPSink* m_videoRtcpSink;
 
@@ -61,7 +61,7 @@ public:
 	{
 		std::string videoStr =
 			//video rtp
-			"myudpsrc name=videoSrc !"
+			"udpsrc name=videoSrc !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
 			"application/x-rtp ";
 		if (m_rtcp)
@@ -135,10 +135,11 @@ public:
 #define SET_SRC(name,p) m_##name=GST_MyUDPSrc(gst_bin_get_by_name(GST_BIN(GetPipeline()), #name)); if(m_##name){m_##name->SetPort(p);}
 #define SET_SINK(name,p) m_##name=GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), #name)); if(m_##name){m_##name->SetPort(m_ipAddr,p);}
 
-		SET_SRC(videoSrc, m_videoPort);
+		//SET_SRC(videoSrc, m_videoPort);
 		SET_SINK(videoRtcpSink, (m_videoPort + 1));
 		SET_SRC(videoRtcpSrc, (m_videoPort + 2));
 
+		g_object_set(m_videoSrc, "port", m_videoPort, "host",m_ipAddr.c_str(),0);
 	}
 
 	void SetIPAddress(const std::string& ip, uint videoPort, uint clockPort, bool rtcp)
@@ -244,8 +245,8 @@ public:
 
 	virtual void Close()
 	{
-		if (m_videoSrc && m_videoSrc->m_client)
-			m_videoSrc->m_client->Close();
+		/*if (m_videoSrc && m_videoSrc->m_client)
+			m_videoSrc->m_client->Close();*/
 		GstPipelineHandler::Close();
 		m_videoHandler.Close();
 	}
@@ -262,6 +263,19 @@ public:
 	void SetVolume(float vol)
 	{
 		g_object_set(G_OBJECT(GetPipeline()), "volume", (gdouble)vol, (void*)0);
+	}
+
+	virtual int GetPort(int i)
+	{
+		/*if (m_videoSrc && m_videoSrc->m_client)
+			return m_videoSrc->m_client->Port();*/
+		if (m_videoSrc)
+		{
+			gint port;
+			g_object_get(m_videoSrc, "port", &port, 0);
+			return port;
+		}
+		return m_videoPort;
 	}
 
 
@@ -382,6 +396,11 @@ float GstNetworkVideoPlayer::GetCaptureFrameRate()
 const ImageInfo* GstNetworkVideoPlayer::GetLastFrame()
 {
 	return m_impl->GetLastFrame();
+}
+
+int GstNetworkVideoPlayer::GetPort(int i)
+{
+	return m_impl->GetPort(i);
 }
 
 

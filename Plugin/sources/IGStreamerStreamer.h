@@ -26,8 +26,6 @@ public:
 	IGStreamerStreamer(){}
 	virtual ~IGStreamerStreamer(){}
 
-	virtual void BindPorts(const std::string& addr, uint port,uint clockPort,bool rtcp) = 0;
-
 	virtual bool CreateStream() = 0;
 	virtual void Stream() = 0;
 	virtual bool IsStreaming() = 0;

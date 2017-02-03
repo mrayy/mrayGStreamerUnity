@@ -15,7 +15,7 @@ namespace video
 
 class GstNetworkMultipleVideoPlayerImpl;
 
-class GstNetworkMultipleVideoPlayer :public IGStreamerPlayer
+extern "C" class UNITY_INTERFACE_EXPORT GstNetworkMultipleVideoPlayer :public IGStreamerPlayer
 {
 protected:
 	GstNetworkMultipleVideoPlayerImpl* m_impl;
@@ -31,6 +31,12 @@ public:
 	// videoport: port for the video stream, video rtcp is allocated as videoPort+1 and videoPort+2
 	void SetIPAddress(const std::string& ip, uint baseVideoPort, uint count, uint clockPort, bool rtcp);
 	bool CreateStream();
+
+	//add custom elements to pipeline. Should be set before calling CreateStream
+	void AddIntermidateElement(const std::string& elems);
+
+	//encoder type: H264 and JPEG
+	void SetDecoderType(std::string type);
 
 	uint GetVideoPort(int i);
 
@@ -51,17 +57,23 @@ public:
 
 	virtual float GetCaptureFrameRate(int i);
 
+	virtual bool SetPosition(signed long pos) { return false; }
+	virtual signed long  GetPosition(){ return -1; }
+	virtual signed long GetDuration() { return -1; }
 
 	//defined by the source video stream
-	virtual void SetImageFormat(video::EPixelFormat fmt){}
+	virtual void SetImageFormat(video::EPixelFormat fmt);
 	virtual video::EPixelFormat GetImageFormat();
 
 	int GetFramesCount();
 	virtual bool GrabFrame(int i);
 	virtual bool HasNewFrame(int i);
 	virtual ulong GetBufferID(int i);// incremented once per frame
+	virtual int GetPort(int i);
 
 	virtual const ImageInfo* GetLastFrame(int i);
+
+	virtual ulong GetNetworkUsage();
 
 };
 

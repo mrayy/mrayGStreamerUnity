@@ -42,6 +42,23 @@ public:
 	virtual bool IsPlaying();
 	virtual void Close();
 
+	//if it set to false, then the audio will be played using directsound
+	virtual void UseCustomAudioInterface(bool use);
+	virtual bool IsUsingCustomAudioInterface();
+
+	virtual bool SetPosition(signed long pos) { return false; }
+	virtual signed long  GetPosition(){ return -1; }
+	virtual signed long GetDuration() { return -1; }
+
+	void SetSampleRate(int Rate);
+	int GetSampleRate();
+	bool GrabFrame();
+	int GetFrameSize();
+	bool CopyAudioFrame(float* output);
+	int ChannelsCount();
+
+	virtual int GetPort(int i);
+
 };
 
 }

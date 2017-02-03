@@ -120,14 +120,14 @@ void GStreamerCore::_Init()
 			"appsink", (char*)"Element application sink",
 			appsink_plugin_init, "0.1", "LGPL", "ofVideoPlayer", "openFrameworks",
                                    "http://openframeworks.cc/");
-		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
+	/*	gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysrc", (char*)"Element application src",
 			_GstMySrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
 			"");
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysink", (char*)"Element application sink",
 			_GstMySinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
-                                   "");
+                                   "");*/
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsrc", (char*)"Element udp src",
 			_GstMyUDPSrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",

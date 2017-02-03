@@ -6,6 +6,87 @@
 
 #include <vector>
 
+struct MultiNetRenderRequest
+{
+	void* p;
+	void* _TextureNativePtr;
+	int _UnityTextureWidth;
+	int _UnityTextureHeight;
+	int index;
+};
+std::vector<MultiNetRenderRequest> __multiNetRequests;
+
+//for GL.IssuePluginEvent
+static void __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
+{
+	for (int i = 0; i < __multiNetRequests.size(); ++i)
+	{
+		MultiNetRenderRequest r = __multiNetRequests[i];
+		mray_gst_customPlayerBlitImage((GstCustomVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight);
+	}
+	__multiNetRequests.clear();
+}
+
+//for GL.IssuePluginEvent
+static void __stdcall mray_gst_multiNetPlayerBlitImageNativeEvent(int eventID)
+{
+	if (__multiNetRequests.size() == 0)
+		return;
+	MultiNetRenderRequest r = __multiNetRequests[0];
+	__multiNetRequests.erase(__multiNetRequests.begin());
+	mray_gst_multiNetPlayerBlitImage((GstNetworkMultipleVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight, r.index);
+}
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_multiNetPlayerBlitImageNativeGLCall(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+{
+	MultiNetRenderRequest r;
+	r.p = p;
+	r.index = index;
+	r._TextureNativePtr = _TextureNativePtr;
+	r._UnityTextureWidth = _UnityTextureWidth;
+	r._UnityTextureHeight = _UnityTextureHeight;
+	__multiNetRequests.push_back(r);
+	return mray_gst_multiNetPlayerBlitImageNativeEvent;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+{
+	if (p == NULL || !_TextureNativePtr)
+		return;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
+	}
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerCopyData(GstNetworkMultipleVideoPlayer* p, uchar* _data, int index)
+{
+	if (p == nullptr || !_data)
+		return;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		memcpy(_data, ifo->imageData, ifo->imageDataSize);
+	}
+
+}
+
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+{
+	MultiNetRenderRequest r;
+	r.p = p;
+	r._TextureNativePtr = _TextureNativePtr;
+	r._UnityTextureWidth = _UnityTextureWidth;
+	r._UnityTextureHeight = _UnityTextureHeight;
+	r.index = 0;
+	__multiNetRequests.push_back(r);
+	return mray_gst_customPlayerBlitImageNativeEvent;
+}
+
 #ifdef USE_UNITY_NETWORK
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkPlayer()
 {
@@ -82,6 +163,14 @@ extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerFrameCount(GstNetworkVid
 		return 0;
 	return p->GetCaptureFrameRate();
 }
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerGetPort(GstNetworkVideoPlayer* p, int i)
+{
+	if (p != nullptr)
+	{
+		return p->GetPort(i);
+	}
+	return 0;
+}
 //////////////////////////////////////////////////////////////////////////
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkMultiplePlayer()
 {
@@ -138,18 +227,6 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetPlayerGrabFrame(GstNetwo
 	return false;
 
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
-{
-	if (p == NULL || !_TextureNativePtr)
-		return;
-
-	const video::ImageInfo* ifo = p->GetLastFrame(index);
-
-	if (ifo)
-	{
-		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
-	}
-}
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index)
 {
 	if (p == NULL)
@@ -161,6 +238,34 @@ extern "C" UNITY_INTERFACE_EXPORT uint  mray_gst_multiNetPlayerGetVideoPort(GstN
 	if (!p)
 		return 0;
 	return p->GetVideoPort(index);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void  mray_gst_multiNetPlayerSetFormat(GstNetworkMultipleVideoPlayer* p, int format)
+{
+	if (!p)
+		return;
+	p->SetImageFormat((video::EPixelFormat)format);
+
+}
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_multiNetPlayerGetFormat(GstNetworkMultipleVideoPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->GetImageFormat();
+
+}
+extern "C" UNITY_INTERFACE_EXPORT ulong  mray_gst_multiNetPlayerGetNetworkUsage(GstNetworkMultipleVideoPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->GetNetworkUsage();
+}
+extern "C" UNITY_INTERFACE_EXPORT void  mray_gst_multiNetPlayerSetDecoderType(GstNetworkMultipleVideoPlayer* p, const char* decoder)
+{
+
+	if (!p)
+		return;
+	p->SetDecoderType(decoder);
 }
 #endif
 
@@ -274,36 +379,35 @@ extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customPlayerFrameCount(GstCustomV
 	return p->GetCaptureFrameRate();
 }
 
-struct MultiNetRenderRequest
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerGrabAudioFrame(GstCustomVideoPlayer* p)
 {
-    void* p;
-    void* _TextureNativePtr;
-    int _UnityTextureWidth;
-    int _UnityTextureHeight;
-    int index;
-};
-std::vector<MultiNetRenderRequest> __multiNetRequests;
-//for GL.IssuePluginEvent
-static void __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
-{
-	for (int i = 0; i<__multiNetRequests.size(); ++i)
-	{
-		MultiNetRenderRequest r = __multiNetRequests[i];
-		mray_gst_customPlayerBlitImage((GstCustomVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight);
-	}
-	__multiNetRequests.clear();
+	if (p == nullptr)
+		return 0;
+	return p->GrabAudioFrame();
+
 }
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerGetAudioFrameSize(GstCustomVideoPlayer* p)
 {
-    MultiNetRenderRequest r;
-    r.p = p;
-    r._TextureNativePtr = _TextureNativePtr;
-    r._UnityTextureWidth = _UnityTextureWidth;
-    r._UnityTextureHeight = _UnityTextureHeight;
-    r.index=0;
-    __multiNetRequests.push_back(r);
-    return mray_gst_customPlayerBlitImageNativeEvent;
+
+	if (p == nullptr)
+		return 0;
+	return p->GetAudioFrameSize();
 }
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyAudioFrame(GstCustomVideoPlayer* p, float*data)
+{
+	if (p == nullptr)
+		return 0;
+	return p->CopyAudioFrame(data);
+
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customPlayerChannelsCount(GstCustomVideoPlayer* p)
+{
+	if (p == nullptr)
+		return 0;
+	return p->GetAudioChannelsCount();
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 
@@ -426,4 +530,81 @@ extern "C" UNITY_INTERFACE_EXPORT uint  mray_gst_netAudioPlayerGetAudioPort(GstN
 		return 0;
 	return p->GetAudioPort();
 }
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerUseCustomOutput(GstNetworkAudioPlayer* p, bool use)
+{
+	if (!p)
+		return;
+	return p->UseCustomAudioInterface(use);
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netAudioPlayerChannelsCount(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->ChannelsCount();
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netAudioPlayerSetSampleRate(GstNetworkAudioPlayer* p, int rate)
+{
+	if (!p)
+		return;
+	p->SetSampleRate(rate);
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netAudioPlayerSampleRate(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->GetSampleRate();
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerIsUsingCustomOutput(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return false;
+	return p->IsUsingCustomAudioInterface();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerGrabFrame(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return false;
+	return p->GrabFrame();
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netAudioPlayerGetFrameSize(GstNetworkAudioPlayer* p)
+{
+	if (!p)
+		return 0;
+	return p->GetFrameSize();
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerCopyAudioFrame(GstNetworkAudioPlayer* p, float* data)
+{
+	if (!p)
+		return false;
+	return p->CopyAudioFrame(data);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT float mray_gst_ProcessAudioPackets(float* srcData, int startIndex, int channelIndex, int count, int stride, int srcChannels, float* data, int length, int channels)
+{
+	float Volume = 1;
+	float average = 0;
+	if (channels == srcChannels) {
+		for (int i = 0, j = 0; i < count; i += stride, ++j) {
+			data[j + length] *= srcData[startIndex + i + channelIndex] * Volume;
+			average += srcData[startIndex + i + channelIndex] * srcData[startIndex + i + channelIndex];
+		}
+	}
+	else if (channels == 2 && srcChannels == 1) {
+		for (int i = 0, j = 0; i < count; i += stride, ++j) {
+			data[2 * j + length] *= srcData[startIndex + i + channelIndex] * Volume;
+			data[2 * j + length + 1] *= srcData[startIndex + i + channelIndex] * Volume;
+			average += srcData[startIndex + i + channelIndex] * srcData[startIndex + i + channelIndex];
+		}
+	}
+	else if (channels == 1 && srcChannels == 2) {
+		for (int i = 0; i < count; i++) {
+			data[i + length] *= srcData[startIndex + 2 * i] * Volume;
+			average += srcData[startIndex + 2 * i] * srcData[startIndex + 2 * i];
+		}
+	}
+	return average;
+}
+
 #endif

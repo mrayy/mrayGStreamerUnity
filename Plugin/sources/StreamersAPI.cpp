@@ -126,4 +126,81 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetResolution(GstCust
 	}
 
 }
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createAudioNetworkStreamer()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		GstNetworkAudioStreamer* g = new GstNetworkAudioStreamer();
+		return g;
+	}
+	return 0;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerAddClient(GstNetworkAudioStreamer* p, const char* ip, int port)
+{
+	if (p)
+	{
+		p->AddClient(ip, port, 0, 0);
+	}
+
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_audioStreamerGetClientCount(GstNetworkAudioStreamer* p)
+{
+	if (p)
+	{
+		return p->GetClientCount();
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerRemoveClient(GstNetworkAudioStreamer* p, int i)
+{
+	if (p)
+	{
+		return p->RemoveClient(i);
+	}
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerClearClients(GstNetworkAudioStreamer* p)
+{
+	if (p)
+	{
+		return p->ClearClients();
+	}
+}
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_audioStreamerGetClient(GstNetworkAudioStreamer* p, int i)
+{
+	if (p)
+	{
+		return p->GetClientAddress(i).c_str();
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetClientVolume(GstNetworkAudioStreamer* p, int i, float vol)
+{
+	if (p)
+	{
+		return p->SetVolume(i, vol);
+	}
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_audioStreamerCreateStream(GstNetworkAudioStreamer* p)
+{
+
+	if (p)
+	{
+		return p->CreateStream();
+	}
+	return false;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetChannels(GstNetworkAudioStreamer* p, int c)
+{
+	if (p)
+	{
+		p->SetChannels(c);
+	}
+
+}
+
 #endif

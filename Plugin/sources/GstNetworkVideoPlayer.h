@@ -50,6 +50,9 @@ public:
 
 	virtual float GetCaptureFrameRate();
 
+	virtual bool SetPosition(signed long pos) { return false; }
+	virtual signed long  GetPosition(){ return -1; }
+	virtual signed long GetDuration() { return -1; }
 
 	//defined by the source video stream
 	virtual void SetImageFormat(video::EPixelFormat fmt){}
@@ -61,6 +64,7 @@ public:
 
 	virtual const ImageInfo* GetLastFrame() ;
 
+	virtual int GetPort(int i);
 };
 
 class GstNetworkVideoPlayerGrabber :public IVideoGrabber

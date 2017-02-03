@@ -131,12 +131,12 @@ namespace video
 		m_data->paused = p;
 		if (m_data->Loaded)
         {
-            if (m_data->paused)
+           /* if (m_data->paused)
                 gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
             else
                 gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
-
-            /*if (m_data->playing)
+				*/
+            if (m_data->playing)
             {
 				if (m_data->paused)
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
@@ -151,7 +151,7 @@ namespace video
 				if (!m_data->paused)
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
 				m_data->playing = true;
-			}*/
+			}
 		}
 	}
 	void GstPipelineHandler::Stop()

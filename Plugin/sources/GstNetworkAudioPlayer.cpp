@@ -10,6 +10,8 @@
 #include "CMySrc.h"
 #include "CMySink.h"
 #include "GstPipelineHandler.h"
+#include "UnityHelpers.h"
+#include "AudioAppSinkHandler.h"
 
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
@@ -32,6 +34,12 @@ class GstNetworkAudioPlayerImpl :public GstPipelineHandler
 	GstMyUDPSink* m_audioRtcpSink;
 	bool m_rtcp;
 
+	bool m_customAudioInterface;
+	GstAppSink* m_audioSink;
+	AudioAppSinkHandler m_audioHandler;
+
+	int m_sampleRate;
+
 public:
 	GstNetworkAudioPlayerImpl()
 	{
@@ -41,51 +49,43 @@ public:
 		m_clockPort = 5010;
 		m_audioRtcpSrc = 0;
 		m_audioRtcpSink = 0;
+		m_audioSink = 0;
+		m_customAudioInterface = false;
+		m_sampleRate = 32000;
 	}
 	virtual ~GstNetworkAudioPlayerImpl()
 	{
 
 	}
 
-#define VORBIS_ENC
+#define OPUS_ENC
 	void _BuildPipeline()
 	{
 #ifdef FLAC_ENC
 		core::string audiocaps = " caps=application/x-rtp,media=application,clock-rate=90000,encoding-name=X-GST,payload=96 ";
 		core::string audioStr = " rtpgstdepay ! audio/x-flac,rate=8000,channels=1! flacdec !  audioconvert ! audioresample  ";
-#else 
-#ifdef VORBIS_ENC
+#elif defined OPUS_ENC
 
-		std::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=22000,encoding-name=VORBIS,payload=96,encoding-params=2 ";
-		/*
-		if (false)
-		{
-			OS::IStreamPtr capsFile = gFileSystem.openFile("audio.caps");
-			if (capsFile)
-			{
-				OS::StreamReader rdr(capsFile);
-				audiocaps = "caps=";
+		std::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=48000,encoding-name=OPUS,payload=96,encoding-params=2 ";
+		char buffer[128];
+		sprintf(buffer, "%d", m_sampleRate);
 
-				while (!capsFile->eof())
-				{
-					audiocaps += rdr.readLine();
-				}
+		std::string audioStr = " rtpopusdepay ! opusdec ! audioconvert ";
+#elif defined VORBIS_ENC
 
-				//audiocaps += "\"";
-			}
-		}*/
+		std::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=32000,encoding-name=VORBIS,payload=96,encoding-params=2 ";
+		char buffer[128];
+		sprintf(buffer, "%d", m_sampleRate);
 
-		std::string audioStr = " rtpvorbisdepay ! vorbisdec ! audioconvert ! audioresample  ";
-
-#else
-#ifdef SPEEX_ENC
+		std::string audioStr = " rtpvorbisdepay ! vorbisdec ! audioconvert   ! audio/x-raw, rate=";//! audioresample quality=10
+		audioStr+=buffer;
+		audioStr+=" ";
+#elif defined SPEEX_ENC
 		core::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=(int)22000,encoding-name=(string)SPEEX ";
 		core::string audioStr = " rtpspeexdepay ! speexdec ! audioconvert ! audioresample  ";
 #else
 		core::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=(int)8000,encoding-name=(string)AMR,encoding-params=(string)1,octet-align=(string)1 ";
 		core::string audioStr = " rtpamrdepay ! amrnbdec  ";
-#endif
-#endif
 #endif
 		if (m_rtcp)
 		{
@@ -105,7 +105,17 @@ public:
 		else
 		{
 			m_pipeLineString =
-				"myudpsrc name=audioSrc " + audiocaps +"!"+ audioStr  + " ! directsoundsink buffer-time=200000 latency-time=100 sync=false";
+				"myudpsrc name=audioSrc " + audiocaps + "!" + audioStr;//
+			if (m_customAudioInterface)
+			{
+				m_pipeLineString += "! audioresample ! audio/x-raw,format=F32LE,rate=";//! audioresample quality=10
+				m_pipeLineString += buffer;
+				m_pipeLineString += " ! appsink name=audioSink sync=false  emit-signals=false";
+			}
+			else
+			{
+				m_pipeLineString += " ! directsoundsink buffer-time=40000  sync=false";
+			}
 
 		}
 
@@ -145,13 +155,42 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			printf("GstNetworkAudioPlayer: Pipeline error: %s", err->message);
+			LogMessage("NetworkAudioPlayer:CreateStream() - Pipeline error:" + std::string(err->message), ELL_WARNING);
 		}
 		if (!p)
 			return false;
 
 		SetPipeline(p);
 		_UpdatePorts();
+
+		if (m_customAudioInterface)
+		{
+
+			m_audioSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), "audioSink"));
+			m_audioHandler.SetSink(m_audioSink);
+
+			g_signal_connect(m_audioSink, "new-sample", G_CALLBACK(new_buffer), this);
+			//attach videosink callbacks
+			GstAppSinkCallbacks gstCallbacks;
+			gstCallbacks.eos = &AudioAppSinkHandler::on_eos_from_source;
+			gstCallbacks.new_preroll = &AudioAppSinkHandler::on_new_preroll_from_source;
+#if GST_VERSION_MAJOR==0
+			gstCallbacks.new_buffer = &AudioAppSinkHandler::on_new_buffer_from_source;
+#else
+			gstCallbacks.new_sample = &AudioAppSinkHandler::on_new_buffer_from_source;
+#endif
+			gst_app_sink_set_callbacks(GST_APP_SINK(m_audioSink), &gstCallbacks, &m_audioHandler, NULL);
+			//gst_app_sink_set_emit_signals(GST_APP_SINK(m_videoSink), true);
+
+
+			// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
+			gst_base_sink_set_sync(GST_BASE_SINK(m_audioSink), false);
+			gst_app_sink_set_drop(GST_APP_SINK(m_audioSink), TRUE);
+			gst_app_sink_set_max_buffers(GST_APP_SINK(m_audioSink), 8);
+			gst_base_sink_set_max_lateness(GST_BASE_SINK(m_audioSink), 0);
+		}
+
+		LogMessage("NetworkAudioPlayer:CreateStream() - Pipeline created", ELL_INFO);
 
 		return CreatePipeline(false,m_ipAddr,m_clockPort);
 
@@ -170,9 +209,12 @@ public:
 
 	virtual void Close()
 	{
+		m_audioHandler.Close();
 		if (m_audioSrc && m_audioSrc->m_client)
 			m_audioSrc->m_client->Close();
+
 		GstPipelineHandler::Close();
+		LogMessage("NetworkAudioPlayer:Close() - Connection closed", ELL_INFO);
 	}
 
 	void Play()
@@ -189,7 +231,81 @@ public:
 		g_object_set(G_OBJECT(GetPipeline()), "volume", (gdouble)vol, (void*)0);
 	}
 
+	virtual void UseCustomAudioInterface(bool use)
+	{
+		m_customAudioInterface = use;
+	}
+	virtual bool IsUsingCustomAudioInterface()
+	{
+		return m_customAudioInterface;
+	}
+	int GetPort()
+	{
+		if (m_audioSrc && m_audioSrc->m_client)
+			return m_audioSrc->m_client->Port();//return the generated port
+		else return m_audioPort;
+	}
 
+	//////////////////////////////////////////////////////////////////////////
+
+	static GstFlowReturn new_buffer(GstElement *sink, void *data) {
+		GstBuffer *buffer;
+		GstMapInfo map;
+		GstSample *sample;
+		//gsize size;
+
+
+		g_signal_emit_by_name(sink, "pull-sample", &sample, NULL);
+		if (sample) {
+
+			buffer = gst_sample_get_buffer(sample);
+
+			gst_buffer_map(buffer, &map, GST_MAP_READ);
+
+			//	fwrite(map.data, 1, map.size, data->audio_file);
+
+			gst_buffer_unmap(buffer, &map);
+			gst_sample_unref(sample);
+
+		}
+
+		return GST_FLOW_OK;
+	}
+
+	void SetSampleRate(int Rate)
+	{
+		m_sampleRate = Rate;
+	}
+	int GetSampleRate()
+	{
+		return m_audioHandler.SampleRate();
+	}
+
+	bool GrabFrame()
+	{
+		if (!m_customAudioInterface)
+			return false;
+		return m_audioHandler.GrabFrame();
+	}
+	int GetFrameSize()
+	{
+		if (!m_customAudioInterface)
+			return 0;
+		return m_audioHandler.GetFrameSize();
+	}
+	bool CopyAudioFrame(float* output)
+	{
+		if (!m_customAudioInterface)
+			return false;
+		m_audioHandler.CopyAudioFrame(output);
+		return true;
+	}
+	int ChannelsCount()
+	{
+		if (!m_customAudioInterface)
+			return 0;
+		return m_audioHandler.ChannelsCount();
+	}
 };
 
 
@@ -254,6 +370,44 @@ void GstNetworkAudioPlayer::Close()
 	m_impl->Close();
 
 }
+
+void GstNetworkAudioPlayer::SetSampleRate(int Rate)
+{
+	m_impl->SetSampleRate(Rate);
+}
+int GstNetworkAudioPlayer::GetSampleRate()
+{
+	return m_impl->GetSampleRate();
+}
+void GstNetworkAudioPlayer::UseCustomAudioInterface(bool use)
+{
+	m_impl->UseCustomAudioInterface(use);
+}
+bool GstNetworkAudioPlayer::IsUsingCustomAudioInterface()
+{
+	return m_impl->IsUsingCustomAudioInterface();
+}
+
+bool GstNetworkAudioPlayer::GrabFrame()
+{
+	return m_impl->GrabFrame();
+}
+int GstNetworkAudioPlayer::GetFrameSize()
+{
+	return m_impl->GetFrameSize();
+}
+bool GstNetworkAudioPlayer::CopyAudioFrame(float* output)
+{
+	return m_impl->CopyAudioFrame(output);
+}
+int GstNetworkAudioPlayer::ChannelsCount()
+{
+	return m_impl->ChannelsCount();
+}
+int GstNetworkAudioPlayer::GetPort(int i){
+	return m_impl->GetPort();
+}
+
 
 }
 }
