@@ -290,7 +290,7 @@ namespace mray
         }
 
         
-        const ImageInfo* GstCustomVideoPlayer::GetLastFrame()
+        const ImageInfo* GstCustomVideoPlayer::GetLastFrame(int i)
         {
             return m_impl->GetLastFrame();
         }

@@ -482,12 +482,19 @@ extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetPosition(IGStre
 }
 extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetDuration(IGStreamerPlayer* p)
 {
-    
     if (p != NULL)
     {
         return p->GetDuration();
     }
     return -1;
+}
+extern "C" UNITY_INTERFACE_EXPORT const ImageInfo* mray_gst_PlayerGetLastImage(IGStreamerPlayer* p, int index)
+{
+	if (p != NULL)
+	{
+		return p->GetLastFrame(index);
+	}
+	return 0;
 }
 
 

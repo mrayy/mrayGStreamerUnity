@@ -393,7 +393,7 @@ float GstNetworkVideoPlayer::GetCaptureFrameRate()
 	return m_impl->GetCaptureFrameRate();
 }
 
-const ImageInfo* GstNetworkVideoPlayer::GetLastFrame()
+const ImageInfo* GstNetworkVideoPlayer::GetLastFrame(int i)
 {
 	return m_impl->GetLastFrame();
 }

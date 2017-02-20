@@ -13,6 +13,22 @@
 using namespace mray;
 using namespace video;
 
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerDestroy(IGStreamerPlayer* p);
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPlay(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPause(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerStop(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerClose(IGStreamerPlayer* p);
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerSetPosition(IGStreamerPlayer* p, unsigned int pos);
+extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetPosition(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetDuration(IGStreamerPlayer* p);
+extern "C" UNITY_INTERFACE_EXPORT const ImageInfo* mray_gst_PlayerGetLastImage(IGStreamerPlayer* p,int index);
+
+
 #ifdef USE_UNITY_NETWORK
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkPlayer();
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerSetIP(GstNetworkVideoPlayer* p, const char* ip, int videoPort, bool rtcp);
@@ -54,18 +70,6 @@ extern "C" UNITY_INTERFACE_EXPORT int  mray_gst_customPlayerChannelsCount(GstCus
 
 
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerDestroy(IGStreamerPlayer* p);
-
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPlay(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerPause(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerStop(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsLoaded(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerIsPlaying(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerClose(IGStreamerPlayer* p);
-
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerSetPosition(IGStreamerPlayer* p,unsigned int pos);
-extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetPosition(IGStreamerPlayer* p);
-extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetDuration(IGStreamerPlayer* p);
 
 
 

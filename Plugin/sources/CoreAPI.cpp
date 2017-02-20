@@ -77,6 +77,10 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_cloneImageData(video::ImageInfo* ifo
 {
     dst->copyFrom(ifo);
 }
+extern "C" UNITY_INTERFACE_EXPORT void mray_copyCroppedImageData(video::ImageInfo* ifo, video::ImageInfo* dst, int x, int y, int width, int height, bool clamp)
+{
+	dst->copyCroppedFrom(ifo, Vector2d(x, y), Vector2d(width, height), clamp, dst->format);
+}
 extern "C" UNITY_INTERFACE_EXPORT void mray_deleteImageData(video::ImageInfo* ifo)
 {
     if(ifo!=NULL)

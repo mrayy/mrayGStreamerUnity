@@ -52,7 +52,7 @@ public:
     virtual bool SetPosition(signed long pos)=0;
     virtual signed long  GetPosition()=0;
     virtual signed long GetDuration()=0;
-
+	virtual const ImageInfo* GetLastFrame(int i = 0) = 0;
 	virtual bool QueryLatency(bool &isLive, ulong& minLatency, ulong& maxLatency);
 
 	virtual void SetClockBase(ulong c);
