@@ -20,6 +20,7 @@
 #include "IStreamListener.h"
 #include "ListenerContainer.h"
 #include "UnityHelpers.h"
+#include "CMyUDPSrc.h"
 
 
 namespace mray
@@ -27,6 +28,26 @@ namespace mray
 namespace video
 {
 	class GstPipelineHandler;
+
+
+	struct RTPPacketData
+	{
+		uint32_t timestamp;
+		uint64_t presentationTime;
+		unsigned short length;
+		unsigned char data[255];
+	};
+	template<class T>
+	class GstFrameData
+	{
+	public:
+		T data;
+		unsigned __int64 PTS;
+		unsigned __int64 DTS;
+		RTPPacketData RTPPacket;
+	};
+
+	typedef GstFrameData<ImageInfo> GstImageFrame;
 
 class IGStreamerPlayer :public ListenerContainer<IGStreamerPlayerListener*>
 {
@@ -53,6 +74,8 @@ public:
     virtual signed long  GetPosition()=0;
     virtual signed long GetDuration()=0;
 	virtual const ImageInfo* GetLastFrame(int i = 0) = 0;
+	virtual unsigned long GetLastFrameTimestamp(int i = 0) = 0;
+	virtual void* GetLastFrameRTPMeta(int i = 0) = 0;
 	virtual bool QueryLatency(bool &isLive, ulong& minLatency, ulong& maxLatency);
 
 	virtual void SetClockBase(ulong c);

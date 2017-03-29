@@ -22,14 +22,14 @@
     <Filter Include="Source Files\Engine\Headers">
       <UniqueIdentifier>{66f08993-3e01-47d8-b52e-211fe3905496}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Players">
-      <UniqueIdentifier>{53c03b70-31b0-4063-809e-414e4a124693}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\API">
       <UniqueIdentifier>{e574c74c-40e7-4c61-80ca-f817c02f38cf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Streamer">
       <UniqueIdentifier>{3be6591e-78a9-4b7a-800e-ac354152667a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Players">
+      <UniqueIdentifier>{53c03b70-31b0-4063-809e-414e4a124693}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +162,6 @@
     <ClInclude Include="../includes/UnityGraphicsDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\sources\GstCustomVideoStreamer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\sources\CMyUDPSink.h">
       <Filter>Source Files\Elements</Filter>
     </ClInclude>
@@ -172,22 +169,22 @@
       <Filter>Source Files\Elements</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\GstNetworkAudioStreamer.h">
+      <Filter>Source Files\Streamer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\GstCustomVideoStreamer.h">
+      <Filter>Source Files\Streamer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\MutexLocks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\CMyListener.h">
+      <Filter>Source Files\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\rtp.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="../sources/CoreAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/GstCustomVideoPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/GstPipelineHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/GstPlayerBin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="../sources/GStreamerCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -212,61 +209,10 @@
     <ClCompile Include="../includes/UnityGraphicsDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="../includes/Win32/Win32Network.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/Win32/Win32UDPClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/Win32/WinMutex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/Win32/WinThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/Win32/WinThreadManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/PlayersAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/StreamersAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="../sources/UnityHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="../sources/UnityImageGrabber.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/VideoAppSinkHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_D3D11.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_D3D9.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_OpenGL2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/AudioAppSinkHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="../sources/IAppSinkHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sources\GstNetworkAudioPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sources\GstNetworkMultipleVideoPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\CMyUDPSink.cpp">
@@ -275,11 +221,80 @@
     <ClCompile Include="..\sources\CMyUDPSrc.cpp">
       <Filter>Source Files\Elements</Filter>
     </ClCompile>
-    <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="../sources/VideoAppSinkHandler.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/AudioAppSinkHandler.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/GstPipelineHandler.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\GstNetworkAudioStreamer.cpp">
+      <Filter>Source Files\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp">
+      <Filter>Source Files\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/GstCustomVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstNetworkAudioPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstNetworkMultipleVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/RenderAPI_OpenGL2.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/RenderAPI.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/RenderAPI_D3D9.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/RenderAPI_D3D11.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/PlayersAPI.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/CoreAPI.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/GstPlayerBin.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/Win32Network.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/Win32UDPClient.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinMutex.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinThread.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../includes/Win32/WinThreadManager.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/StreamersAPI.cpp">
+      <Filter>Source Files\API</Filter>
+    </ClCompile>
+    <ClCompile Include="../sources/IAppSinkHandler.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\rtp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\CMyListener.cpp">
+      <Filter>Source Files\Elements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

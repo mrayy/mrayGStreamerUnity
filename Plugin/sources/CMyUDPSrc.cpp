@@ -3,6 +3,12 @@
 #include "stdafx.h"
 #include "cMyUDPSrc.h"
 #include "INetwork.h"
+#include "IThreadManager.h"
+#include "MutexLocks.h"
+#include "rtp.h"
+
+#include <gst/rtp/rtp.h>
+#include <gst/rtp/gstrtpbuffer.h>
 
 
 using namespace mray;
@@ -35,7 +41,6 @@ static GstStaticPadTemplate MyUDPSrc_template = GST_STATIC_PAD_TEMPLATE("src",
 	GST_PAD_SRC,
 	GST_PAD_ALWAYS,
 	GST_STATIC_CAPS_ANY);
-
 
 #define UDP_DEFAULT_PORT                5004
 enum
@@ -146,6 +151,8 @@ gst_MyUDPSrc_init(GstMyUDPSrc * MyUDPSrc)
 {
 	MyUDPSrc->port = UDP_DEFAULT_PORT;
 	MyUDPSrc->m_client = network::INetwork::getInstance().createUDPClient();
+//	MyUDPSrc->m_mutex = OS::IThreadManager::getInstance().createMutex();
+//	MyUDPSrc->timestampQueue = new std::list<GstMyUDPSrc::RTPPacketData>();
 	/* configure basesrc to be a live source */
 	gst_base_src_set_live(GST_BASE_SRC(MyUDPSrc), TRUE);
 	/* make basesrc output a segment in time */
@@ -195,7 +202,12 @@ gst_MyUDPSrc_Close(GstMyUDPSrc * src)
 	{
 		GST_DEBUG_OBJECT(src, "closing socket");
 		src->m_client->Close();
-	}
+		delete src->m_client;
+		src->m_client = 0;
+	}/*
+	delete src->m_mutex;
+	src->m_mutex = 0;
+	delete src->timestampQueue;*/
 	return true;
 }
 
@@ -214,6 +226,7 @@ gst_MyUDPSrc_finalize(GObject * object)
 	{
 		MyUDPSrc->m_client->Close();
 		delete MyUDPSrc->m_client;
+		MyUDPSrc->m_client = 0;
 	}
 
 	G_OBJECT_CLASS(parent_class)->finalize(object);
@@ -240,6 +253,19 @@ gst_MyUDPSrc_create(GstPushSrc * psrc, GstBuffer ** buf)
 			gst_buffer_map(outbuf, &map, GST_MAP_WRITE);
 			memcpy(map.data, Buffer, len);
 			gst_buffer_unmap(outbuf, &map);
+
+			/*
+			GstRTPBuffer rtp_buf;
+			gst_rtp_buffer_map(outbuf, GST_MAP_READ, &rtp_buf);
+			//gst_rtp_buffer_map()
+			//gst_rtp_buffer_add_extension_onebyte_header()
+						gst_rtp_buffer_unmap(&rtp_buf);*/
+			/*
+			GstMyUDPSrc::RTPPacketData packet;
+			packet .timestamp= rtp_timestamp(Buffer);
+			packet.length = rtp_padding_payload((unsigned char*)Buffer, len, packet.data);
+			src->AddRTPPacket(packet);*/
+
 			//printf("%d  ", len);
 			/*
 			gst_buffer_append_memory(outbuf,
@@ -292,7 +318,32 @@ void _GstMyUDPSrc::SetPort(guint16 p)
 	}
 
 }
+/*
+GstMyUDPSrc::RTPPacketData _GstMyUDPSrc::GetLastRTPPacket(bool remove)
+{
+	OS::ScopedLock lock(m_mutex);
+	if (timestampQueue->size() == 0)
+		return GstMyUDPSrc::RTPPacketData();
+	GstMyUDPSrc::RTPPacketData ts = *timestampQueue->begin();
+	if (remove)
+		timestampQueue->erase(timestampQueue->begin());
+	return ts;
+}
+void _GstMyUDPSrc::AddRTPPacket(const GstMyUDPSrc::RTPPacketData& ts)
+{
+	OS::ScopedLock lock(m_mutex);
+	if (timestampQueue->size() == 0)
+	{
+		timestampQueue->push_back(ts);
+		
+	}
+	else{
+		const GstMyUDPSrc::RTPPacketData& last = timestampQueue->back();
+		if (last.timestamp != ts.timestamp)
+			timestampQueue->push_back(ts);
+	}
 
+}*/
 
 static void
 gst_MyUDPSrc_set_property(GObject * object, guint prop_id, const GValue * value,

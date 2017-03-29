@@ -130,7 +130,7 @@ namespace mray
             {
                 SetPaused(false);
             }
-                        void Pause()
+			void Pause()
             {
                 SetPaused(true);
             }
@@ -163,7 +163,15 @@ namespace mray
             virtual ulong GetBufferID(){ return m_videoHandler.GetFrameID(); }
             
             virtual const ImageInfo* GetLastFrame(){ return m_videoHandler.getPixelsRef(); }
-            
+
+			virtual unsigned long GetLastFrameTimestamp()
+			{
+				return m_videoHandler.getPixelFrame()->RTPPacket.timestamp;
+			}
+			void* GetLastFrameRTPMeta()
+			{
+				return &m_videoHandler.getPixelFrame()->RTPPacket;
+			}
             
             virtual bool GrabAudioFrame()
             {
@@ -293,8 +301,16 @@ namespace mray
         const ImageInfo* GstCustomVideoPlayer::GetLastFrame(int i)
         {
             return m_impl->GetLastFrame();
-        }
-        
+		}
+		unsigned long GstCustomVideoPlayer::GetLastFrameTimestamp(int i)
+		{
+			return m_impl->GetLastFrameTimestamp();
+		}
+		void* GstCustomVideoPlayer::GetLastFrameRTPMeta(int i)
+		{
+			return m_impl->GetLastFrameRTPMeta();
+		}
+
         int GstCustomVideoPlayer::GetAudioFrameSize()
         {
             return m_impl->GetAudioFrameSize();

@@ -39,7 +39,7 @@ protected:
 		}
 		std::string address;
 		uint audioPort;
-		GstMyUDPSink* audioSink;
+		GstElement* audioSink;
 		GstElement* volume;
 	};
 
@@ -77,7 +77,7 @@ public:
 #elif defined OPUS_ENC
 			audioStr += "opusenc complexity=10 bitrate-type=vbr frame-size=5 ! rtpopuspay  ";
 #endif
-			audioStr += "! myudpsink name=audioSink" + std::string(buffer) + " sync=false";
+			audioStr += "! udpsink name=audioSink" + std::string(buffer) + " sync=false";
 
 			break;
 		}
@@ -89,15 +89,15 @@ public:
 
 		if (!GetPipeline())
 			return;
-#define SET_SINK(target,name,p) target=GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), name)); if(target){target->SetPort(p.address,p.audioPort);}
+//#define SET_SINK(target,name,p) target=GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), name)); if(target){target->SetPort(p.address,p.audioPort);}
 
 		char buffer[128];
 		for (int i = 0; i < m_clients.size(); ++i)
 		{
 			sprintf(buffer, "audioSink%d", i);
-			m_clients[i].audioSink = GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), buffer));
+			m_clients[i].audioSink = gst_bin_get_by_name(GST_BIN(GetPipeline()), buffer);
 			if (m_clients[i].audioSink)
-				m_clients[i].audioSink->SetPort(m_clients[i].address, m_clients[i].audioPort);
+				g_object_set(m_clients[i].audioSink, "port", m_clients[i].audioPort, "host", m_clients[i].address.c_str(),0);
 
 			sprintf(buffer, "vol%d", i);
 			m_clients[i].volume = gst_bin_get_by_name(GST_BIN(GetPipeline()), buffer);

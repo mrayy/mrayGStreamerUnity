@@ -288,6 +288,18 @@ public:
 	{
 		return m_videoHandler.getPixelsRef()->format;
 	}
+	const GstImageFrame* GetLastDataFrame()
+	{
+		return m_videoHandler.getPixelFrame();
+	}
+	virtual unsigned long GetLastFrameTimestamp()
+	{
+		return m_videoHandler.getPixelFrame()->RTPPacket.timestamp;
+	}
+	void* GetLastFrameRTPMeta()
+	{
+		return &m_videoHandler.getPixelFrame()->RTPPacket;
+	}
 
 	virtual bool GrabFrame(){ return m_videoHandler.GrabFrame(); }
 	virtual bool HasNewFrame(){ return m_videoHandler.isFrameNew(); }
@@ -398,6 +410,19 @@ const ImageInfo* GstNetworkVideoPlayer::GetLastFrame(int i)
 	return m_impl->GetLastFrame();
 }
 
+const GstImageFrame* GstNetworkVideoPlayer::GetLastDataFrame(int i)
+{
+	return m_impl->GetLastDataFrame();
+}
+
+void* GstNetworkVideoPlayer::GetLastFrameRTPMeta(int i)
+{
+	return m_impl->GetLastFrameRTPMeta();
+}
+unsigned long GstNetworkVideoPlayer::GetLastFrameTimestamp(int i )
+{
+	return m_impl->GetLastFrameTimestamp();
+}
 int GstNetworkVideoPlayer::GetPort(int i)
 {
 	return m_impl->GetPort(i);

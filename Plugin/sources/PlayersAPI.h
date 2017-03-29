@@ -27,6 +27,11 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerSetPosition(IGStreamerPlay
 extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetPosition(IGStreamerPlayer* p);
 extern "C" UNITY_INTERFACE_EXPORT unsigned int mray_gst_PlayerGetDuration(IGStreamerPlayer* p);
 extern "C" UNITY_INTERFACE_EXPORT const ImageInfo* mray_gst_PlayerGetLastImage(IGStreamerPlayer* p,int index);
+extern "C" UNITY_INTERFACE_EXPORT unsigned long mray_gst_PlayerGetLastImageTimestamp(IGStreamerPlayer* p, int index);
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerSendRTPMetaToHost(IGStreamerPlayer* p, int index, const char* host, int port);
+
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStreamerPlayer* p, int index, int& x, int& y, int& w, int& h);
 
 
 #ifdef USE_UNITY_NETWORK

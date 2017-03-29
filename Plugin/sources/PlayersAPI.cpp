@@ -4,7 +4,14 @@
 #include "GraphicsInclude.h"
 #include "PixelUtil.h"
 
+#include "INetwork.h"
+#include "IMutex.h"
+#include "IThreadManager.h"
+#include "MutexLocks.h"
+
 #include <vector>
+
+using namespace mray;
 
 struct MultiNetRenderRequest
 {
@@ -497,6 +504,63 @@ extern "C" UNITY_INTERFACE_EXPORT const ImageInfo* mray_gst_PlayerGetLastImage(I
 	return 0;
 }
 
+extern "C" UNITY_INTERFACE_EXPORT unsigned long mray_gst_PlayerGetLastImageTimestamp(IGStreamerPlayer* p, int index)
+{
+	if (p != NULL)
+	{
+		return p->GetLastFrameTimestamp(index);
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerSendRTPMetaToHost(IGStreamerPlayer* p, int index, const char* host, int port)
+{
+	static OS::IMutex* mutex;
+	static network::IUDPClient* client;
+	if (client == 0)
+	{
+		client=network::INetwork::getInstance().createUDPClient();
+		client->Open();
+		mutex = OS::IThreadManager::getInstance().createMutex();
+	}
+	OS::ScopedLock lock(mutex);
+	if (p != NULL)
+	{
+		RTPPacketData* data = (RTPPacketData*) p->GetLastFrameRTPMeta(index);
+		if (data == NULL)
+			return;
+
+		struct CPacket
+		{
+			uint32_t timestamp;
+			uint64_t presentationTime;
+		};
+
+		CPacket packet;
+		packet.presentationTime = data->presentationTime;
+		packet.timestamp = data->timestamp;
+
+		network::NetAddress address(host, port);
+		client->SendTo(&address, (const char*)&packet, sizeof(packet));
+	}
+	return;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStreamerPlayer* p, int index, int& x, int& y, int& w, int& h)
+{
+	RTPPacketData* data = (RTPPacketData*)p->GetLastFrameRTPMeta(index);
+	if (data == NULL)
+		return;
+
+	struct Vector4di
+	{
+		int x, y, w, h;
+	}vec;
+
+	memcpy(&vec, data->data, sizeof(vec));
+	x = vec.x;
+	y = vec.y;
+	w = vec.w;
+	h = vec.h;
+}
 
 //////////////////////////////////////////////////////////////////////////
 

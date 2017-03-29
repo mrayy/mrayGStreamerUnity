@@ -12,6 +12,7 @@
 #include "VideoAppSinkHandler.h"
 #include "GstPipelineHandler.h"
 #include "UnityHelpers.h"
+#include "CMyListener.h"
 
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
@@ -48,12 +49,17 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 			videoSink = 0;
 			videoRtcpSrc = 0;
 			videoRtcpSink = 0;
+			rtpListener = 0;
+			preappsrcListener = 0;
 		}
 		VideoAppSinkHandler handler;
 		uint videoPort;
 
 		GstElement* videoSrc;
 		GstAppSink* videoSink;
+
+		GstMyListener* rtpListener;
+		GstMyListener* preappsrcListener;
 
 		GstElement* videoRtcpSrc;
 		GstElement* videoRtcpSink;
@@ -142,10 +148,11 @@ public:
 		else{
 			ss << " ! rtpjitterbuffer latency=500  ";
 		}
+		
 
 		if (m_encoderType == "H264")
 		{
-			ss << "  ! rtph264depay ! h264parse !  avdec_h264 ! "
+			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay  !  avdec_h264 ! " //! h264parse
 				" videoconvert !"
 				;
 		//	ss << " videoflip method=5 !";
@@ -184,7 +191,7 @@ public:
 		}
 		else
 		{
-			ss << " appsink name=videoSink" << i <<" sync=true  emit-signals=false ";
+			ss << " mylistener name=preappsrc" << i << " ! appsink name=videoSink" << i << " sync=true  emit-signals=false ";
 		}
 		//"fpsdisplaysink sync=false";
 
@@ -219,7 +226,7 @@ public:
 			ss << "videoSrc" << i;
 			m_videoHandler[i].videoSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), ss.str().c_str());
 			if (m_videoHandler[i].videoPort!=0)
-				g_object_set(m_videoHandler[i].videoSrc, "port", m_videoHandler[i].videoPort);
+				g_object_set(m_videoHandler[i].videoSrc, "port", m_videoHandler[i].videoPort,0);
 		//	SET_SRC(i, ss.str().c_str(), m_videoHandler[i].videoPort);
 			// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i].videoPort + 1));
 			// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i].videoPort + 2));
@@ -293,10 +300,23 @@ public:
 
 		for (int i = 0; i < m_playersCount; ++i)
 		{
-			std::stringstream ss;
-			ss << "videoSink" << i;
+			{
+				std::stringstream ss;
+				ss << "videoSink" << i;
+				m_videoHandler[i].videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+			}
+			{
 
-			m_videoHandler[i].videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+				std::stringstream ss;
+				ss << "rtplistener" << i;
+				m_videoHandler[i].rtpListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+			}
+			{
+
+				std::stringstream ss;
+				ss << "preappsrc" << i;
+				m_videoHandler[i].preappsrcListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+			}
 
 			if (m_rtcp)
 			{
@@ -308,6 +328,8 @@ public:
 			}
 
 			m_videoHandler[i].handler.SetSink(m_videoHandler[i].videoSink);
+			m_videoHandler[i].handler.SetRTPListener(m_videoHandler[i].rtpListener, m_videoHandler[i].preappsrcListener);
+			//m_videoHandler[i].handler.SetSource(GST_MyUDPSrc(m_videoHandler[i].videoSrc));
 			g_signal_connect(m_videoHandler[i].videoSink, "new-sample", G_CALLBACK(new_buffer), this);
 			//attach videosink callbacks
 			GstAppSinkCallbacks gstCallbacks;
@@ -439,6 +461,27 @@ public:
 			return 0;
 		else
 			return m_videoHandler[i].handler.getPixelsRef();
+	}
+	virtual unsigned long GetLastFrameTimestamp(int i)
+	{
+		if (i > m_playersCount)
+			return 0;
+		else
+			return m_videoHandler[i].handler.getPixelFrame()->RTPPacket.timestamp;
+	}
+	const GstImageFrame* GetLastDataFrame(int i)
+	{
+		if (i > m_playersCount)
+			return 0;
+		else
+			return m_videoHandler[i].handler.getPixelFrame();
+	}
+	void* GetLastFrameRTPMeta(int i)
+	{
+		if (i > m_playersCount)
+			return 0;
+		else
+			return &m_videoHandler[i].handler.getPixelFrame()->RTPPacket;
 	}
 
 	virtual int GetPort(int i)
@@ -579,6 +622,20 @@ const ImageInfo* GstNetworkMultipleVideoPlayer::GetLastFrame(int i)
 	return m_impl->GetLastFrame(i);
 }
 
+
+const GstImageFrame* GstNetworkMultipleVideoPlayer::GetLastDataFrame(int i)
+{
+	return m_impl->GetLastDataFrame(i);
+}
+unsigned long GstNetworkMultipleVideoPlayer::GetLastFrameTimestamp(int i)
+{
+	return m_impl->GetLastFrameTimestamp(i);
+}
+void* GstNetworkMultipleVideoPlayer::GetLastFrameRTPMeta(int i)
+{
+	return m_impl->GetLastFrameRTPMeta(i);
+
+}
 int GstNetworkMultipleVideoPlayer::GetPort(int i)
 {
 	return m_impl->GetPort(i);

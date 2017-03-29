@@ -18,6 +18,7 @@
 #ifdef USE_UNITY_NETWORK
 #include "CMyUDPSrc.h"
 #include "CMyUDPSink.h"
+#include "CMyListener.h"
 #endif
 
 
@@ -135,6 +136,11 @@ void GStreamerCore::_Init()
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsink", (char*)"Element udp sink",
 			_GstMyUDPSinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
+			"");
+
+		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
+			"mylistener", (char*)"Custom listener element",
+			_GstMyListenerClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
 			"");
 #endif
 		LogManager::Instance()->LogMessage("GStreamerCore - GStreamer inited");

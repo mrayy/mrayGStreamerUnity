@@ -72,6 +72,10 @@ public:
 	virtual int GetPort(int i);
 
 	virtual const ImageInfo* GetLastFrame(int i);
+	virtual const GstImageFrame* GetLastDataFrame(int i);
+	virtual unsigned long GetLastFrameTimestamp(int i);
+	virtual void* GetLastFrameRTPMeta(int i);
+
 
 	virtual ulong GetNetworkUsage();
 

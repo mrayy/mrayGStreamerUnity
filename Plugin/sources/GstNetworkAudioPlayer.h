@@ -42,7 +42,8 @@ public:
 	virtual bool IsPlaying();
 	virtual void Close();
 	virtual const ImageInfo* GetLastFrame(int i = 0){ return 0; }
-
+	virtual unsigned long GetLastFrameTimestamp(int i = 0){ return 0; }
+	virtual void* GetLastFrameRTPMeta(int i = 0){return 0;}
 	//if it set to false, then the audio will be played using directsound
 	virtual void UseCustomAudioInterface(bool use);
 	virtual bool IsUsingCustomAudioInterface();

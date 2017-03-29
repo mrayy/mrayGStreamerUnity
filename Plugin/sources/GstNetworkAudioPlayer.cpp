@@ -4,8 +4,8 @@
 #include "GstNetworkAudioPlayer.h"
 
 
-#include "CMyUDPSrc.h"
-#include "CMyUDPSink.h"
+//#include "CMyUDPSrc.h"
+//#include "CMyUDPSink.h"
 
 #include "CMySrc.h"
 #include "CMySink.h"
@@ -29,9 +29,9 @@ class GstNetworkAudioPlayerImpl :public GstPipelineHandler
 
 	std::string m_pipeLineString;
 
-	GstMyUDPSrc* m_audioSrc;
-	GstMyUDPSrc* m_audioRtcpSrc;
-	GstMyUDPSink* m_audioRtcpSink;
+	GstElement* m_audioSrc;
+	GstElement* m_audioRtcpSrc;
+	GstElement* m_audioRtcpSink;
 	bool m_rtcp;
 
 	bool m_customAudioInterface;
@@ -91,13 +91,13 @@ public:
 		{
 			m_pipeLineString =
 				"rtpbin name=rtpbin "
-				"myudpsrc name=audioSrc "+ audiocaps +
+				"udpsrc name=audioSrc "+ audiocaps +
 				//audio rtp
 				"! rtpbin.recv_rtp_sink_0 "
 
 				"rtpbin. ! " + audioStr+ " ! directsoundsink "
 
-				"myudpsrc name=audioRtcpSrc ! rtpbin.recv_rtcp_sink_0 "
+				"udpsrc name=audioRtcpSrc ! rtpbin.recv_rtcp_sink_0 "
 
 				//audio rtcp
 				"rtpbin.send_rtcp_src_0 ! myudpsink name=audioRtcpSink sync=false async=false ";
@@ -105,7 +105,7 @@ public:
 		else
 		{
 			m_pipeLineString =
-				"myudpsrc name=audioSrc " + audiocaps + "!" + audioStr;//
+				"udpsrc name=audioSrc " + audiocaps + "!" + audioStr;//
 			if (m_customAudioInterface)
 			{
 				m_pipeLineString += "! audioresample ! audio/x-raw,format=F32LE,rate=";//! audioresample quality=10
@@ -128,9 +128,18 @@ public:
 #define SET_SINK(name,p) m_##name=GST_MyUDPSink(gst_bin_get_by_name(GST_BIN(GetPipeline()), #name)); if(m_##name){m_##name->SetPort(m_ipAddr,p);}
 
 
-		SET_SRC(audioSrc, m_audioPort);
-		SET_SINK(audioRtcpSink, (m_audioPort + 1));
-		SET_SRC(audioRtcpSrc, (m_audioPort + 2));
+		m_audioSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), "audioSrc");
+		if (m_audioSrc)
+			g_object_set(m_audioSrc, "port", m_audioPort, 0);
+		m_audioRtcpSink = gst_bin_get_by_name(GST_BIN(GetPipeline()), "audioSrc");
+		if (m_audioRtcpSink)
+			g_object_set(m_audioRtcpSink, "port", m_audioPort+1, 0);
+		m_audioRtcpSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), "audioSrc");
+		if (m_audioRtcpSrc)
+			g_object_set(m_audioRtcpSrc, "port", m_audioPort+2, 0);
+//		SET_SRC(audioSrc, m_audioPort);
+//		SET_SINK(audioRtcpSink, (m_audioPort + 1));
+//		SET_SRC(audioRtcpSrc, (m_audioPort + 2));
 
 	}
 
@@ -198,8 +207,13 @@ public:
 	uint GetAudioPort()
 	{
 		if (m_audioSrc)
-			return m_audioSrc->port;
-		else return m_audioPort;
+		{
+			int port;
+			g_object_get(m_audioSrc, "port", &port, 0);
+			return port;
+		}
+		else 
+			return m_audioPort;
 	}
 
 	bool IsStream()
@@ -210,8 +224,9 @@ public:
 	virtual void Close()
 	{
 		m_audioHandler.Close();
+		/*
 		if (m_audioSrc && m_audioSrc->m_client)
-			m_audioSrc->m_client->Close();
+			m_audioSrc->m_client->Close();*/
 
 		GstPipelineHandler::Close();
 		LogMessage("NetworkAudioPlayer:Close() - Connection closed", ELL_INFO);
@@ -241,9 +256,14 @@ public:
 	}
 	int GetPort()
 	{
-		if (m_audioSrc && m_audioSrc->m_client)
-			return m_audioSrc->m_client->Port();//return the generated port
-		else return m_audioPort;
+		if (m_audioSrc)
+		{
+			int port;
+			g_object_get(m_audioSrc, "port", &port, 0);
+			return port;
+		}
+		else 
+			return m_audioPort;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

@@ -55,7 +55,9 @@ public:
 	virtual bool HasNewFrame();
 	virtual ulong GetBufferID();// incremented once per frame
 
-	virtual const ImageInfo* GetLastFrame(int i=0);
+	virtual const ImageInfo* GetLastFrame(int i = 0);
+	virtual unsigned long GetLastFrameTimestamp(int i = 0);
+	virtual void* GetLastFrameRTPMeta(int i = 0);
 	virtual float GetCaptureFrameRate();
 
 	int GetAudioFrameSize();
