@@ -1,25 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Threading;
 
-public class GstCustomTexture : MonoBehaviour {
-	
-	public int m_Width = 64;
-	public int m_Height = 64;
-	public bool m_FlipX = false;
-	public bool m_FlipY = false;
-	
+public class GstCustomTexture : GstBaseTexture {
 	public string Pipeline="";
-	
+
 	private GstCustomPlayer _player;
-	
-	[SerializeField]	// Only for testing purposes.
-	private Texture2D m_Texture = null;
-	
-	
-	[SerializeField]
-	private bool m_InitializeOnStart = true;
-	private bool m_HasBeenInitialized = false;
-	
+
+
 	public GstCustomPlayer Player
 	{
 		get	
@@ -32,72 +20,38 @@ public class GstCustomTexture : MonoBehaviour {
 				_player = value;
 		}
 	}
-	
-	public Texture2D PlayerTexture
+
+	public override int GetTextureCount ()
 	{
-		get
-		{
-			return m_Texture;	
-		}
+		return 1;
 	}
-	
-	public void Initialize()
+	/*public override int GetCaptureRate (int index)
 	{
-		m_HasBeenInitialized = true;
-		
-		GStreamerCore.Ref();
+		return _player.GetCaptureRate (index);
+	}*/
+
+	public override IGstPlayer GetPlayer(){
+		return _player;
+	}
+
+	Thread _imageGrabber;
+	bool _isDone=false;
+
+	protected override void _initialize()
+	{
 		_player = new GstCustomPlayer ();
-		
-		// Call resize which will create a texture and a webview for us if they do not exist yet at this point.
-		Resize(m_Width, m_Height);
-		
-		if (GetComponent<GUITexture>())
-		{
-			GetComponent<GUITexture>().texture = m_Texture;
-		}
-		else if (GetComponent<Renderer>() && GetComponent<Renderer>().material)
-		{		
-			GetComponent<Renderer>().material.mainTexture = m_Texture;
-			GetComponent<Renderer>().material.mainTextureScale = new Vector2(	Mathf.Abs(GetComponent<Renderer>().material.mainTextureScale.x) * (m_FlipX ? -1.0f : 1.0f),
-			                                                                 Mathf.Abs(GetComponent<Renderer>().material.mainTextureScale.y) * (m_FlipY ? -1.0f : 1.0f));
-		}
-		else
-		{
-			Debug.LogWarning("There is no Renderer or guiTexture attached to this GameObject! GstTexture will render to a texture but it will not be visible.");
-		}
-		
+
+		_imageGrabber = new Thread (new ThreadStart (ImageGrabberThread));
+		_imageGrabber.Start ();
 	}
-	
-	
-	// Use this for initialization
-	void Start () {
-		
-		if (m_InitializeOnStart && !m_HasBeenInitialized) 
-		{
-			Initialize ();
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-	public void Resize( int _Width, int _Height )
+	public override void Destroy ()
 	{
-		m_Width = _Width;
-		m_Height = _Height;
-		
-		if (m_Texture == null)
-		{
-			m_Texture = new Texture2D(m_Width, m_Height, TextureFormat.RGB24, false);
-		}
-		else
-		{	
-			m_Texture.Resize(m_Width, m_Height, TextureFormat.RGB24, false);
-			m_Texture.Apply(false, false);
-		}
-		m_Texture.filterMode = FilterMode.Point;
-		
+		_isDone = true;
+		if (_imageGrabber != null)
+			_imageGrabber.Join ();
+
+		base.Destroy ();
+		_player = null;
 	}
 
 	public void SetPipeline(string p)
@@ -105,83 +59,63 @@ public class GstCustomTexture : MonoBehaviour {
 		Pipeline = p;
 		if(_player.IsLoaded || _player.IsPlaying)
 			_player.Close ();
+
 		_player.SetPipeline (Pipeline);
 		_player.CreateStream();
 	}
-	
-	
-	public bool IsLoaded {
-		get {
-			return _player.IsLoaded;
+
+	bool _imageGrabed=false;
+	Vector2 _grabbedSize;
+	int _grabbedComponents;
+	void ImageGrabberThread()
+	{
+		Vector2 sz;
+		int c;
+		while (!_isDone) {
+			if (_player.GrabFrame (out sz, out c)) {
+				_grabbedSize = sz;
+				_grabbedComponents = c;
+				_imageGrabed = true;
+				_triggerOnFrameGrabbed (0);
+			}
 		}
 	}
-	
-	public bool IsPlaying {
-		get {
-			return _player.IsPlaying;
-		}
-	}
-	
-	public void Destroy()
-	{
-		if (_player != null)
-		{
-			_player.Destroy ();
-			_player = null;
-			GStreamerCore.Unref();
-		}
-	}
-	
-	public void Play()
-	{
-		_player.Play ();
-	}
-	
-	public void Pause()
-	{
-		_player.Pause ();
-	}
-	
-	public void Stop()
-	{
-		_player.Stop ();
-	}
-	
-	public void Close()
-	{
-		_player.Close ();
-	}
-	void OnDestroy()
-	{
-		Destroy ();
-	}
-	
-	void OnApplicationQuit()
-	{
-		Destroy ();
-	}
-	
+
 	void OnGUI()
 	{
 		// This function should do input injection (if enabled), and drawing.
 		if (_player == null)
 			return;
-		
+
 		Event e = Event.current;
-		
+
 		switch (e.type) {
 		case EventType.Repaint:	
-		{
-			Vector2 sz;
-			if (_player.GrabFrame (out sz)) {
-				Resize ((int)sz.x,(int) sz.y);
-				if (m_Texture == null)
-					Debug.LogError ("The GstTexture does not have a texture assigned and will not paint.");
-				else
-					_player.BlitTexture (m_Texture.GetNativeTexturePtr (), m_Texture.width, m_Texture.height);
+			{
+				//if (_player.GrabFrame (out sz,out components)) {
+				if(_imageGrabed){
+					Resize ((int)_grabbedSize.x,(int) _grabbedSize.y,_grabbedComponents,0);
+					if (m_Texture[0] == null)
+						Debug.LogError ("The GstTexture does not have a texture assigned and will not paint.");
+					else {
+						_player.BlitTexture (m_Texture [0].GetNativeTexturePtr (), m_Texture [0].width, m_Texture [0].height);
+					}
+					_imageGrabed = false;
+					OnFrameCaptured(0);
+					_triggerOnFrameBlitted (0);
+				}
+				break;	
 			}
-			break;	
-		}
 		}
 	}
+
+	// Use this for initialization
+	void Start () {
+	}
+
+	// Update is called once per frame
+	void Update () {
+
+	}
+
 }

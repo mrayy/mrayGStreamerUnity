@@ -5,7 +5,7 @@ using System;
 
 public class GStreamerCore {
 	
-	internal const string DllName = "GStreamerUnityPlugin";
+	public const string DllName = "GStreamerUnityPlugin";
 	
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private bool mray_gstreamer_initialize(  );
@@ -21,9 +21,12 @@ public class GStreamerCore {
 	extern static private void mray_SetDebugFunction( IntPtr str );
 
 
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate void MyDelegate(string str);
+	static public float Time=0;
 
+	static float GetEngineTime()
+	{
+		return Time;
+	}
 
 	static void CallBackFunction(string str)
 	{
@@ -43,7 +46,7 @@ public class GStreamerCore {
 	}
 	public static void Ref()
 	{
-		if (_nativeLibraryPtr == IntPtr.Zero) {
+	/*	if (_nativeLibraryPtr == IntPtr.Zero) {
 			_nativeLibraryPtr=NativeDLL.LoadLibrary(DllName);
 			if(_nativeLibraryPtr==IntPtr.Zero)
 			{
@@ -55,14 +58,14 @@ public class GStreamerCore {
 			MyDelegate callback=new MyDelegate(CallBackFunction);
 			IntPtr intptr_del=Marshal.GetFunctionPointerForDelegate(callback);
 			mray_SetDebugFunction(intptr_del);
-		}
+		}*/
 		mray_gstreamer_initialize();
 	}
 	public static void Unref()
 	{
 		if (IsActive) 
 			mray_gstreamer_shutdown();
-
+		/*
 		if (!IsActive) {
 			if(_nativeLibraryPtr!=IntPtr.Zero)
 			{
@@ -71,6 +74,8 @@ public class GStreamerCore {
 				          "mrayGStreamer Library successfuly Unloaded":
 				          "Failed to unload mrayGStreamer Library");
 			}
-		}
+		}*/
 	}
+
+
 }
