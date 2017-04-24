@@ -12,12 +12,19 @@ To compile the plugin:
 
 http://gstreamer.freedesktop.org/data/pkg/windows/
 
-2- [Important] Add gstreamer binary folder path to System Environment Variables:
+2- Install Visual studio runtimes x64 version:
+> VS 2010:
+https://www.microsoft.com/en-US/Download/confirmation.aspx?id=14632
+> VS 2013:
+https://www.microsoft.com/en-us/download/details.aspx?id=40784
+
+
+3- [Important] Add gstreamer binary folder path to System Environment Variables:
 System Settigns --> Advanced System Settings --> Advanced Tab --> Environment Variables... --> Path variable
 
 GStreamer path should be similar to this (depending on installation directory):
 C:\gstreamer\1.0\x86_64\bin
 
-3- [Optional] Compile using Visual studio 2013 and put the result dll into Plugins/x86_64 Unity folder (or use the already compiled dll in the Plugins/x86_64 folder)
+4- [Optional] Compile using Visual studio 2013 and put the result dll into Plugins/x86_64 Unity folder (or use the already compiled dll in the Plugins/x86_64 folder)
 
-4- Open test scenes and check the info text 
+5- Open test scenes and check the info text 
