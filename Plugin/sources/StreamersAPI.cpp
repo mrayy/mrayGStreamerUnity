@@ -1,9 +1,21 @@
 
 
-#include "StreamersAPI.h"
+#include "Unity/IUnityInterface.h"
+
+#ifdef USE_UNITY_GRABBER
+#include "UnityImageGrabber.h"
+#endif
+
+#include "GstCustomVideoStreamer.h"
+#include "GstNetworkVideoStreamer.h"
+#include "GstNetworkAudioStreamer.h"
+
 #include "GStreamerCore.h"
 #include "GraphicsInclude.h"
 #include "PixelUtil.h"
+
+using namespace mray;
+using namespace video;
 
 #ifdef USE_UNITY_GRABBER
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityImageGrabber()
@@ -23,6 +35,15 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberSetData(UnityIm
 		return;
 	g->SetData(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, Format);
 }
+
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberDestroy(UnityImageGrabber* g)
+{
+	if (!g)
+		return;
+	delete g;
+}
+
 #endif
 
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerDestroy(IGStreamerStreamer* p)
@@ -33,6 +54,15 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerDestroy(IGStreamerStream
 		delete p;
 	}
 
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_StreamerCreateStream(IGStreamerStreamer* p)
+{
+
+	if (p != NULL)
+	{
+		return p->CreateStream();
+	}
+	return false;
 }
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerStream(IGStreamerStreamer* p)
 {
@@ -75,6 +105,38 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_StreamerClose(IGStreamerStreamer
 
 }
 
+extern "C" UNITY_INTERFACE_EXPORT IGStreamerStreamer* mray_gst_createCustomImageStreamer()
+{
+	return new GstCustomVideoStreamer();
+
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetPipeline(GstCustomVideoStreamer* p, const char* pipeline)
+{
+	if (p != NULL)
+	{
+		p->SetPipeline(pipeline);
+	}
+
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetGrabber(GstCustomVideoStreamer* p, UnityImageGrabber* g)
+{
+	if (p)
+	{
+		p->SetVideoGrabber(g);
+	}
+
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetResolution(GstCustomVideoStreamer* p, int width, int height, int fps)
+{
+	if (p)
+	{
+		p->SetResolution(width, height, fps);
+	}
+
+}
+
+
 #ifdef USE_UNITY_NETWORK
 
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkStreamer()
@@ -87,22 +149,14 @@ extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkStreamer()
 	}
 	return 0;
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetIP(GstCustomVideoStreamer* p, const char* ip, int videoPort, bool rtcp)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetIP(GstNetworkVideoStreamer* p, const char* ip, int videoPort, bool rtcp)
 {
 	if (p)
 	{
 		p->BindPorts(ip, videoPort, 0, rtcp);
 	}
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netStreamerCreateStream(GstCustomVideoStreamer* p)
-{
-	if (p)
-	{
-		return p->CreateStream();
-	}
-	return false;
-}
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstCustomVideoStreamer* p, UnityImageGrabber* g)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstNetworkVideoStreamer* p, UnityImageGrabber* g)
 {
 	if (p)
 	{
@@ -110,7 +164,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstCustomV
 	}
 
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstCustomVideoStreamer* p, int bitRate)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstNetworkVideoStreamer* p, int bitRate)
 {
 	if (p)
 	{
@@ -118,7 +172,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstCustomV
 	}
 
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetResolution(GstCustomVideoStreamer* p, int width, int height, int fps)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetResolution(GstNetworkVideoStreamer* p, int width, int height, int fps)
 {
 	if (p)
 	{
@@ -183,15 +237,6 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetClientVolume(Gst
 	{
 		return p->SetVolume(i, vol);
 	}
-}
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_audioStreamerCreateStream(GstNetworkAudioStreamer* p)
-{
-
-	if (p)
-	{
-		return p->CreateStream();
-	}
-	return false;
 }
 
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetChannels(GstNetworkAudioStreamer* p, int c)

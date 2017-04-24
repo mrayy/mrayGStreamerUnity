@@ -225,9 +225,10 @@
     <ClInclude Include="..\sources\CMyListener.h" />
     <ClInclude Include="..\sources\CMyUDPSink.h" />
     <ClInclude Include="..\sources\CMyUDPSrc.h" />
-    <ClInclude Include="..\sources\GstCustomVideoStreamer.h" />
+    <ClInclude Include="..\sources\GstNetworkVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkAudioStreamer.h" />
     <ClInclude Include="..\sources\rtp.h" />
+    <ClInclude Include="GstCustomVideoStreamer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../sources/CoreAPI.cpp" />
@@ -261,12 +262,13 @@
     <ClCompile Include="..\sources\CMyListener.cpp" />
     <ClCompile Include="..\sources\CMyUDPSink.cpp" />
     <ClCompile Include="..\sources\CMyUDPSrc.cpp" />
-    <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp" />
+    <ClCompile Include="..\sources\GstNetworkVideoStreamer.cpp" />
     <ClCompile Include="..\sources\GstNetworkAudioPlayer.cpp" />
     <ClCompile Include="..\sources\GstNetworkAudioStreamer.cpp" />
     <ClCompile Include="..\sources\GstNetworkMultipleVideoPlayer.cpp" />
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />
+    <ClCompile Include="GstCustomVideoStreamer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
