@@ -8,7 +8,11 @@ public class IGstStreamer : MonoBehaviour {
 	
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_StreamerDestroy(System.IntPtr p);
-	
+
+
+	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+	extern static private bool mray_gst_StreamerCreateStream(System.IntPtr p);
+
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_StreamerStream(System.IntPtr p);
 	
@@ -47,6 +51,10 @@ public class IGstStreamer : MonoBehaviour {
 	public void Destroy()
 	{
 		mray_gst_StreamerDestroy (m_Instance);
+	}
+	public bool CreateStream()
+	{		
+		return mray_gst_StreamerCreateStream (m_Instance);
 	}
 	
 	public void Stream()

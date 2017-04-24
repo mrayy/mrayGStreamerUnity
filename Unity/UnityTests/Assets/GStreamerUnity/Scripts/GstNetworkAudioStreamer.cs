@@ -26,8 +26,6 @@ public class GstNetworkAudioStreamer:IGstStreamer {
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_audioStreamerSetClientVolume(System.IntPtr p,int i,float volume);
 
-	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-	extern static private bool mray_gst_audioStreamerCreateStream(System.IntPtr p);
 
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_audioStreamerSetChannels(System.IntPtr p,int c);
@@ -67,10 +65,6 @@ public class GstNetworkAudioStreamer:IGstStreamer {
 		mray_gst_audioStreamerSetClientVolume(m_Instance,i,volume);
 	}
 
-	public bool CreateStream()
-	{		
-		return mray_gst_audioStreamerCreateStream (m_Instance);
-	}
 
 	public void SetChannels(int c)
 	{

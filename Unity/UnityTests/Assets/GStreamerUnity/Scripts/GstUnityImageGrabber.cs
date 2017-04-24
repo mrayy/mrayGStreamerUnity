@@ -62,6 +62,10 @@ public class GstUnityImageGrabber {
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_UnityImageGrabberSetData(System.IntPtr p, System.IntPtr _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight,int Format);
 
+	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+	extern static private void mray_gst_UnityImageGrabberDestroy(System.IntPtr p);
+
+
 	byte[] m_Texture;
 	int m_width,m_height;
 	//protected Color32[] m_Pixels;
@@ -82,7 +86,13 @@ public class GstUnityImageGrabber {
 
 	public GstUnityImageGrabber()
 	{
+		GStreamerCore.Ref ();
 		m_Instance = mray_gst_createUnityImageGrabber();	
+	}
+
+	public void Destroy()
+	{
+		mray_gst_UnityImageGrabberDestroy (m_Instance);
 	}
 
 	public void SetTexture2D(Texture2D tex)

@@ -8,6 +8,10 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 	Material material;
 	OffscreenProcessor _Processor;
 
+	public Shader[] PostProcessors;
+
+	OffscreenProcessor[] _postProcessors;
+
 	public Texture VideoTexture;
 
 	public bool ConvertToRGB=true;
@@ -48,6 +52,14 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 
 		_Processor.ShaderName="Image/I420ToRGB";
 
+		if (PostProcessors != null) {
+			_postProcessors = new OffscreenProcessor[PostProcessors.Length];
+			for (int i = 0; i < PostProcessors.Length; ++i) {
+				_postProcessors [i] = new OffscreenProcessor ();
+				_postProcessors [i].ProcessingShader = PostProcessors [i];
+			}
+		}
+
 		Debug.Log ("Starting Base");
 		base.Start ();
 	}
@@ -74,6 +86,12 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 			
 		} else {
 			VideoTexture = tex;
+		}
+
+		if (_postProcessors != null) {
+			foreach (var p in _postProcessors) {
+				VideoTexture = p.ProcessTexture (VideoTexture);
+			}
 		}
 		material.mainTexture = VideoTexture;
 

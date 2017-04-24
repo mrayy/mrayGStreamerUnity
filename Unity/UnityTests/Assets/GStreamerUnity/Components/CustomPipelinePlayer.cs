@@ -3,11 +3,14 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GstCustomTexture))]
 public class CustomPipelinePlayer : MonoBehaviour {
 
 	GstCustomTexture m_Texture;
 
 	public Texture2D BlittedImage;
+
+	public Material TargetMaterial;
 
 	public string pipeline = "";
 
@@ -34,7 +37,8 @@ public class CustomPipelinePlayer : MonoBehaviour {
 		BlittedImage.anisoLevel=0;
 		BlittedImage.wrapMode=TextureWrapMode.Clamp;
 
-		GetComponent<MeshRenderer>().material.mainTexture=BlittedImage;
+		if(TargetMaterial!=null)
+			TargetMaterial.mainTexture=BlittedImage;
 	}
 	void OnFrameBlitted(GstBaseTexture src,int index)
 	{
