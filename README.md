@@ -20,7 +20,8 @@ https://www.microsoft.com/en-us/download/details.aspx?id=40784
 
 
 3- [Important] Add gstreamer binary folder path to System Environment Variables:
-System Settigns --> Advanced System Settings --> Advanced Tab --> Environment Variables... --> Path variable
+Computer -> System properties -> Advanced System Settings -> Advanced Tab -> Environment Variables... -> System Variables -> Variable: Path -> Edit -> New -> C:\gstreamer\1.0\x86_64\bin
+
 
 GStreamer path should be similar to this (depending on installation directory):
 C:\gstreamer\1.0\x86_64\bin
