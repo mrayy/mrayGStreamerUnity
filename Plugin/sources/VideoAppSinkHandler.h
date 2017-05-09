@@ -56,7 +56,7 @@ public:
 	virtual ~VideoAppSinkHandler();
 
 	void SetSink(GstAppSink* s){ m_sink = s; }
-	void SetRTPListener(GstMyListener* s, GstMyListener* preapp);
+	void SetRTPListener(GstMyListener* preRTP, GstMyListener* postRTP, GstMyListener* preapp);
 
 	void Close();
 	bool 			isFrameNew(){ return m_IsFrameNew; }

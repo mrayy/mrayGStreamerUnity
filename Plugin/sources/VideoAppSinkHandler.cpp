@@ -15,18 +15,24 @@ namespace mray
 namespace video
 {
 
+	//this listener is used for pre-decoding stage, when we are still receiving the rtp packets for the frame
 	class VideoRTPDataListener:public IMyListenerCallback
 	{
 	public:
 	protected:
 		mray::OS::IMutex* m_mutex;
 		std::list<RTPPacketData> timestampQueue;
-
+		_GstMyListener* _pre,*_post;
 	public:
 
 		VideoRTPDataListener()
 		{
 			m_mutex = OS::IThreadManager::getInstance().createMutex();
+		}
+		void Init(_GstMyListener* pre, _GstMyListener* post)
+		{
+			_pre = pre;
+			_post = post;
 		}
 
 		~VideoRTPDataListener()
@@ -35,6 +41,24 @@ namespace video
 		}
 
 		void ListenerOnDataChained(_GstMyListener* src, GstBuffer * buffer)
+		{
+			if (src == _pre)
+				PreRTP(buffer);
+			if (src == _post)
+				PostRTP(buffer);
+		}
+		void PostRTP(GstBuffer * buffer)
+		{
+			//check if packet dropped
+			RTPPacketData &ts = timestampQueue.front();
+			while (ts.presentationTime != buffer->pts)
+			{
+				//packet dropped!
+				GetLastRTPPacket(true);
+				ts = timestampQueue.front();
+			}
+		}
+		void PreRTP(GstBuffer * buffer)
 		{
 			//GstRTPBuffer rtp_buf;
 			//gst_rtp_buffer_map(buffer, GST_MAP_READ, &rtp_buf);
@@ -46,8 +70,10 @@ namespace video
 
 			if (true)
 			{
+				//check if the timestamp of this packet is different from the one on top of our timestamp queue. if so, then add the packet
 				RTPPacketData packet;
 				packet.timestamp = rtp_timestamp(map.data);
+				
 				bool okay = timestampQueue.size() == 0;
 				if (!okay)
 				{
@@ -58,6 +84,7 @@ namespace video
 				{
 					//new packet, read padding and add it to packet list
 					packet.length = rtp_padding_payload((unsigned char*)map.data, map.size, packet.data);
+					packet.presentationTime = buffer->pts;
 					AddRTPPacket(packet);
 				}
 
@@ -105,6 +132,7 @@ namespace video
 		}
 	};
 
+	//this listener is used after the decoding is done
 	class VideoPreappDataListener :public IMyListenerCallback
 	{
 	public:
@@ -158,6 +186,7 @@ namespace video
 	{
 	public:
 		VideoRTPDataListener* rtplistener;
+		VideoRTPDataListener* postRtplistener;
 		VideoPreappDataListener* preapplistener;
 
 	public:
@@ -253,10 +282,13 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 }
 
 
-void VideoAppSinkHandler::SetRTPListener(GstMyListener* s, GstMyListener* preapp)
+void VideoAppSinkHandler::SetRTPListener(GstMyListener* preRTP, GstMyListener* postRTP, GstMyListener* preapp)
 { 
-	m_rtpDataListener = s; 
+	m_rtpDataListener = preRTP; 
 	m_rtpDataListener->listeners->AddListener(m_data->rtplistener);
+	postRTP->listeners->AddListener(m_data->rtplistener);
+	m_data->rtplistener->Init(preRTP, postRTP);
+
 	m_preappsrcListener = preapp;
 	m_preappsrcListener->listeners->AddListener(m_data->preapplistener);
 }
@@ -327,35 +359,51 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	if (m_pixels[0].data.imageData){
 		++m_frameID;
 		//if (stride > 0) {
-		if (vinfo.stride[0] == m_pixels[0].data.Size.x*pxSize)
+	/*	if (vinfo.stride[0] == m_pixels[0].data.Size.x*pxSize)
 		{
 			m_backPixels[0].data.setData(mapinfo.data, m_pixels[0].data.Size, m_pixels[0].data.format);
 		}
-		else
+		else*/
 		{
 			uchar* ptr = m_backPixels[0].data.imageData;
 
 			uchar* srcptr = mapinfo.data + vinfo.offset[0];
-			//copy row by row..
-			for (int i = 0; i < vinfo.height; ++i)
+			if (vinfo.stride[0] == m_pixels[0].data.Size.x*pxSize)
 			{
-				memcpy(ptr, srcptr, vinfo.width*sizeof(uchar)*pxSize);
-				ptr += vinfo.width*pxSize;
-				srcptr += vinfo.stride[0];
+				memcpy(ptr, srcptr, vinfo.width*pxSize*vinfo.height);
+				ptr += vinfo.width*pxSize*vinfo.height;
+				srcptr += vinfo.width*pxSize*vinfo.height;
+			}
+			else{
+				//copy row by row..
+				for (int i = 0; i < vinfo.height; ++i)
+				{
+					memcpy(ptr, srcptr, vinfo.width*pxSize);
+					ptr += vinfo.width*pxSize;
+					srcptr += vinfo.stride[0];
+				}
 			}
 
 			if (!RGBFormat)
 			{
-				//copy other planes
-				int len = height-vinfo.height;
-				for (int n = 0; n < 2; ++n)
+				if (vinfo.stride[1] + vinfo.stride[2] == vinfo.width)
 				{
-					srcptr =  mapinfo.data + vinfo.offset[n+1] ;
-					for (int i = 0; i < len; ++i)
+					int len = height - vinfo.height;
+					memcpy(ptr, srcptr, vinfo.width*len);
+				}
+				else
+				{
+					//copy other planes
+					int len = height - vinfo.height;
+					for (int n = 0; n < 2; ++n)
 					{
-						memcpy(ptr, srcptr, vinfo.width/2);
-						ptr += vinfo.width / 2;
-						srcptr += vinfo.stride[n+1];
+						srcptr = mapinfo.data + vinfo.offset[n + 1];
+						for (int i = 0; i < len; ++i)
+						{
+							memcpy(ptr, srcptr, vinfo.width / 2);
+							ptr += vinfo.width / 2;
+							srcptr += vinfo.stride[n + 1];
+						}
 					}
 				}
 			}

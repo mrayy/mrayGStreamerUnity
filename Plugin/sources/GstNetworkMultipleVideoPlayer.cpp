@@ -50,6 +50,7 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 			videoRtcpSrc = 0;
 			videoRtcpSink = 0;
 			rtpListener = 0;
+			postdepayListener = 0;
 			preappsrcListener = 0;
 		}
 		VideoAppSinkHandler handler;
@@ -59,6 +60,7 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 		GstAppSink* videoSink;
 
 		GstMyListener* rtpListener;
+		GstMyListener* postdepayListener;
 		GstMyListener* preappsrcListener;
 
 		GstElement* videoRtcpSrc;
@@ -152,7 +154,8 @@ public:
 
 		if (m_encoderType == "H264")
 		{
-			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay  !  avdec_h264 ! " //! h264parse
+			//propably rtph264depay drops some rtp packets along the way??
+			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i << " !  avdec_h264 ! " //! h264parse
 				" videoconvert !"
 				;
 		//	ss << " videoflip method=5 !";
@@ -310,6 +313,12 @@ public:
 				std::stringstream ss;
 				ss << "rtplistener" << i;
 				m_videoHandler[i].rtpListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+		}
+			{
+
+				std::stringstream ss;
+				ss << "postdepay" << i;
+				m_videoHandler[i].postdepayListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 			}
 			{
 
@@ -328,7 +337,7 @@ public:
 			}
 
 			m_videoHandler[i].handler.SetSink(m_videoHandler[i].videoSink);
-			m_videoHandler[i].handler.SetRTPListener(m_videoHandler[i].rtpListener, m_videoHandler[i].preappsrcListener);
+			m_videoHandler[i].handler.SetRTPListener(m_videoHandler[i].rtpListener, m_videoHandler[i].postdepayListener, m_videoHandler[i].preappsrcListener);
 			//m_videoHandler[i].handler.SetSource(GST_MyUDPSrc(m_videoHandler[i].videoSrc));
 			g_signal_connect(m_videoHandler[i].videoSink, "new-sample", G_CALLBACK(new_buffer), this);
 			//attach videosink callbacks

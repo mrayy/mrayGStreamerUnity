@@ -555,11 +555,16 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStream
 		int x, y, w, h;
 	}vec;
 
+	int counter = 0;
+
 	memcpy(&vec, data->data+sizeof(vec)*level, sizeof(vec));
 	x = vec.x;
 	y = vec.y;
 	w = vec.w;
 	h = vec.h;
+
+	memcpy(&counter, data->data + 36-sizeof(counter), sizeof(counter));
+
 }
 
 //////////////////////////////////////////////////////////////////////////
