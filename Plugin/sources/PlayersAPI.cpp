@@ -544,7 +544,23 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerSendRTPMetaToHost(IGStream
 	}
 	return;
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStreamerPlayer* p, int index,int level, int& x, int& y, int& w, int& h)
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_PlayerRTPGetEyeGazeLevels(IGStreamerPlayer* p, int index)
+{
+
+	RTPPacketData* data = (RTPPacketData*)p->GetLastFrameRTPMeta(index);
+	if (data == NULL)
+		return 0;
+
+	int header = 0;
+	int levels = 0;
+	memcpy(&header, data->data, sizeof(header));
+	if (header != 0x1010)
+		return 0;
+
+	memcpy(&levels, data->data + sizeof(header), sizeof(levels));
+	return levels;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStreamerPlayer* p, int index, int level, int& x, int& y, int& w, int& h)
 {
 	RTPPacketData* data = (RTPPacketData*)p->GetLastFrameRTPMeta(index);
 	if (data == NULL)
@@ -555,15 +571,18 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStream
 		int x, y, w, h;
 	}vec;
 
-	int counter = 0;
+	int header = 0;
+	memcpy(&header, data->data, sizeof(header));
+	if (header != 0x1010)
+		return;
 
-	memcpy(&vec, data->data+sizeof(vec)*level, sizeof(vec));
+	int offset = sizeof(int)* 2;
+
+	memcpy(&vec, data->data + offset + sizeof(vec)*level, sizeof(vec));
 	x = vec.x;
 	y = vec.y;
 	w = vec.w;
 	h = vec.h;
-
-	memcpy(&counter, data->data + 36-sizeof(counter), sizeof(counter));
 
 }
 

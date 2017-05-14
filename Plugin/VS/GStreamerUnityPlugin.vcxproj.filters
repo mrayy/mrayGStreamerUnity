@@ -183,7 +183,7 @@
     <ClInclude Include="..\sources\GstNetworkVideoStreamer.h">
       <Filter>Source Files\Streamer</Filter>
     </ClInclude>
-    <ClInclude Include="GstCustomVideoStreamer.h">
+    <ClInclude Include="..\sources\GstCustomVideoStreamer.h">
       <Filter>Source Files\Streamer</Filter>
     </ClInclude>
   </ItemGroup>
@@ -299,7 +299,7 @@
     <ClCompile Include="..\sources\GstNetworkVideoStreamer.cpp">
       <Filter>Source Files\Streamer</Filter>
     </ClCompile>
-    <ClCompile Include="GstCustomVideoStreamer.cpp">
+    <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp">
       <Filter>Source Files\Streamer</Filter>
     </ClCompile>
   </ItemGroup>

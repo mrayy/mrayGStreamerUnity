@@ -1,5 +1,7 @@
 
 
+
+
 #include "stdafx.h"
 #include "GstCustomVideoStreamer.h"
 
@@ -18,24 +20,17 @@ namespace mray
 namespace video
 {
 
-class GstCustomVideoStreamerImpl :public GstPipelineHandler,public IPipelineListener
+class GstCustomVideoStreamerImpl :public GstPipelineHandler, public IPipelineListener
 {
 protected:
 
 	GstCustomVideoStreamer* m_owner;
 
-	std::string m_ipAddr;
-	uint m_videoPort;
 	uint m_clockPort;
-
 	IVideoGrabber* m_grabber;
-	int m_bitRate;
-	bool m_rtcp;
 
 	std::string m_pipeLineString;
-	GstMyUDPSink* m_videoSink;
-	GstMyUDPSink* m_videoRtcpSink;
-	GstMyUDPSrc* m_videoRtcpSrc;
+	std::string m_srcPipeLineString;
 
 	int m_fps;
 	Vector2d m_frameSize;
@@ -58,20 +53,12 @@ public:
 	GstCustomVideoStreamerImpl(GstCustomVideoStreamer* owner)
 	{
 		m_owner = owner;
-		m_ipAddr = "127.0.0.1";
-		m_videoPort = 5000;
-		m_clockPort = 5010;
+		m_grabber = 0;
 
-		m_bitRate = 5000;
-		m_grabber= 0;
-
-		m_videoSink = 0;
-		m_videoRtcpSink = 0;
-		m_videoRtcpSrc = 0;
 
 		m_videoSrc.sourceID = 0;
 
-		m_frameSize = Vector2d(640,480);
+		m_frameSize = Vector2d(640, 480);
 		m_fps = 30;
 
 		AddListener(this);
@@ -80,11 +67,11 @@ public:
 
 	virtual ~GstCustomVideoStreamerImpl()
 	{
-		if (m_videoSink && m_videoSink->m_client)
-		{
-			m_videoSink->m_client->Close();
-		}
 		Stop();
+	}
+	void SetPipelineString(const std::string& pipeline)
+	{
+		m_srcPipeLineString = pipeline;
 	}
 	void  SetResolution(int width, int height, int fps)
 	{
@@ -135,21 +122,21 @@ public:
 		std::stringstream ss;
 		if (m_grabber)
 		{
-				std::string format = GetFormatStr(m_grabber->GetImageFormat());
-				//ksvideosrc
-				ss<< "appsrc"
-					 " name=src"  
-					<< " do-timestamp=true is-live=true block=true"
-					" ! video/x-raw,format=" + format + ",width=" << m_grabber->GetFrameSize().x <<
-					",height=" << m_grabber->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
-				<<  "! videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
-				//videoStr += "! videorate ";//" max-rate=" + std::stringConverter::toString(m_fps) + " ";
-				//	videoStr += " ! queue ";
-				//	if (m_grabber->GetImageFormat()!=video::EPixel_YUYV)
+			std::string format = GetFormatStr(m_grabber->GetImageFormat());
+			//ksvideosrc
+			ss << "appsrc"
+				" name=src"
+				<< " do-timestamp=true is-live=true block=true"
+				" ! video/x-raw,format=" + format + ",width=" << m_grabber->GetFrameSize().x <<
+				",height=" << m_grabber->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
+				<< "! videoconvert  ! video/x-raw,format=I420 ! ";// !videoflip method = 1  ";
+			//videoStr += "! videorate ";//" max-rate=" + std::stringConverter::toString(m_fps) + " ";
+			//	videoStr += " ! queue ";
+			//	if (m_grabber->GetImageFormat()!=video::EPixel_YUYV)
 		}
 		else{
-			ss<< "mysrc name=src" <<
-				" ! video/x-raw,format=RGB  ";// !videoflip method = 1  ";
+			ss << "videotestsrc name=src" <<
+				" ! video/x-raw,format=I420 ! ";// !videoflip method = 1  ";
 		}
 		//add time stamp
 
@@ -161,73 +148,52 @@ public:
 		std::string videoStr;
 		std::stringstream ss;
 
+		ss << BuildGStr();
+
 		int height = m_frameSize.y;
 		int width = m_frameSize.x;
-		if (m_grabber->GetFrameSize().x < width)
+		/*
+		if (m_grabber->GetFrameSize().x !=0 &&  < width)
 			width = m_grabber->GetFrameSize().x;
 
 		if (m_grabber->GetFrameSize().y < height)
 			height = m_grabber->GetFrameSize().y;
 
-		if ( (width < m_grabber->GetFrameSize().x || height < m_grabber->GetFrameSize().y))
+		if ((width < m_grabber->GetFrameSize().x || height < m_grabber->GetFrameSize().y))
 		{
 			ss << "! videoscale ! video/x-raw,width=" << width <<
 				",height=" << height << ",framerate=" << m_fps << "/1";
-		}
+		}*/
 		//videoStr = "mysrc name=src0 ! video/x-raw,format=RGB,width=640,height=480,framerate="+std::stringConverter::toString(m_fps)+"/1 ! videoconvert ";
 		//encoder string
 
 
-		ss << BuildGStr() << "! x264enc name=videoEnc bitrate=" << m_bitRate <<
-			" speed-preset=superfast tune=zerolatency sync-lookahead=0  pass=qual ! rtph264pay ";
-		if (m_rtcp)
-		{
-			m_pipeLineString = "rtpbin  name=rtpbin " +
-				videoStr +
-				"! rtpbin.send_rtp_sink_0 "
-
-				"rtpbin.send_rtp_src_0 ! "
-				"myudpsink name=videoSink  "
-
-				"rtpbin.send_rtcp_src_0 ! "
-				"myudpsink name=videoRtcpSink sync=false async=false "
-				"myudpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 ";
-		}
-		else
-		{
-
-			m_pipeLineString = ss.str() + " ! "
-				"myudpsink name=videoSink sync=false";
-			//"udpsink host=127.0.0.1 port=7000";
-		}
+		ss << m_srcPipeLineString;
+		m_pipeLineString = ss.str();
 
 	}
 
-	void SetBitRate(int bitRate)
-	{
-		m_bitRate = bitRate;
-	}
 	void SetVideoGrabber(IVideoGrabber* grabber0)
 	{
 		m_grabber = grabber0;
 	}
 
 
-	GstFlowReturn NeedBuffer(GstMySrc * sink, GstBuffer ** buffer,int index)
+	GstFlowReturn NeedBuffer(GstMySrc * sink, GstBuffer ** buffer, int index)
 	{
-		if (!m_grabber)
+		if (!IsStreaming() || !m_grabber)
 		{
-			LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
+			//LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
 			return GST_FLOW_ERROR;
 		}
-// 		do 
-// 		{
-// 			OS::IThreadManager::getInstance().sleep (1);
-// 		} while (!m_grabber->GrabFrame());
- 		if (!m_grabber->GrabFrame())
-  		{
-  			return GST_FLOW_ERROR;
-  		}
+		// 		do 
+		// 		{
+		// 			OS::IThreadManager::getInstance().sleep (1);
+		// 		} while (!m_grabber->GrabFrame());
+		if (!m_grabber->GrabFrame())
+		{
+			return GST_FLOW_ERROR;
+		}
 		m_grabber->Lock();
 
 		const video::ImageInfo* ifo = m_grabber->GetLastFrame();
@@ -235,7 +201,7 @@ public:
 		GstMapInfo map;
 		GstBuffer* outbuf = gst_buffer_new_and_alloc(len);
 		gst_buffer_map(outbuf, &map, GST_MAP_WRITE);
-		memcpy(map.data, ifo->imageData, len);
+		memcpy(map.data+1, ifo->imageData, len-1); //offset one pixel to fix RGB -->BRG issue (2017/4/24th)
 
 
 		gst_buffer_unmap(outbuf, &map);
@@ -249,7 +215,7 @@ public:
 		VideoSrcData* d = static_cast<VideoSrcData*>(data);
 		if (d)
 		{
-			return d->o->NeedBuffer(sink, buffer,d->index);
+			return d->o->NeedBuffer(sink, buffer, d->index);
 		}
 		return GST_FLOW_ERROR;
 	}
@@ -304,7 +270,7 @@ public:
 
 		{
 			std::stringstream ss;
-			ss << "src" ;
+			ss << "src";
 			std::string name = ss.str();
 #if 1
 			m_videoSrc.videoSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN(GetPipeline()), name.c_str()));
@@ -338,25 +304,9 @@ public:
 		}
 		//g_object_set(G_OBJECT(m_videoSink), "sync", false, (void*)NULL);
 
-		SET_SINK(videoSink, m_videoPort);
-		if (m_rtcp){
-			SET_SRC(videoRtcpSrc, (m_videoPort + 1));
-			SET_SINK(videoRtcpSink, (m_videoPort + 2));
-		}
 
 	}
 
-	void BindPorts(const std::string& addr, int videoPort, uint clockPort, bool rtcp)
-	{
-		if (m_ipAddr == addr && m_videoPort == videoPort && m_rtcp == rtcp)
-			return;
-		m_ipAddr = addr;
-		m_videoPort = videoPort;
-		m_rtcp = rtcp;
-		m_clockPort = clockPort;
-
-		_UpdatePorts();
-	}
 	bool CreateStream()
 	{
 		GError *err = 0;
@@ -365,6 +315,7 @@ public:
 		if (err)
 		{
 			LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
+			LogMessage(m_pipeLineString, ELL_ERROR);
 		}
 		if (!pipeline)
 			return false;
@@ -372,7 +323,7 @@ public:
 		SetPipeline(pipeline);
 		_UpdatePorts();
 
-		return CreatePipeline(true,"",m_clockPort);
+		return CreatePipeline(true, "", m_clockPort);
 
 	}
 	void Stream()
@@ -414,9 +365,9 @@ void GstCustomVideoStreamer::Stop()
 }
 
 
-void GstCustomVideoStreamer::BindPorts(const std::string& addr, uint videoPort, uint clockPort, bool rtcp)
+void GstCustomVideoStreamer::SetPipeline(const std::string& pipeline)
 {
-	m_impl->BindPorts(addr, videoPort, clockPort, rtcp);
+	m_impl->SetPipelineString(pipeline);
 }
 
 bool GstCustomVideoStreamer::CreateStream()
@@ -431,11 +382,6 @@ void GstCustomVideoStreamer::Close()
 bool GstCustomVideoStreamer::IsStreaming()
 {
 	return m_impl->IsStreaming();
-}
-
-void GstCustomVideoStreamer::SetBitRate(int bitRate)
-{
-	m_impl->SetBitRate(bitRate);
 }
 
 void GstCustomVideoStreamer::SetResolution(int width, int height, int fps)
@@ -463,4 +409,5 @@ GstPipelineHandler* GstCustomVideoStreamer::GetPipeline()
 
 }
 }
+
 

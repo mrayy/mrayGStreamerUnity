@@ -26,6 +26,7 @@ protected:
 	std::shared_ptr<GstSample> 	buffer, prevBuffer;
 	GstMapInfo mapinfo;
 
+
 	video::EPixelFormat m_pixelFormat;
 	//quick hack for YUV support: maximum of 3 surfaces
 	GstImageFrame m_pixels[1];				// 24 bit: rgb

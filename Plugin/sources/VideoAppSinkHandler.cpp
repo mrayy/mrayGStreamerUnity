@@ -218,6 +218,7 @@ VideoAppSinkHandler::VideoAppSinkHandler()
 	m_data = new VideoAppSinkHandlerData();
 
 	m_mutex = OS::IThreadManager::getInstance().createMutex();
+
 }
 VideoAppSinkHandler::~VideoAppSinkHandler()
 {
@@ -414,7 +415,7 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 		if (m_rtpDataListener)
 		{
 			//read rtp data
-			m_backPixels[0].RTPPacket = m_data->preapplistener->GetLastRTPPacket((ulong)_buffer,true);
+			m_backPixels[0].RTPPacket = m_data->preapplistener->GetLastRTPPacket((ulong)_buffer, true);
 			m_backPixels[0].RTPPacket.presentationTime = _buffer->pts;
 		}
 // 		}
@@ -431,7 +432,7 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	}
 	else{
 	//	m_data->rtplistener->GetLastRTPPacket(true);//remove one packet
-		m_backPixels[0].RTPPacket = m_data->preapplistener->GetLastRTPPacket((ulong)_buffer, true);
+	//	m_backPixels[0].RTPPacket = m_data->preapplistener->GetLastRTPPacket((ulong)_buffer, true);
 		if (RGBFormat)
 			_Allocate(vinfo.width, vinfo.height, fmt);
 		else 

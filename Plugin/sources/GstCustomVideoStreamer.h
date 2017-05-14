@@ -3,15 +3,17 @@
 
 
 
+
+
 /********************************************************************
-	created:	2013/12/05
-	created:	5:12:2013   20:26
-	filename: 	C:\Development\mrayEngine\Plugins\mrayGStreamer\GstCustomVideoStreamer
-	file base:	GstCustomVideoStreamer
-	file ext:	h
-	author:		MHD Yamen Saraiji
-	
-	purpose:	
+created:	2013/12/05
+created:	5:12:2013   20:26
+filename: 	C:\Development\mrayEngine\Plugins\mrayGStreamer\GstCustomVideoStreamer
+file base:	GstCustomVideoStreamer
+file ext:	h
+author:		MHD Yamen Saraiji
+
+purpose:
 *********************************************************************/
 
 #ifndef GstCustomVideoStreamer_h__
@@ -38,19 +40,16 @@ public:
 	GstCustomVideoStreamer();
 	virtual ~GstCustomVideoStreamer();
 
-	// addr: target address to stream video to
-	// videoport: port for the video stream, video rtcp is allocated as videoPort+1/videoPort+2
-	void BindPorts(const std::string& addr, uint videoPort,uint clockPort, bool rtcp);
-	void SetBitRate(int bitRate);
-	void SetResolution(int width, int height,int fps);
-
+	void SetPipeline(const std::string& pipeline);
 	bool CreateStream();
+
 	void Stream();
 	bool IsStreaming();
 	void Stop();
 	virtual void Close();
 
 	void SetVideoGrabber(IVideoGrabber* grabber0);
+	void  SetResolution(int width, int height, int fps);
 
 	virtual void SetPaused(bool paused);
 	virtual bool IsPaused();
@@ -60,3 +59,4 @@ public:
 }
 
 #endif // GstCustomVideoStreamer_h__
+
