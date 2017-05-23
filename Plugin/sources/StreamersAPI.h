@@ -44,7 +44,6 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerRemoveClient(GstNet
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerClearClients(GstNetworkAudioStreamer* p);
 extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_audioStreamerGetClient(GstNetworkAudioStreamer* p, int i);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetClientVolume(GstNetworkAudioStreamer* p, int i, float vol);
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_audioStreamerCreateStream(GstNetworkAudioStreamer* p);
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetChannels(GstNetworkAudioStreamer* p, int c);
 
 #endif
