@@ -252,7 +252,9 @@
     <ClCompile Include="../sources/StreamersAPI.cpp" />
     <ClCompile Include="../sources/UnityHelpers.cpp" />
     <ClCompile Include="../sources/UnityImageGrabber.cpp" />
-    <ClCompile Include="../sources/VideoAppSinkHandler.cpp" />
+    <ClCompile Include="../sources/VideoAppSinkHandler.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="../includes/RenderAPI.cpp" />
     <ClCompile Include="../includes/RenderAPI_D3D11.cpp" />
     <ClCompile Include="../includes/RenderAPI_D3D9.cpp" />
@@ -266,7 +268,9 @@
     <ClCompile Include="..\sources\GstNetworkVideoStreamer.cpp" />
     <ClCompile Include="..\sources\GstNetworkAudioPlayer.cpp" />
     <ClCompile Include="..\sources\GstNetworkAudioStreamer.cpp" />
-    <ClCompile Include="..\sources\GstNetworkMultipleVideoPlayer.cpp" />
+    <ClCompile Include="..\sources\GstNetworkMultipleVideoPlayer.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />
   </ItemGroup>

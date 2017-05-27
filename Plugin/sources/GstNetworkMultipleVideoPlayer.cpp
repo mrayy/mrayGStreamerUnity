@@ -114,6 +114,10 @@ public:
 			format = "GRAY8";
 			extraElem = " ! videoconvert ";
 			break;
+		case mray::video::EPixel_LUMINANCE16:
+			format = "YVYU";
+			extraElem = " ! videoconvert ";
+			break;
 		case mray::video::EPixel_R8G8B8:
 			format = "RGB";
 			extraElem = " ! videoconvert ";

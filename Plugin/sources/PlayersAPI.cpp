@@ -213,7 +213,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerGetFrameSize(GstNe
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
-		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).elemSizeB;
 	}
 	else
 		w = h = components = 0;
