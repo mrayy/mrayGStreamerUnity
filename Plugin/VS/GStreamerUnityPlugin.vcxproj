@@ -221,6 +221,7 @@
     <ClInclude Include="../includes/Win32/WinThreadManager.h" />
     <ClInclude Include="../includes/RenderAPI.h" />
     <ClInclude Include="../includes/UnityGraphicsDevice.h" />
+    <ClInclude Include="..\includes\GstCustomDataReceiver.h" />
     <ClInclude Include="..\includes\MutexLocks.h" />
     <ClInclude Include="..\sources\CMyListener.h" />
     <ClInclude Include="..\sources\CMyUDPSink.h" />
@@ -264,6 +265,9 @@
     <ClCompile Include="..\sources\CMyListener.cpp" />
     <ClCompile Include="..\sources\CMyUDPSink.cpp" />
     <ClCompile Include="..\sources\CMyUDPSrc.cpp" />
+    <ClCompile Include="..\sources\GstCustomDataReceiver.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|X64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp" />
     <ClCompile Include="..\sources\GstNetworkVideoStreamer.cpp" />
     <ClCompile Include="..\sources\GstNetworkAudioPlayer.cpp" />

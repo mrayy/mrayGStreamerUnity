@@ -186,6 +186,9 @@
     <ClInclude Include="..\sources\GstCustomVideoStreamer.h">
       <Filter>Source Files\Streamer</Filter>
     </ClInclude>
+    <ClInclude Include="..\includes\GstCustomDataReceiver.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../sources/GStreamerCore.cpp">
@@ -301,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="..\sources\GstCustomVideoStreamer.cpp">
       <Filter>Source Files\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstCustomDataReceiver.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

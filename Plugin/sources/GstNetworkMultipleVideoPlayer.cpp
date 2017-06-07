@@ -78,14 +78,16 @@ public:
 		m_playersCount = 0;
 		m_videoHandler.resize(1);
 		m_encoderType = "H264";
-		AddListener(this);
 
+		AddListener(this);
 		m_targetFormat = EPixel_B8G8R8;
 	}
 	virtual ~GstNetworkMultipleVideoPlayerImpl()
 	{
 
 	}
+
+
 	void AddIntermidateElement(const std::string& elems)
 	{
 		m_intermidateElems = elems;

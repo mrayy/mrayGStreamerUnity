@@ -228,6 +228,7 @@ VideoAppSinkHandler::~VideoAppSinkHandler()
 		m_preappsrcListener->listeners->RemoveListener(m_data->preapplistener);
 	}
 	delete m_data;
+	m_data = 0;
 }
 void VideoAppSinkHandler::Close()
 {
