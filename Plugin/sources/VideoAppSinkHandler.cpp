@@ -259,7 +259,7 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 		return EPixel_LUMINANCE8;
 	case GST_VIDEO_FORMAT_GRAY16_BE:
 	case GST_VIDEO_FORMAT_GRAY16_LE:
-	case GST_VIDEO_FORMAT_VYUY:
+	//case GST_VIDEO_FORMAT_VYUY:
 	case GST_VIDEO_FORMAT_YVYU:
 		return EPixel_LUMINANCE16;
 
@@ -483,9 +483,9 @@ bool VideoAppSinkHandler::GrabFrame(){
 	if (m_HavePixelsChanged){
 		m_BackPixelsChanged = false;
 		Swap(m_pixels[0].data.imageData, m_backPixels[0].data.imageData);
-		Swap(m_pixels[0].DTS, m_backPixels[0].DTS);
-		Swap(m_pixels[0].PTS, m_backPixels[0].PTS);
-		Swap(m_pixels[0].RTPPacket, m_backPixels[0].RTPPacket);
+		m_pixels[0].DTS= m_backPixels[0].DTS;
+		m_pixels[0].PTS= m_backPixels[0].PTS;
+		m_pixels[0].RTPPacket= m_backPixels[0].RTPPacket;
 
 		prevBuffer = buffer;
 
