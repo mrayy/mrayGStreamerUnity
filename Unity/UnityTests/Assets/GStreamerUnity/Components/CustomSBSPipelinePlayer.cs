@@ -11,23 +11,24 @@ public class CustomSBSPipelinePlayer : MonoBehaviour
 {
     private GstCustomTexture m_Texture;
 
-    private Texture2D blittedImageLeft;
-    private Texture2D blittedImageRight;
+	protected Texture2D blittedImageLeft;
+	protected Texture2D blittedImageRight;
 
-    public Image leftUIImage;
-    public Image rightUIImage;
 
-    public string pipeline = "udpsrc port=1337 ! application/x-rtp, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! avdec_h264";
-    public int frameWidth = 806;
-    public int frameHeight = 451;
+	public Texture2D LeftEye {
+		get{ return blittedImageLeft; }
+	}
+	public Texture2D RightEye{
+		get{ return blittedImageRight; }
+	}
 
-    private Rect BlitRect = new Rect(0, 0, 1, 1);
+	public RawImage leftUIImage;
+    public RawImage rightUIImage;
+
+	public int Port = 1337;
 
     private GstImageInfo _img_left;
     private GstImageInfo _img_right;
-
-    private long position;
-    private long duration;
 
     private bool _newFrame = false;
 
@@ -36,6 +37,7 @@ public class CustomSBSPipelinePlayer : MonoBehaviour
     {
         m_Texture = gameObject.GetComponent<GstCustomTexture>();
         m_Texture.Initialize();
+		string pipeline = "udpsrc port=" + Port.ToString () + " ! application/x-rtp, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! avdec_h264";
         m_Texture.SetPipeline(pipeline + " ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink");
         m_Texture.Player.CreateStream();
         m_Texture.Player.Play();
@@ -59,14 +61,12 @@ public class CustomSBSPipelinePlayer : MonoBehaviour
 
         if (leftUIImage != null)
         {
-            leftUIImage.material.mainTexture = blittedImageLeft;
-            leftUIImage.rectTransform.sizeDelta = new Vector2(frameWidth, frameHeight);
+			leftUIImage.texture = blittedImageLeft;
         }
 
         if (rightUIImage != null)
         {
-            rightUIImage.material.mainTexture = blittedImageRight;
-            rightUIImage.rectTransform.sizeDelta = new Vector2(frameWidth, frameHeight);
+			rightUIImage.texture = blittedImageRight;
         }
     }
 
@@ -79,12 +79,14 @@ public class CustomSBSPipelinePlayer : MonoBehaviour
         m_Texture.Player.CopyFrameCropped(_img_left, 0, 0, (int)(w / 2), (int)(h));
         m_Texture.Player.CopyFrameCropped(_img_right, (int)(w / 2), 0, (int)(w / 2), (int)(h));
         _newFrame = true;
-        if (_newFrame)
-        {
-            _img_left.BlitToTexture(blittedImageLeft);
-            _img_right.BlitToTexture(blittedImageRight);
-            _newFrame = false;
-        }
+
+		//can be moved update function in case of performance issues
+		if (_newFrame)
+		{
+			_img_left.BlitToTexture(blittedImageLeft);
+			_img_right.BlitToTexture(blittedImageRight);
+			_newFrame = false;
+		}
     }
 
     void OnDestroy()
@@ -97,6 +99,6 @@ public class CustomSBSPipelinePlayer : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+	{
     }
 }
