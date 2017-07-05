@@ -7,24 +7,36 @@ GStreamerCore - GStreamer inited
 Initializing GStreamer - Done
 mray_gstreamer_initialize
 Info: Checking is active
+mray_gstreamer_initialize
+mray_gstreamer_initialize
+Info: alloc_len: 46
 Info: Checking is active
 mray_gstreamer_initialize
 mray_gstreamer_initialize
-Info: Checking is active
-Info: Checking is active
-mray_gstreamer_initialize
-mray_gstreamer_initialize
-Info: Checking is active
+Info: alloc_len: 46
 Info: Checking is active
 mray_gstreamer_initialize
 mray_gstreamer_initialize
-Info: Checking is active
-Info: Checking is active
-mray_gstreamer_initialize
-mray_gstreamer_initialize
-Info: Checking is active
+Info: alloc_len: 46
 Info: Checking is active
 mray_gstreamer_initialize
 mray_gstreamer_initialize
+Info: alloc_len: 46
 Info: Checking is active
+mray_gstreamer_initialize
+mray_gstreamer_initialize
+Info: alloc_len: 46
+Info: Checking is active
+mray_gstreamer_initialize
+mray_gstreamer_initialize
+Info: alloc_len: 46
+Info: Checking is active
+mray_gstreamer_initialize
+Info: alloc_len: 46
+Info: Checking is active
+mray_gstreamer_initialize
+Info: alloc_len: 46
+Info: Checking is active
+mray_gstreamer_initialize
+Info: alloc_len: 46
 Info: Checking is active

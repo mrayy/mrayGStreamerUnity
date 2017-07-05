@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Players">
       <UniqueIdentifier>{53c03b70-31b0-4063-809e-414e4a124693}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Streamer\AudioGrabber">
+      <UniqueIdentifier>{011190e1-ba41-41c9-8f0f-c9e0fe5b3816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../source/CMySink.h">
@@ -189,6 +192,18 @@
     <ClInclude Include="..\includes\GstCustomDataReceiver.h">
       <Filter>Source Files\Players</Filter>
     </ClInclude>
+    <ClInclude Include="..\sources\GstAppNetAudioStreamer.h">
+      <Filter>Source Files\Streamer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\IAudioGrabber.h">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\LocalAudioGrabber.h">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\CustomAudioGrabber.h">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../sources/GStreamerCore.cpp">
@@ -307,6 +322,15 @@
     </ClCompile>
     <ClCompile Include="..\sources\GstCustomDataReceiver.cpp">
       <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
+      <Filter>Source Files\Streamer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\LocalAudioGrabber.cpp">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\CustomAudioGrabber.cpp">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

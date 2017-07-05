@@ -200,7 +200,7 @@ public:
 		}
 		else
 		{
-			ss << " mylistener name=preappsrc" << i << " ! appsink name=videoSink" << i << " sync=true  emit-signals=false ";
+			ss << " mylistener name=preappsrc" << i << " ! appsink name=videoSink" << i << " sync=true  emit-signals=false "; //fpsdisplaysink ";// "
 		}
 		//"fpsdisplaysink sync=false";
 

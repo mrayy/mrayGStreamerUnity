@@ -228,9 +228,13 @@
     <ClInclude Include="..\sources\CMyListener.h" />
     <ClInclude Include="..\sources\CMyUDPSink.h" />
     <ClInclude Include="..\sources\CMyUDPSrc.h" />
+    <ClInclude Include="..\sources\CustomAudioGrabber.h" />
+    <ClInclude Include="..\sources\GstAppNetAudioStreamer.h" />
     <ClInclude Include="..\sources\GstCustomVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkAudioStreamer.h" />
+    <ClInclude Include="..\sources\IAudioGrabber.h" />
+    <ClInclude Include="..\sources\LocalAudioGrabber.h" />
     <ClInclude Include="..\sources\rtp.h" />
   </ItemGroup>
   <ItemGroup>
@@ -262,11 +266,19 @@
     <ClCompile Include="../includes/RenderAPI_D3D11.cpp" />
     <ClCompile Include="../includes/RenderAPI_D3D9.cpp" />
     <ClCompile Include="../includes/RenderAPI_OpenGL2.cpp" />
-    <ClCompile Include="../sources/AudioAppSinkHandler.cpp" />
+    <ClCompile Include="../sources/AudioAppSinkHandler.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="../sources/IAppSinkHandler.cpp" />
     <ClCompile Include="..\sources\CMyListener.cpp" />
     <ClCompile Include="..\sources\CMyUDPSink.cpp" />
     <ClCompile Include="..\sources\CMyUDPSrc.cpp" />
+    <ClCompile Include="..\sources\CustomAudioGrabber.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="..\sources\GstCustomDataReceiver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|X64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">true</ExcludedFromBuild>
@@ -279,6 +291,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp" />
+    <ClCompile Include="..\sources\LocalAudioGrabber.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />

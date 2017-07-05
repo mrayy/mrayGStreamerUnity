@@ -45,6 +45,7 @@ public:
 	virtual void SetPaused(bool p);
 	virtual void Stop();
 	virtual bool IsLoaded();
+	virtual bool IsPaused();
 	virtual bool IsPlaying();
 	virtual void Close();
     virtual bool HandleMessage(GstBus * bus, GstMessage * msg);

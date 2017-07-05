@@ -174,6 +174,10 @@ namespace video
 	{
 		return m_data->Loaded;
 	}
+	bool GstPipelineHandler::IsPaused()
+	{
+		return m_data->paused;
+	}
 	bool GstPipelineHandler::IsPlaying()
 	{
 		return m_data->playing;

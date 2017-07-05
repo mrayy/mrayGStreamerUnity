@@ -9,6 +9,9 @@
 #include "GstCustomVideoStreamer.h"
 #include "GstNetworkVideoStreamer.h"
 #include "GstNetworkAudioStreamer.h"
+#include "GstAppNetAudioStreamer.h"
+
+#include "LocalAudioGrabber.h"
 
 #include "GStreamerCore.h"
 #include "GraphicsInclude.h"
@@ -246,6 +249,104 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_audioStreamerSetChannels(GstNetw
 		p->SetChannels(c);
 	}
 
+}
+
+
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createAppNetAudioStreamer()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		GstAppNetAudioStreamer* g = new GstAppNetAudioStreamer();
+		return g;
+	}
+	return 0;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AppNetAudioStreamerSetIP(GstAppNetAudioStreamer* p, const char* ip, uint port, bool rtcp)
+{
+	if (p)
+	{
+		p->BindPorts(ip, &port,1, rtcp);
+	}
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AppNetAudioStreamerAttachGrabber(GstAppNetAudioStreamer* a,IAudioGrabber* g)
+{
+	a->SetAudioGrabber(g);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberDestroy(IAudioGrabber* g)
+{
+	delete g;
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AudioGrabberStart(IAudioGrabber* g)
+{
+	return g->Start();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberPause(IAudioGrabber* g)
+{
+	g->Pause();
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberClose(IAudioGrabber* g)
+{
+	g->Close();
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AudioGrabberIsStarted(IAudioGrabber* g)
+{
+	return g->IsStarted();
+}
+extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_AudioGrabberGetSamplingRate(IAudioGrabber* g)
+{
+	return g->GetSamplingRate();
+}
+extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_AudioGrabberGetChannelsCount(IAudioGrabber* g)
+{
+	return g->GetChannelsCount();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createLocalAudioGrabber()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		LocalAudioGrabber* g = new LocalAudioGrabber();
+		return g;
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_LocalAudioGrabberInit(LocalAudioGrabber* g,const char* guid, int channels, int samplingrate)
+{
+
+	g->Init(guid, channels, samplingrate);
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createCustomAudioGrabber()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		CustomAudioGrabber* g = new CustomAudioGrabber();
+		return g;
+	}
+	return 0;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_CustomAudioGrabberInit(CustomAudioGrabber* g, const char* pipeline, int channels, int samplingrate)
+{
+
+	g->Init(pipeline, channels, samplingrate);
 }
 
 #endif
