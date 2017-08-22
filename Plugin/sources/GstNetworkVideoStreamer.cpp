@@ -11,6 +11,7 @@
 #include "CMyUDPSink.h"
 
 #include "IThreadManager.h"
+#include <map>
 
 #include <gst/app/gstappsrc.h>
 namespace mray
@@ -33,7 +34,7 @@ protected:
 	bool m_rtcp;
 
 	std::string m_pipeLineString;
-	GstMyUDPSink* m_videoSink;
+	GstElement* m_videoSink;
 	GstMyUDPSink* m_videoRtcpSink;
 	GstMyUDPSrc* m_videoRtcpSrc;
 
@@ -41,6 +42,9 @@ protected:
 	Vector2d m_frameSize;
 
 	video::ImageInfo m_tmp;
+
+
+	std::map<std::string, std::string> m_encoderParams;
 
 	struct VideoSrcData
 	{
@@ -74,16 +78,24 @@ public:
 		m_frameSize = Vector2d(640,480);
 		m_fps = 30;
 
+		m_encoderParams["speed-preset"] = "superfast";
+		m_encoderParams["tune"] = "zerolatency";
+		m_encoderParams["pass"] = "cbr";
+		m_encoderParams["sliced-threads"] = "true";
+		m_encoderParams["sync-lookahead"] = "0";
+		m_encoderParams["rc-lookahead"] = "0";
+		m_encoderParams["quantizer"] = "15";
+
 		AddListener(this);
 
 	}
 
 	virtual ~GstNetworkVideoStreamerImpl()
 	{
-		if (m_videoSink && m_videoSink->m_client)
-		{
-			m_videoSink->m_client->Close();
-		}
+// 		if (m_videoSink && m_videoSink->m_client)
+// 		{
+// 			m_videoSink->m_client->Close();
+// 		}
 		Stop();
 	}
 	void  SetResolution(int width, int height, int fps)
@@ -156,8 +168,10 @@ public:
 		return ss.str();
 	}
 
-	void BuildString()
+	bool BuildString()
 	{
+		if (!m_grabber)
+			return false;
 		std::string videoStr;
 		std::stringstream ss;
 
@@ -178,8 +192,14 @@ public:
 		//encoder string
 
 
-		ss << BuildGStr() << "! x264enc name=videoEnc bitrate=" << m_bitRate <<
-			" speed-preset=superfast tune=zerolatency sync-lookahead=0  pass=qual ! rtph264pay ";
+		ss << BuildGStr() << "! x264enc name=videoEnc bitrate=" << m_bitRate;
+
+		std::string encoderParams = " ";
+		std::map<std::string, std::string>::iterator it = m_encoderParams.begin();
+		for (; it != m_encoderParams.end(); ++it)
+			encoderParams += it->first + "=" + it->second + " ";
+
+		ss << encoderParams<<" ! rtph264pay ";
 		if (m_rtcp)
 		{
 			m_pipeLineString = "rtpbin  name=rtpbin " +
@@ -191,18 +211,23 @@ public:
 
 				"rtpbin.send_rtcp_src_0 ! "
 				"myudpsink name=videoRtcpSink sync=false async=false "
-				"myudpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 ";
+				"udpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 ";
 		}
 		else
 		{
 
 			m_pipeLineString = ss.str() + " ! "
-				"myudpsink name=videoSink sync=false";
+				"udpsink name=videoSink sync=false";
 			//"udpsink host=127.0.0.1 port=7000";
 		}
+		return true;
 
 	}
 
+	void SetEncoderSettings(const std::string& param, const std::string& value)
+	{
+		m_encoderParams[param] = value;
+	}
 	void SetBitRate(int bitRate)
 	{
 		m_bitRate = bitRate;
@@ -336,9 +361,9 @@ public:
 			}
 #endif
 		}
-		//g_object_set(G_OBJECT(m_videoSink), "sync", false, (void*)NULL);
+		g_object_set(m_videoSink, "port", m_videoPort,"host",m_ipAddr.c_str(),0);
 
-		SET_SINK(videoSink, m_videoPort);
+		//SET_SINK(videoSink, m_videoPort);
 		if (m_rtcp){
 			SET_SRC(videoRtcpSrc, (m_videoPort + 1));
 			SET_SINK(videoRtcpSink, (m_videoPort + 2));
@@ -360,7 +385,8 @@ public:
 	bool CreateStream()
 	{
 		GError *err = 0;
-		BuildString();
+		if (!BuildString())
+			return false;
 		GstElement* pipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
@@ -369,6 +395,7 @@ public:
 		if (!pipeline)
 			return false;
 
+		m_videoSink = gst_bin_get_by_name(GST_BIN(pipeline), "videoSink");
 		SetPipeline(pipeline);
 		_UpdatePorts();
 

@@ -23,6 +23,7 @@ using namespace video;
 #ifdef USE_UNITY_GRABBER
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityImageGrabber()
 {
+	GStreamerCore::Ref();
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
 	{
@@ -147,7 +148,7 @@ extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkStreamer()
 	GStreamerCore* c = GStreamerCore::Instance();
 	if (c)
 	{
-		GstCustomVideoStreamer* g = new GstCustomVideoStreamer();
+		GstNetworkVideoStreamer* g = new GstNetworkVideoStreamer();
 		return g;
 	}
 	return 0;

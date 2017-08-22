@@ -97,7 +97,7 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 	if (fmt == video::EPixel_I420 || fmt==video::EPixelFormat::EPixel_LUMINANCE8
 		|| fmt == video::EPixelFormat::EPixel_R8G8B8 || fmt == video::EPixelFormat::EPixel_B8G8R8
         || (fmt==video::EPixel_LUMINANCE8 || fmt==video::EPixel_Alpha8 ) &&
-        (src->format==video::EPixel_LUMINANCE8 || src->format==video::EPixel_Alpha8 ))
+		(src->format == video::EPixel_LUMINANCE8 || src->format == video::EPixel_Alpha8 || src->format == video::EPixel_LUMINANCE16))
 	{
 		memcpy(dst, src->imageData, src->imageDataSize);
 		return;
@@ -139,7 +139,13 @@ void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHe
         *pitch = _UnityTextureWidth;
         
         *data = ifo->imageData;
-    }
+	}
+	else if (ifo->format == video::EPixel_LUMINANCE16)
+	{
+		*comps = 1;
+		*pitch = _UnityTextureWidth;
+		*data = ifo->imageData;
+	}
     else
     {
         //				data = new uchar[_UnityTextureWidth*_UnityTextureHeight * 4];

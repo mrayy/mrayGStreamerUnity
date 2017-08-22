@@ -44,6 +44,8 @@ public:
 	void SetBitRate(int bitRate);
 	void SetResolution(int width, int height,int fps);
 
+	void SetEncoderSettings(const std::string& param, const std::string& value);
+
 	bool CreateStream();
 	void Stream();
 	bool IsStreaming();
