@@ -12,6 +12,7 @@
 #include "GstAppNetAudioStreamer.h"
 
 #include "LocalAudioGrabber.h"
+#include "UnityAudioGrabber.h"
 
 #include "GStreamerCore.h"
 #include "GraphicsInclude.h"
@@ -301,6 +302,14 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberClose(IAudioGrabber*
 {
 	g->Close();
 }
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberResume(IAudioGrabber* g)
+{
+	g->Resume();
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberRestart(IAudioGrabber* g)
+{
+	g->Restart();
+}
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AudioGrabberIsStarted(IAudioGrabber* g)
 {
 	return g->IsStarted();
@@ -329,6 +338,30 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_LocalAudioGrabberInit(LocalAudio
 {
 
 	g->Init(guid, channels, samplingrate);
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityAudioGrabber()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		UnityAudioGrabber* g = new UnityAudioGrabber();
+		return g;
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityAudioGrabberInit(UnityAudioGrabber* g, int bufferLength, int channels, int samplingrate)
+{
+
+	g->Init(bufferLength, channels, samplingrate);
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityAudioGrabberAddFrame(UnityAudioGrabber* g, float* data)
+{
+	g->AddFrame(data);
 }
 
 

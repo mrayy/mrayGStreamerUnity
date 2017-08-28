@@ -114,6 +114,14 @@ public:
 	{
 		SetPaused(true);
 	}
+	void Resume()
+	{
+		SetPaused(false);
+	}
+	void Restart()
+	{
+		GstPipelineHandler::SetPosition(0);
+	}
 	void Close()
 	{
 		GstPipelineHandler::Close();
@@ -176,6 +184,14 @@ bool CustomAudioGrabber::Start()
 void CustomAudioGrabber::Pause()
 {
 	m_impl->Pause();
+}
+void CustomAudioGrabber::Resume()
+{
+	m_impl->SetPaused(false);
+}
+void CustomAudioGrabber::Restart()
+{
+	m_impl->Restart();
 }
 void CustomAudioGrabber::Close()
 {

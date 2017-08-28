@@ -204,6 +204,9 @@
     <ClInclude Include="..\sources\CustomAudioGrabber.h">
       <Filter>Source Files\Streamer\AudioGrabber</Filter>
     </ClInclude>
+    <ClInclude Include="..\sources\UnityAudioGrabber.h">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../sources/GStreamerCore.cpp">
@@ -330,6 +333,9 @@
       <Filter>Source Files\Streamer\AudioGrabber</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\CustomAudioGrabber.cpp">
+      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\UnityAudioGrabber.cpp">
       <Filter>Source Files\Streamer\AudioGrabber</Filter>
     </ClCompile>
   </ItemGroup>

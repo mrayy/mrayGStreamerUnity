@@ -19,7 +19,9 @@ public:
 
 	virtual bool Start() = 0;
 	virtual void Pause() = 0;
+	virtual void Resume() = 0;
 	virtual void Close() = 0;
+	virtual void Restart() {};
 	virtual bool IsStarted() = 0;
 
 	virtual uint GetSamplingRate() = 0;

@@ -152,6 +152,8 @@ public:
 
 	GstFlowReturn NeedBuffer( GstBuffer ** buffer)
 	{
+		if (!IsPlaying())
+			return GST_FLOW_ERROR;
 
 		if (!m_audioGrabber)
 		{
@@ -284,6 +286,11 @@ public:
 	virtual void Close()
 	{
 		GstPipelineHandler::Close();
+		if (m_appSourceID != 0)
+		{
+			g_source_remove(m_appSourceID);
+			m_appSourceID = 0;
+		}
 	}
 
 };

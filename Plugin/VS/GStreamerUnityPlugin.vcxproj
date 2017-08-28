@@ -234,6 +234,7 @@
     <ClInclude Include="..\sources\GstNetworkVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkAudioStreamer.h" />
     <ClInclude Include="..\sources\IAudioGrabber.h" />
+    <ClInclude Include="..\sources\UnityAudioGrabber.h" />
     <ClInclude Include="..\sources\LocalAudioGrabber.h" />
     <ClInclude Include="..\sources\rtp.h" />
   </ItemGroup>
@@ -291,6 +292,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp" />
+    <ClCompile Include="..\sources\UnityAudioGrabber.cpp" />
     <ClCompile Include="..\sources\LocalAudioGrabber.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />
   </ItemGroup>

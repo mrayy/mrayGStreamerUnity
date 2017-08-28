@@ -25,6 +25,8 @@ public:
 	virtual bool Start();
 	virtual void Pause();
 	virtual void Close();
+	virtual void Resume() ;
+	virtual void Restart() ;
 	virtual bool IsStarted();
 
 	virtual uint GetSamplingRate();
