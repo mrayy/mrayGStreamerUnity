@@ -36,6 +36,7 @@ public:
 	virtual uchar* GetAudioFrame();
 	virtual uint GetAudioFrameSize();
 
+	virtual void SetVolume(float vol);
 };
 
 }

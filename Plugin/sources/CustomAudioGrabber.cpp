@@ -27,6 +27,9 @@ protected:
 	AudioAppSinkHandler audiohandler;
 
 	std::vector<float> frame;
+	GstElement* m_volume;
+
+
 
 public:
 	CustomAudioGrabberImpl()
@@ -52,7 +55,7 @@ public:
 
 		ss<< " ! audio/x-raw,endianness=1234,signed=true,width=16,depth=16,rate=" <<samplingrate<< ",channels=" <<channels<< " "
 			//" ! audiochebband mode=band-pass lower-frequency=1000 upper-frequency=6000 poles=4 "
-			"! audioconvert !audio/x-raw,format=F32LE,rate=" << samplingrate<<" ! appsink name=sink ";
+			" ! volume name=vol volume=1 ! audioconvert !audio/x-raw,format=F32LE,rate=" << samplingrate<<" ! appsink name=sink ";
 
 		return ss.str();
 	}
@@ -79,6 +82,7 @@ public:
 		LogMessage("CustomAudioGrabber::Finished Linking Pipeline", ELL_INFO);
 		SetPipeline(p);
 
+		m_volume = gst_bin_get_by_name(GST_BIN(p), "vol");
 
 		m_audioSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), "sink"));
 		audiohandler.SetSink(m_audioSink);
@@ -158,7 +162,10 @@ public:
 	{
 		return frame.size()*sizeof(float);
 	}
-
+	void SetVolume(float vol)
+	{
+		g_object_set(m_volume, "volume", (gdouble)vol, (void*)0);
+	}
 };
 
 
@@ -222,6 +229,10 @@ uchar* CustomAudioGrabber::GetAudioFrame()
 uint CustomAudioGrabber::GetAudioFrameSize()
 {
 	return m_impl->GetAudioFrameSize();
+}
+void CustomAudioGrabber::SetVolume(float vol)
+{
+	m_impl->SetVolume(vol);
 }
 
 }

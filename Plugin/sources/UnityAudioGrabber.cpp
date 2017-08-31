@@ -86,6 +86,10 @@ bool UnityAudioGrabber::IsStarted()
 	return _started;
 }
 
+void UnityAudioGrabber::SetVolume(float vol)
+{
+
+}
 
 
 uint UnityAudioGrabber::GetSamplingRate()

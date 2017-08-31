@@ -71,7 +71,7 @@ public:
 		ss << " ! audio/x-raw,endianness=1234,format=F32LE,rate=" << (m_audioGrabber->GetSamplingRate()) <<
 			",channels=" << (m_audioGrabber->GetChannelsCount()) << " "
 			//" ! audiochebband mode=band-pass lower-frequency=1000 upper-frequency=6000 poles=4 "
-			"! audioconvert ! volume volume=2 ! audioresample ! ";
+			"! audioconvert  ! audioresample ! ";
 		//	"audiochebband mode=band-pass lower-frequency=1000 upper-frequency=4000 type=2 ! "
 
 		ss<< "opusenc complexity=5 bitrate-type=vbr frame-size=5 ! rtpopuspay  ";

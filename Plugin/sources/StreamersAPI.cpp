@@ -323,6 +323,11 @@ extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_AudioGrabberGetChannelsCount(IAu
 	return g->GetChannelsCount();
 }
 
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberSetVolume(IAudioGrabber* g,float vol)
+{
+	g->SetVolume(vol);
+}
+
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createLocalAudioGrabber()
 {
 
