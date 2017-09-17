@@ -13,6 +13,8 @@
 #endif
 #include <vector>
 
+#include "UnityGraphicsDevice.h"
+
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 {
 	LogManager::Instance()->LogMessage("mray_gstreamer_initialize");
@@ -136,11 +138,22 @@ static void  __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
     }
     _data.clear();
 }
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(video::ImageInfo* ifo,void* _TextureNativePtr)
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(video::ImageInfo* ifo, void* _TextureNativePtr)
 {
     ImageBlitData r;
     r.ifo = ifo;
     r._TextureNativePtr = _TextureNativePtr;
     _data.push_back(r);
     return mray_gst_customPlayerBlitImageNativeEvent;
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT void*  mray_GetTextureData(void* texturePtr)
+{
+	return GetRenderer()->GetTextureDataPtr(texturePtr);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void  mray_ReleaseTextureData(void* texturePtr)
+{
+	GetRenderer()->ReleaseTextureDataPtr(texturePtr);
 }

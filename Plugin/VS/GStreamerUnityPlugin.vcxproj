@@ -174,7 +174,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>gstvideo-1.0.lib;ws2_32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gstvideo-1.0.lib;ws2_32.lib;opengl32.lib;dsound.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -229,11 +229,13 @@
     <ClInclude Include="..\sources\CMyUDPSink.h" />
     <ClInclude Include="..\sources\CMyUDPSrc.h" />
     <ClInclude Include="..\sources\CustomAudioGrabber.h" />
+    <ClInclude Include="..\sources\DirectSoundInputStream.h" />
     <ClInclude Include="..\sources\GstAppNetAudioStreamer.h" />
     <ClInclude Include="..\sources\GstCustomVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkVideoStreamer.h" />
     <ClInclude Include="..\sources\GstNetworkAudioStreamer.h" />
     <ClInclude Include="..\sources\IAudioGrabber.h" />
+    <ClInclude Include="..\sources\NetworkAudioGrabber.h" />
     <ClInclude Include="..\sources\UnityAudioGrabber.h" />
     <ClInclude Include="..\sources\LocalAudioGrabber.h" />
     <ClInclude Include="..\sources\rtp.h" />
@@ -277,6 +279,7 @@
     <ClCompile Include="..\sources\CustomAudioGrabber.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
+    <ClCompile Include="..\sources\DirectSoundInputStream.cpp" />
     <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
@@ -292,6 +295,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp" />
+    <ClCompile Include="..\sources\NetworkAudioGrabber.cpp" />
     <ClCompile Include="..\sources\UnityAudioGrabber.cpp" />
     <ClCompile Include="..\sources\LocalAudioGrabber.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />

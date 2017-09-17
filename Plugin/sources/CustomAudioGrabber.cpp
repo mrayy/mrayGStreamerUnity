@@ -34,6 +34,8 @@ protected:
 public:
 	CustomAudioGrabberImpl()
 	{
+		m_volume = 0;
+		m_audioSink = 0;
 	}
 	virtual ~CustomAudioGrabberImpl(){
 		Close();
@@ -53,9 +55,13 @@ public:
 		std::stringstream ss;
 		ss<< pipeline;
 
-		ss<< " ! audio/x-raw,endianness=1234,signed=true,width=16,depth=16,rate=" <<samplingrate<< ",channels=" <<channels<< " "
-			//" ! audiochebband mode=band-pass lower-frequency=1000 upper-frequency=6000 poles=4 "
-			" ! volume name=vol volume=1 ! audioconvert !audio/x-raw,format=F32LE,rate=" << samplingrate<<" ! appsink name=sink ";
+		if (samplingrate > 0 && channels > 0){
+			ss << "  ! audioresample ! audio/x-raw,endianness=1234,signed=true,width=16,depth=16,rate=" << samplingrate << ",channels=" << channels;// << " ";
+				//" ! audiochebband mode=band-pass lower-frequency=1000 upper-frequency=6000 poles=4 "
+				
+		}
+		ss<< " ! audioconvert !audio/x-raw,format=F32LE ";// , rate = " << samplingrate;
+		ss<< " ! volume name=vol volume=1 ! appsink name=sink ";
 
 		return ss.str();
 	}
@@ -154,13 +160,15 @@ public:
 		}
 		return false;
 	}
-	uchar* GetAudioFrame()
+	float* GetAudioFrame()
 	{
-		return (uchar*)&frame[0];
+		if (frame.size() == 0)
+			return 0;
+		return &frame[0];
 	}
 	uint GetAudioFrameSize()
 	{
-		return frame.size()*sizeof(float);
+		return frame.size();
 	}
 	void SetVolume(float vol)
 	{
@@ -177,6 +185,11 @@ CustomAudioGrabber::CustomAudioGrabber()
 CustomAudioGrabber::~CustomAudioGrabber()
 {
 	delete m_impl;
+}
+
+GstPipelineHandler* CustomAudioGrabber::GetPipelineHandler()
+{
+	return m_impl;
 }
 
 void CustomAudioGrabber::Init(const std::string &pipeline, int channels, int samplingrate)
@@ -222,7 +235,7 @@ bool CustomAudioGrabber::GrabFrame()
 {
 	return m_impl->GrabFrame();
 }
-uchar* CustomAudioGrabber::GetAudioFrame()
+float* CustomAudioGrabber::GetAudioFrame()
 {
 	return m_impl->GetAudioFrame();
 }

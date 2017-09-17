@@ -18,6 +18,10 @@ public:
 	virtual ~LocalAudioGrabber();
 
 	void Init(const std::string &deviceGUID, int channels, int samplingrate);
+
+	static int GetInterfacesCount();
+	static const char* GetInterfaceName(int i);
+	static const char* GetInterfaceGUID(int i);
 };
 
 }

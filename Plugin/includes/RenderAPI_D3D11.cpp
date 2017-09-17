@@ -27,6 +27,8 @@ public:
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
+	virtual void* GetTextureDataPtr(void* textureHandle);
+	virtual void ReleaseTextureDataPtr(void* textureHandle);
 
 private:
 	void CreateResources();
@@ -34,6 +36,8 @@ private:
 
 private:
 	ID3D11Device* m_Device;
+
+
 };
 
 
@@ -87,6 +91,40 @@ void* RenderAPI_D3D11::BeginModifyTexture(void* textureHandle, int textureWidth,
 	return 0;
 }
 
+
+void* RenderAPI_D3D11::GetTextureDataPtr(void* textureHandle)
+{
+	ID3D11Texture2D* d3dtex = (ID3D11Texture2D*)textureHandle;
+	assert(d3dtex); 
+	
+	D3D11_MAP eMapType = D3D11_MAP_READ;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	HRESULT res=ctx->Map(d3dtex, 0, eMapType, NULL, &mappedResource);
+	ctx->Release();
+
+	BYTE* pYourBytes = (BYTE*)mappedResource.pData;
+	unsigned int uiPitch = mappedResource.RowPitch;
+
+	return pYourBytes;
+
+}
+
+void RenderAPI_D3D11::ReleaseTextureDataPtr(void* textureHandle)
+{
+	ID3D11Texture2D* d3dtex = (ID3D11Texture2D*)textureHandle;
+	assert(d3dtex);
+
+	D3D11_MAP eMapType = D3D11_MAP_READ;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	ID3D11DeviceContext* ctx = NULL;
+	m_Device->GetImmediateContext(&ctx);
+	ctx->Unmap(d3dtex, 0);
+	ctx->Release();
+}
 
 void RenderAPI_D3D11::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int components,int rowPitch, void* dataPtr)
 {

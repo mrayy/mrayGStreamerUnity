@@ -104,6 +104,8 @@ namespace video
 			return false;
 		}
 
+		FIRE_LISTENR_METHOD(OnPipelineLink, (this));
+
 		return true;
 	}
     bool GstPipelineHandler::SetPosition(signed long pos)
@@ -217,6 +219,7 @@ namespace video
 		}
 
 		m_data->Loaded = false;
+		FIRE_LISTENR_METHOD(OnPipelineClosed, (this));
 	}
 	bool GstPipelineHandler::HandleMessage(GstBus * bus, GstMessage * msg)
 	{

@@ -27,6 +27,8 @@ public:
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
+	virtual void* GetTextureDataPtr(void* textureHandle);
+	virtual void ReleaseTextureDataPtr(void* textureHandle);
 
 private:
 	IDirect3DDevice9* m_Device;
@@ -47,6 +49,24 @@ RenderAPI_D3D9::RenderAPI_D3D9()
 }
 
 
+void* RenderAPI_D3D9::GetTextureDataPtr(void* textureHandle)
+{
+
+	IDirect3DTexture9* d3dtex = (IDirect3DTexture9*)textureHandle;
+	assert(d3dtex);
+	D3DLOCKED_RECT lr;
+	HRESULT hr = d3dtex->LockRect(0, &lr, NULL, D3DLOCK_READONLY);
+	if (FAILED(hr))
+		return NULL;
+	return lr.pBits;
+}
+void RenderAPI_D3D9::ReleaseTextureDataPtr(void* textureHandle)
+{
+	IDirect3DTexture9* d3dtex = (IDirect3DTexture9*)textureHandle;
+	assert(d3dtex);
+	d3dtex->UnlockRect(0);
+
+}
 void RenderAPI_D3D9::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces)
 {
 	switch (type)

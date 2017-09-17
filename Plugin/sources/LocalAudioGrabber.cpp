@@ -3,12 +3,23 @@
 #include "stdafx.h"
 #include "LocalAudioGrabber.h"
 
+#include "DirectSoundInputStream.h"
+
+
+
 namespace mray
 {
 namespace video
 {
+	std::vector<sound::InputStreamDeviceInfo> _dsInterfacesList;
 
-
+	void LoadInterfaces()
+	{
+		sound::DirectSoundInputStream* instance;
+		instance = new sound::DirectSoundInputStream();
+		instance->ListDevices(_dsInterfacesList);
+		delete instance;
+	}
 
 LocalAudioGrabber::LocalAudioGrabber()
 {
@@ -30,6 +41,31 @@ void LocalAudioGrabber::Init(const std::string &deviceGUID, int channels, int sa
 
 	CustomAudioGrabber::Init(audioStr, channels, samplingrate);
 }
+
+int LocalAudioGrabber::GetInterfacesCount()
+{
+	LoadInterfaces();
+	return _dsInterfacesList.size();
+}
+
+
+const char* LocalAudioGrabber::GetInterfaceName(int i)
+{
+	LoadInterfaces();
+	if (i >= _dsInterfacesList.size())
+		return "";
+	return _dsInterfacesList[i].description.c_str();
+}
+
+
+const char* LocalAudioGrabber::GetInterfaceGUID(int i)
+{
+	LoadInterfaces();
+	if (i >= _dsInterfacesList.size())
+		return "";
+	return _dsInterfacesList[i].deviceGUID.c_str();
+}
+
 
 }
 }

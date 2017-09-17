@@ -110,14 +110,14 @@ bool UnityAudioGrabber::GrabFrame()
 }
 
 
-uchar* UnityAudioGrabber::GetAudioFrame()
+float* UnityAudioGrabber::GetAudioFrame()
 {
 	if (_samples.size() > 0)
 	{
 		float* ptr=_samples.front();
 		_graveyard.push_back(ptr);
 		_samples.pop_front();
-		return (uchar*)ptr;
+		return ptr;
 	}
 	return 0;
 }
@@ -125,7 +125,7 @@ uchar* UnityAudioGrabber::GetAudioFrame()
 
 uint UnityAudioGrabber::GetAudioFrameSize()
 {
-	return _bufferLength*sizeof(float);
+	return _bufferLength;
 }
 
 

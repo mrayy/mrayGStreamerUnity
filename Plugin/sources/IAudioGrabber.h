@@ -28,7 +28,7 @@ public:
 	virtual uint GetChannelsCount() = 0;
 
 	virtual bool GrabFrame() = 0;
-	virtual uchar* GetAudioFrame() = 0;
+	virtual float* GetAudioFrame() = 0;
 	virtual uint GetAudioFrameSize() = 0;
 
 	virtual void SetVolume(float vol) = 0;

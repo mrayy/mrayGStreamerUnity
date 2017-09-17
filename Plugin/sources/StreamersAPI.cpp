@@ -12,6 +12,7 @@
 #include "GstAppNetAudioStreamer.h"
 
 #include "LocalAudioGrabber.h"
+#include "NetworkAudioGrabber.h"
 #include "UnityAudioGrabber.h"
 
 #include "GStreamerCore.h"
@@ -328,6 +329,26 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AudioGrabberSetVolume(IAudioGrab
 	g->SetVolume(vol);
 }
 
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AudioGrabberGrabFrame(IAudioGrabber* g)
+{
+	return g->GrabFrame();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_AudioGrabberGetAudioFrameSize(IAudioGrabber* g)
+{
+	return g->GetAudioFrameSize();
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AudioGrabberCopyAudioFrame(IAudioGrabber* p, float*data)
+{
+	float* ptr= p->GetAudioFrame();
+	int size = p->GetAudioFrameSize();
+	if (!ptr || !data)
+		return false;
+	memcpy(data, ptr, size*sizeof(float));
+	return true;
+}
+
+
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createLocalAudioGrabber()
 {
 
@@ -345,6 +366,20 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_LocalAudioGrabberInit(LocalAudio
 	g->Init(guid, channels, samplingrate);
 }
 
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_GetAudioInputInterfacesCount()
+{
+	return LocalAudioGrabber::GetInterfacesCount();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioInputInterfaceName(int index)
+{
+	return LocalAudioGrabber::GetInterfaceName(index);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioInputInterfaceGUID(int index)
+{
+	return LocalAudioGrabber::GetInterfaceGUID(index);
+}
 
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityAudioGrabber()
 {
@@ -386,6 +421,33 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_CustomAudioGrabberInit(CustomAud
 {
 
 	g->Init(pipeline, channels, samplingrate);
+}
+
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkAudioGrabber()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		NetworkAudioGrabber* g = new NetworkAudioGrabber();
+		return g;
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_NetworkAudioGrabberInit(NetworkAudioGrabber* g, uint port, int channels, int samplingrate)
+{
+
+	g->Init(port, channels, samplingrate);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT uint mray_gst_NetworkAudioGrabberGetPort(NetworkAudioGrabber* g)
+{
+	return g->GetAudioPort();
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_NetworkAudioGrabberSetPort(NetworkAudioGrabber* g,uint port)
+{
+	 g->SetPort(port);
 }
 
 #endif

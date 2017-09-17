@@ -213,10 +213,10 @@ public:
 
 		
 		// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
-		gst_base_sink_set_sync(GST_BASE_SINK(m_videoSink), false);
-		gst_app_sink_set_drop(GST_APP_SINK(m_videoSink), TRUE);
- 		gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoSink), 8);
- 		gst_base_sink_set_max_lateness(GST_BASE_SINK(m_videoSink), 0);
+// 		gst_base_sink_set_sync(GST_BASE_SINK(m_videoSink), false);
+// 		gst_app_sink_set_drop(GST_APP_SINK(m_videoSink), TRUE);
+//  		gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoSink), 8);
+//  		gst_base_sink_set_max_lateness(GST_BASE_SINK(m_videoSink), 0);
 		/*
 		GstCaps* caps;
 		caps = gst_caps_new_simple("video/x-raw",

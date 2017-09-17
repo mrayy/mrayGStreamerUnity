@@ -11,6 +11,7 @@ namespace mray
 {
 namespace video
 {
+	class GstPipelineHandler;
 class CustomAudioGrabberImpl;
 class CustomAudioGrabber :public IAudioGrabber
 {
@@ -21,6 +22,8 @@ public:
 	virtual ~CustomAudioGrabber();
 
 	virtual void Init(const std::string &pipeline, int channels, int samplingrate);
+
+	virtual GstPipelineHandler* GetPipelineHandler();
 
 	virtual bool Start();
 	virtual void Pause();
@@ -33,7 +36,7 @@ public:
 	virtual uint GetChannelsCount();
 
 	virtual bool GrabFrame();
-	virtual uchar* GetAudioFrame();
+	virtual float* GetAudioFrame();
 	virtual uint GetAudioFrameSize();
 
 	virtual void SetVolume(float vol);

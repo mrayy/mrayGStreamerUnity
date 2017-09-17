@@ -167,8 +167,8 @@ public:
 		}
 		//m_grabber[index]->Lock();
 
-		uchar* data = m_audioGrabber->GetAudioFrame();
-		uint length = m_audioGrabber->GetAudioFrameSize();
+		float* data = m_audioGrabber->GetAudioFrame();
+		uint length = m_audioGrabber->GetAudioFrameSize()*sizeof(float);
 		*buffer = gst_buffer_new_wrapped_full(GST_MEMORY_FLAG_READONLY, data, length, 0, length, 0, 0);
 		//int len = ifo->imageDataSize;
 		//GstMapInfo map;

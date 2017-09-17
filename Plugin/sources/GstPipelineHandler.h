@@ -20,9 +20,11 @@ namespace video
 	class IPipelineListener
 	{
 	public:
+		virtual void OnPipelineLink(GstPipelineHandler* p){}
 		virtual void OnPipelineReady(GstPipelineHandler* p){}
 		virtual void OnPipelinePlaying(GstPipelineHandler* p){}
 		virtual void OnPipelineStopped(GstPipelineHandler* p){}
+		virtual void OnPipelineClosed(GstPipelineHandler* p){}
 		virtual void OnPipelineError(GstPipelineHandler* p){}
 	};
 	
@@ -32,9 +34,11 @@ protected:
 
 	GstPipelineHandlerImpl* m_data;
 
+	DECLARE_FIRE_METHOD(OnPipelineLink, (GstPipelineHandler* p), (p));
 	DECLARE_FIRE_METHOD(OnPipelineReady, (GstPipelineHandler* p), (p));
 	DECLARE_FIRE_METHOD(OnPipelinePlaying, (GstPipelineHandler* p), (p));
 	DECLARE_FIRE_METHOD(OnPipelineStopped, (GstPipelineHandler* p), (p));
+	DECLARE_FIRE_METHOD(OnPipelineClosed, (GstPipelineHandler* p), (p));
 	DECLARE_FIRE_METHOD(OnPipelineError, (GstPipelineHandler* p), (p));
 public:
 	GstPipelineHandler();

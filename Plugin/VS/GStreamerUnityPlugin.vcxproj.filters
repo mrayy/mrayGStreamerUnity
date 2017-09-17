@@ -31,7 +31,7 @@
     <Filter Include="Source Files\Players">
       <UniqueIdentifier>{53c03b70-31b0-4063-809e-414e4a124693}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Streamer\AudioGrabber">
+    <Filter Include="Source Files\AudioGrabber">
       <UniqueIdentifier>{011190e1-ba41-41c9-8f0f-c9e0fe5b3816}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -196,16 +196,22 @@
       <Filter>Source Files\Streamer</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\IAudioGrabber.h">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\LocalAudioGrabber.h">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\CustomAudioGrabber.h">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\UnityAudioGrabber.h">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\DirectSoundInputStream.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\NetworkAudioGrabber.h">
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -330,13 +336,19 @@
       <Filter>Source Files\Streamer</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\LocalAudioGrabber.cpp">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\CustomAudioGrabber.cpp">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\UnityAudioGrabber.cpp">
-      <Filter>Source Files\Streamer\AudioGrabber</Filter>
+      <Filter>Source Files\AudioGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\DirectSoundInputStream.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\NetworkAudioGrabber.cpp">
+      <Filter>Source Files\AudioGrabber</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

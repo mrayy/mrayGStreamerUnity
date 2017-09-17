@@ -40,7 +40,7 @@ public:
 
 
 	virtual bool GrabFrame();
-	virtual uchar* GetAudioFrame();
+	virtual float* GetAudioFrame();
 	virtual uint GetAudioFrameSize();
 
 	virtual void SetVolume(float vol);
