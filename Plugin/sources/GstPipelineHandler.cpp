@@ -68,6 +68,8 @@ namespace video
 		if (!m_data->gstPipeline)
 			return false;
 
+		FIRE_LISTENR_METHOD(OnPipelineLink, (this));
+
 		//enable logging to stdout
 		g_signal_connect(m_data->gstPipeline, "deep-notify", G_CALLBACK(gst_object_default_deep_notify), NULL);
 
@@ -104,7 +106,6 @@ namespace video
 			return false;
 		}
 
-		FIRE_LISTENR_METHOD(OnPipelineLink, (this));
 
 		return true;
 	}

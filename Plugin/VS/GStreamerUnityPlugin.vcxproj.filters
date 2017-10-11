@@ -25,14 +25,14 @@
     <Filter Include="Source Files\API">
       <UniqueIdentifier>{e574c74c-40e7-4c61-80ca-f817c02f38cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Streamer">
-      <UniqueIdentifier>{3be6591e-78a9-4b7a-800e-ac354152667a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Players">
       <UniqueIdentifier>{53c03b70-31b0-4063-809e-414e4a124693}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\AudioGrabber">
       <UniqueIdentifier>{011190e1-ba41-41c9-8f0f-c9e0fe5b3816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Streamer">
+      <UniqueIdentifier>{3be6591e-78a9-4b7a-800e-ac354152667a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

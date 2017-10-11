@@ -61,7 +61,7 @@ public:
 				
 		}
 		ss<< " ! audioconvert !audio/x-raw,format=F32LE ";// , rate = " << samplingrate;
-		ss<< " ! volume name=vol volume=1 ! appsink name=sink ";
+		ss<< " ! volume name=vol volume=1 ! appsink name=sink sync=false ";
 
 		return ss.str();
 	}
@@ -108,10 +108,10 @@ public:
 
 
 		// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
-		gst_base_sink_set_sync(GST_BASE_SINK(m_audioSink), true);
-		gst_app_sink_set_drop(GST_APP_SINK(m_audioSink), TRUE);
-		gst_app_sink_set_max_buffers(GST_APP_SINK(m_audioSink), 8);
-		gst_base_sink_set_max_lateness(GST_BASE_SINK(m_audioSink), 0);
+		//gst_base_sink_set_sync(GST_BASE_SINK(m_audioSink), false);
+		//gst_app_sink_set_drop(GST_APP_SINK(m_audioSink), TRUE);
+		//gst_app_sink_set_max_buffers(GST_APP_SINK(m_audioSink), 8);
+	//	gst_base_sink_set_max_lateness(GST_BASE_SINK(m_audioSink), 0);
 
 
 

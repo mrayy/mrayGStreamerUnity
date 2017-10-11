@@ -31,7 +31,6 @@ extern "C" UNITY_INTERFACE_EXPORT unsigned long mray_gst_PlayerGetLastImageTimes
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerSendRTPMetaToHost(IGStreamerPlayer* p, int index, const char* host, int port);
 
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStreamerPlayer* p, int index, int level, int& x, int& y, int& w, int& h);
 
 
 #ifdef USE_UNITY_NETWORK
