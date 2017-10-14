@@ -17,6 +17,7 @@ namespace video
 	{
 		sound::DirectSoundInputStream* instance;
 		instance = new sound::DirectSoundInputStream();
+		_dsInterfacesList.clear();
 		instance->ListDevices(_dsInterfacesList);
 		delete instance;
 	}
@@ -32,7 +33,7 @@ void LocalAudioGrabber::Init(const std::string &deviceGUID, int channels, int sa
 {
 	this->deviceGUID = deviceGUID;
 
-	std::string audioStr = "directsoundsrc buffer-time=100  ";
+	std::string audioStr = "directsoundsrc ";
 
 	if (deviceGUID != "")
 	{

@@ -154,7 +154,7 @@ public:
 					<< " do-timestamp=true is-live=true block=true"
 					" ! video/x-raw,format=" + format + ",width=" << m_grabber->GetFrameSize().x <<
 					",height=" << m_grabber->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
-				<<  "! videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
+				<<  "!  videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
 				//videoStr += "! videorate ";//" max-rate=" + std::stringConverter::toString(m_fps) + " ";
 				//	videoStr += " ! queue ";
 				//	if (m_grabber->GetImageFormat()!=video::EPixel_YUYV)
@@ -183,6 +183,8 @@ public:
 		if (m_grabber->GetFrameSize().y < height)
 			height = m_grabber->GetFrameSize().y;
 
+		ss << BuildGStr();
+
 		if ( (width < m_grabber->GetFrameSize().x || height < m_grabber->GetFrameSize().y))
 		{
 			ss << "! videoscale ! video/x-raw,width=" << width <<
@@ -192,7 +194,7 @@ public:
 		//encoder string
 
 
-		ss << BuildGStr() << "! x264enc name=videoEnc bitrate=" << m_bitRate;
+		ss   << "! x264enc name=videoEnc bitrate=" << m_bitRate;
 
 		std::string encoderParams = " ";
 		std::map<std::string, std::string>::iterator it = m_encoderParams.begin();
@@ -210,7 +212,7 @@ public:
 				"myudpsink name=videoSink  "
 
 				"rtpbin.send_rtcp_src_0 ! "
-				"myudpsink name=videoRtcpSink sync=false async=false "
+				"myudpsink name=videoRtcpSink sync=false  "
 				"udpsrc name=videoRtcpSrc ! rtpbin.recv_rtcp_sink_0 ";
 		}
 		else
@@ -337,12 +339,12 @@ public:
 			m_videoSrc.index = 0;
 			if (m_videoSrc.videoSrc){
 
-				gst_base_src_set_blocksize(GST_BASE_SRC(m_videoSrc.videoSrc), 640 * 480 * 3);
-				gst_base_src_set_live(GST_BASE_SRC(m_videoSrc.videoSrc), false);
-				gst_base_src_set_async(GST_BASE_SRC(m_videoSrc.videoSrc), false);
-				gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc.videoSrc), true);
+				//gst_base_src_set_blocksize(GST_BASE_SRC(m_videoSrc.videoSrc), 640 * 480 * 3);
+				//gst_base_src_set_live(GST_BASE_SRC(m_videoSrc.videoSrc), true);
+				//gst_base_src_set_async(GST_BASE_SRC(m_videoSrc.videoSrc), false);
+				//gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc.videoSrc), true);
 
-				gst_app_src_set_max_bytes(m_videoSrc.videoSrc, 640 * 480 * 3);
+				//gst_app_src_set_max_bytes(m_videoSrc.videoSrc, 640 * 480 * 3);
 				gst_app_src_set_emit_signals(m_videoSrc.videoSrc, false);
 
 				m_videoSrc.srcCB.need_data = &start_feed;
