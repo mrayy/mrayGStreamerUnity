@@ -9,6 +9,8 @@
 #include "IThreadManager.h"
 #include "MutexLocks.h"
 
+#include "GstCustomDataPlayer.h"
+
 #include <vector>
 
 using namespace mray;
@@ -604,6 +606,76 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerRTPGetEyeGazeData(IGStream
 
 }
 
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_customDataPlayerCreate()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		video::GstCustomDataPlayer* player = new video::GstCustomDataPlayer();
+		return player;
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customDataPlayerGrabFrame(video::GstCustomDataPlayer* player)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		return player->GrabFrame();
+	}
+	return false;
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customDataPlayerCreateStream(video::GstCustomDataPlayer* player)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		return player->CreateStream();
+	}
+	return false;
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customDataPlayerSetPort(video::GstCustomDataPlayer* player,int port)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		player->SetPort(port);
+	}
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customDataPlayerGetPort(video::GstCustomDataPlayer* player)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		return player->GetPort(0);
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customDataPlayerGetDataLength(video::GstCustomDataPlayer* player)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		return player->GetDataLength();
+	}
+	return 0;
+}
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_customDataPlayerGetData(video::GstCustomDataPlayer* player, unsigned char* data, int length)
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		return player->GetData(data,length);
+	}
+	return 0;
+}
 //////////////////////////////////////////////////////////////////////////
 
 

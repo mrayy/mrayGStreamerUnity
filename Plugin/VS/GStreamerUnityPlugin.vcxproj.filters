@@ -213,6 +213,15 @@
     <ClInclude Include="..\sources\NetworkAudioGrabber.h">
       <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
+    <ClInclude Include="..\sources\GstCustomDataPlayer.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\GstCustomDataStreamer.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\GZipCompress.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../sources/GStreamerCore.cpp">
@@ -349,6 +358,15 @@
     </ClCompile>
     <ClCompile Include="..\sources\NetworkAudioGrabber.cpp">
       <Filter>Source Files\AudioGrabber</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstCustomDataPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstCustomDataStreamer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GZipCompress.cpp">
+      <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
