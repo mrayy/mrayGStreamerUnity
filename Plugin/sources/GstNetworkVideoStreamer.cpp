@@ -31,6 +31,7 @@ protected:
 
 	IVideoGrabber* m_grabber;
 	int m_bitRate;
+	int m_quality;
 	bool m_rtcp;
 
 	std::string m_pipeLineString;
@@ -67,7 +68,8 @@ public:
 		m_clockPort = 5010;
 
 		m_bitRate = 5000;
-		m_grabber= 0;
+		m_grabber = 0;
+		m_quality = -1;
 
 		m_videoSink = 0;
 		m_videoRtcpSink = 0;
@@ -77,6 +79,7 @@ public:
 
 		m_frameSize = Vector2d(640,480);
 		m_fps = 30;
+
 
 		m_encoderParams["speed-preset"] = "superfast";
 		m_encoderParams["tune"] = "zerolatency";
@@ -151,7 +154,7 @@ public:
 				//ksvideosrc
 				ss<< "appsrc"
 					 " name=src"  
-					<< " do-timestamp=true is-live=true block=true"
+					<< " do-timestamp=0 is-live=true format=time"
 					" ! video/x-raw,format=" + format + ",width=" << m_grabber->GetFrameSize().x <<
 					",height=" << m_grabber->GetFrameSize().y << ",framerate=" << m_fps << "/1 "
 				<<  "!  videoconvert  ! video/x-raw,format=I420 ";// !videoflip method = 1  ";
@@ -195,6 +198,16 @@ public:
 
 
 		ss   << "! x264enc name=videoEnc bitrate=" << m_bitRate;
+		if (m_quality > 0)
+		{
+			std::stringstream tmp;
+			tmp << m_quality;
+			m_encoderParams["pass"] = "qual";
+			m_encoderParams["quantizer"] =tmp.str();
+		}
+		else {
+			m_encoderParams["pass"] = "cbr";
+		}
 
 		std::string encoderParams = " ";
 		std::map<std::string, std::string>::iterator it = m_encoderParams.begin();
@@ -219,7 +232,7 @@ public:
 		{
 
 			m_pipeLineString = ss.str() + " ! "
-				"udpsink name=videoSink sync=false";
+				"udpsink name=videoSink ";
 			//"udpsink host=127.0.0.1 port=7000";
 		}
 		return true;
@@ -230,9 +243,10 @@ public:
 	{
 		m_encoderParams[param] = value;
 	}
-	void SetBitRate(int bitRate)
+	void SetBitRate(int bitRate, int quality)
 	{
 		m_bitRate = bitRate;
+		m_quality = quality;
 	}
 	void SetVideoGrabber(IVideoGrabber* grabber0)
 	{
@@ -242,6 +256,8 @@ public:
 
 	GstFlowReturn NeedBuffer(GstMySrc * sink, GstBuffer ** buffer,int index)
 	{
+		if (!GetPipeline() || !IsStreaming())
+			return GST_FLOW_ERROR;
 		if (!m_grabber)
 		{
 			LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
@@ -345,11 +361,21 @@ public:
 				//gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc.videoSrc), true);
 
 				//gst_app_src_set_max_bytes(m_videoSrc.videoSrc, 640 * 480 * 3);
-				gst_app_src_set_emit_signals(m_videoSrc.videoSrc, false);
+				//gst_app_src_set_emit_signals(m_videoSrc.videoSrc, false);
+				//gst_base_src_set_do_timestamp(GST_BASE_SRC(m_videoSrc.videoSrc), true);
 
-				m_videoSrc.srcCB.need_data = &start_feed;
-				m_videoSrc.srcCB.enough_data = &stop_feed;
-				m_videoSrc.srcCB.seek_data = &seek_data;
+// 				g_object_set(G_OBJECT(m_videoSrc.videoSrc),
+// 					"stream-type", GST_APP_STREAM_TYPE_STREAM, // GST_APP_STREAM_TYPE_STREAM
+// 					"format", GST_FORMAT_TIME,
+// 					"is-live", TRUE,
+// 					NULL);
+
+// 				g_signal_connect(m_videoSrc.videoSrc, "need-data", G_CALLBACK(start_feed), &m_videoSrc.srcCB);
+// 				g_signal_connect(m_videoSrc.videoSrc, "enough-data", G_CALLBACK(stop_feed), &m_videoSrc.srcCB);
+ 				m_videoSrc.srcCB.need_data = &start_feed;
+ 				m_videoSrc.srcCB.enough_data = &stop_feed;
+ 				m_videoSrc.srcCB.seek_data = &seek_data;
+
 				gst_app_src_set_callbacks(m_videoSrc.videoSrc, &m_videoSrc.srcCB, &m_videoSrc, NULL);
 			}
 #else
@@ -414,6 +440,8 @@ public:
 	}
 	virtual void Close()
 	{
+		gst_app_src_end_of_stream(m_videoSrc.videoSrc);
+	//	gst_element_send_event(GST_ELEMENT(m_videoSrc.videoSrc), gst_event_new_eos());
 		GstPipelineHandler::Close();
 	}
 
@@ -462,9 +490,9 @@ bool GstNetworkVideoStreamer::IsStreaming()
 	return m_impl->IsStreaming();
 }
 
-void GstNetworkVideoStreamer::SetBitRate(int bitRate)
+void GstNetworkVideoStreamer::SetBitRate(int bitRate, int quality)
 {
-	m_impl->SetBitRate(bitRate);
+	m_impl->SetBitRate(bitRate,quality);
 }
 
 void GstNetworkVideoStreamer::SetResolution(int width, int height, int fps)

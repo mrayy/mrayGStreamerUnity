@@ -133,22 +133,19 @@ namespace video
 	{
 		m_data->paused = p;
 		if (m_data->Loaded)
-        {
-           /* if (m_data->paused)
-                gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
-            else
-                gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
-				*/
-            if (m_data->playing)
-            {
+		{
+			if (m_data->playing)
+			{
 				if (m_data->paused)
+				{
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PAUSED);
+				}
 				else
 					gst_element_set_state(m_data->gstPipeline, GST_STATE_PLAYING);
 			}
 			else
-            {
-              	GstState state = GST_STATE_PAUSED;
+			{
+				GstState state = GST_STATE_PAUSED;
 				gst_element_set_state(m_data->gstPipeline, state);
 				gst_element_get_state(m_data->gstPipeline, &state, NULL, 2 * GST_SECOND);
 				if (!m_data->paused)
@@ -161,7 +158,7 @@ namespace video
 	{
 		if (!m_data->Loaded)return;
 		GstState state;
-		if (!m_data->paused){
+		if (!m_data->paused) {
 			state = GST_STATE_PAUSED;
 			gst_element_set_state(m_data->gstPipeline, state);
 			gst_element_get_state(m_data->gstPipeline, &state, NULL, 2 * GST_SECOND);
@@ -203,23 +200,18 @@ namespace video
 	}
 	void GstPipelineHandler::Close()
 	{
-		m_data->closing = true;
-		if (m_data->busWatchID != 0)
-		{
-			g_source_remove(m_data->busWatchID);
-			m_data->busWatchID = 0;
-		}
 		Stop();
-		if (m_data->Loaded){
+
+		if (m_data->Loaded) {
 			gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_NULL);
 			gst_element_get_state(m_data->gstPipeline, NULL, NULL, 2 * GST_SECOND);
 
+			if (m_data->busWatchID != 0) g_source_remove(m_data->busWatchID);
 
 			gst_object_unref(m_data->gstPipeline);
 			m_data->gstPipeline = NULL;
 		}
 
-		m_data->Loaded = false;
 		FIRE_LISTENR_METHOD(OnPipelineClosed, (this));
 	}
 	bool GstPipelineHandler::HandleMessage(GstBus * bus, GstMessage * msg)
@@ -244,15 +236,15 @@ namespace video
 			break;
 #endif
 
-		case GST_MESSAGE_STATE_CHANGED:{
+		case GST_MESSAGE_STATE_CHANGED: {
 			GstState oldstate, newstate, pendstate;
 			gst_message_parse_state_changed(msg, &oldstate, &newstate, &pendstate);
-			if (newstate == GST_STATE_PAUSED && !m_data->playing){
+			if (newstate == GST_STATE_PAUSED && !m_data->playing) {
 				m_data->Loaded = true;
 				m_data->playing = true;
-				/*if (!m_data->paused){
+				if (!m_data->paused) {
 					SetPaused(false);
-				}*/
+				}
 			}
 			else if (newstate == GST_STATE_READY)
 			{

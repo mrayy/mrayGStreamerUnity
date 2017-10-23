@@ -34,6 +34,13 @@ extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityImageGrabber()
 	}
 	return 0;
 }
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_destroyUnityImageGrabber(UnityImageGrabber* g)
+{
+	if (g)
+	{
+		delete g;
+	}
+}
 
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberSetData(UnityImageGrabber* g, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int Format)
 {
@@ -170,11 +177,11 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetGrabber(GstNetwork
 	}
 
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstNetworkVideoStreamer* p, int bitRate)
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netStreamerSetBitRate(GstNetworkVideoStreamer* p, int bitRate, int quality)
 {
 	if (p)
 	{
-		p->SetBitRate(bitRate);
+		p->SetBitRate(bitRate,quality);
 	}
 
 }
