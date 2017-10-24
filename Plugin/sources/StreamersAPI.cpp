@@ -49,6 +49,13 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberSetData(UnityIm
 	g->SetData(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, Format);
 }
 
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberSetImageInfo(UnityImageGrabber* g, ImageInfo* ifo)
+{
+	if (!g)
+		return;
+	g->SetImageInfo(ifo);
+}
+
 
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_UnityImageGrabberDestroy(UnityImageGrabber* g)
 {

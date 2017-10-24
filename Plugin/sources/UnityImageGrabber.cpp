@@ -88,6 +88,11 @@ void UnityImageGrabber::SetData(void* ptr, int w, int h,int FORMAT)
 	Unlock();
 }
 
+void UnityImageGrabber::SetImageInfo(ImageInfo* ifo)
+{
+	SetData(ifo->imageData, ifo->Size.x, ifo->Size.y, ifo->format);
+}
+
 
 }
 }

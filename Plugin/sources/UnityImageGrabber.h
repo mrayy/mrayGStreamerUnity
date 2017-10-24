@@ -37,6 +37,7 @@ public:
 	virtual const ImageInfo* GetLastFrame();
 
 	void SetData(void* ptr, int w, int h, int FORMAT);
+	void SetImageInfo(ImageInfo* ifo);
 
 	virtual void Lock(){ m_mutex->lock(); }
 	virtual void Unlock(){ m_mutex->unlock(); }
