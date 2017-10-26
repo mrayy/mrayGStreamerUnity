@@ -161,7 +161,7 @@ public:
 		if (m_encoderType == "H264")
 		{
 			//propably rtph264depay drops some rtp packets along the way??
-			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i << " !  avdec_h264 ! " //! h264parse
+			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i << " !  avdec_h264 output-corrupt=false ! " //! h264parse
 				" videoconvert !"
 				;
 		//	ss << " videoflip method=5 !";
@@ -200,7 +200,7 @@ public:
 		}
 		else
 		{
-			ss << " mylistener name=preappsrc" << i << " ! appsink name=videoSink" << i << " sync=true  emit-signals=false "; //fpsdisplaysink ";// "
+			ss << " mylistener name=preappsrc" << i << " !  appsink name=videoSink" << i << " sync=false  emit-signals=false "; //fpsdisplaysink ";// "
 		}
 		//"fpsdisplaysink sync=false";
 

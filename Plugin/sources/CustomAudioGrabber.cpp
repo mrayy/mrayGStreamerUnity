@@ -61,7 +61,7 @@ public:
 				
 		}
 		ss<< " ! audioconvert !audio/x-raw,format=F32LE ";// , rate = " << samplingrate;
-		ss<< " ! volume name=vol volume=1 ! appsink name=sink sync=false ";
+		ss<< " ! volume name=vol volume=1 ! appsink name=sink sync=true ";
 
 		return ss.str();
 	}

@@ -33,7 +33,7 @@ void LocalAudioGrabber::Init(const std::string &deviceGUID, int channels, int sa
 {
 	this->deviceGUID = deviceGUID;
 
-	std::string audioStr = "directsoundsrc ";
+	std::string audioStr = "directsoundsrc blocksize=4096";
 
 	if (deviceGUID != "")
 	{

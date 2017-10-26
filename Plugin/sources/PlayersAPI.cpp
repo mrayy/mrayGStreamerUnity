@@ -766,26 +766,38 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerCopyAudioFrame(Gst
 	return p->CopyAudioFrame(data);
 }
 
-extern "C" UNITY_INTERFACE_EXPORT float mray_gst_ProcessAudioPackets(float* srcData, int startIndex, int channelIndex, int count, int stride, int srcChannels, float* data, int length, int channels)
+extern "C" UNITY_INTERFACE_EXPORT float mray_gst_ProcessAudioPackets(float* srcData, int startIndex, int channelIndex, int count, int stride, int srcChannels, float* data, int length, int channels
+,bool modulate)
 {
 	float Volume = 1;
 	float average = 0;
 	if (channels == srcChannels) {
 		for (int i = 0, j = 0; i < count; i += stride, ++j) {
-			data[j + length] *= srcData[startIndex + i + channelIndex] * Volume;
+			if(modulate)
+				data[j + length] *= srcData[startIndex + i + channelIndex] * Volume;
+			else data[j + length] = srcData[startIndex + i + channelIndex] * Volume;
 			average += srcData[startIndex + i + channelIndex] * srcData[startIndex + i + channelIndex];
 		}
 	}
 	else if (channels == 2 && srcChannels == 1) {
 		for (int i = 0, j = 0; i < count; i += stride, ++j) {
-			data[2 * j + length] *= srcData[startIndex + i + channelIndex] * Volume;
-			data[2 * j + length + 1] *= srcData[startIndex + i + channelIndex] * Volume;
+			if (modulate) {
+				data[2 * j + length] *= srcData[startIndex + i + channelIndex] * Volume;
+				data[2 * j + length + 1] *= srcData[startIndex + i + channelIndex] * Volume;
+			}
+			else {
+				data[2 * j + length] = srcData[startIndex + i + channelIndex] * Volume;
+				data[2 * j + length + 1] = srcData[startIndex + i + channelIndex] * Volume;
+			}
 			average += srcData[startIndex + i + channelIndex] * srcData[startIndex + i + channelIndex];
 		}
 	}
 	else if (channels == 1 && srcChannels == 2) {
 		for (int i = 0; i < count; i++) {
-			data[i + length] *= srcData[startIndex + 2 * i] * Volume;
+			if(modulate)
+				data[i + length] *= srcData[startIndex + 2 * i] * Volume;
+			else 
+				data[i + length] = srcData[startIndex + 2 * i] * Volume;
 			average += srcData[startIndex + 2 * i] * srcData[startIndex + 2 * i];
 		}
 	}
