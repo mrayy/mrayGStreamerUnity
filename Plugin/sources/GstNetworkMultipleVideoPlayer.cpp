@@ -67,7 +67,7 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 		GstElement* videoRtcpSink;
 	};
 
-	std::vector<VideoHandler> m_videoHandler;
+	std::vector<VideoHandler*> m_videoHandler;
 
 public:
 	GstNetworkMultipleVideoPlayerImpl(GstNetworkMultipleVideoPlayer* o)
@@ -76,7 +76,6 @@ public:
 		m_ipAddr = "127.0.0.1";
 		m_clockPort = 5010;
 		m_playersCount = 0;
-		m_videoHandler.resize(1);
 		m_encoderType = "H264";
 
 		AddListener(this);
@@ -101,7 +100,7 @@ public:
 	{
 		std::stringstream ss;
 		std::string videoStr;
-		ss << "udpsrc name=videoSrc" << i << " port=" << m_videoHandler[i].videoPort << " !"
+		ss << "udpsrc name=videoSrc" << i << " port=" << m_videoHandler[i]->videoPort << " !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
 			"application/x-rtp ";
 		videoStr = ss.str();
@@ -233,12 +232,12 @@ public:
 		{
 			std::stringstream ss;
 			ss << "videoSrc" << i;
-			m_videoHandler[i].videoSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), ss.str().c_str());
-			if (m_videoHandler[i].videoPort!=0)
-				g_object_set(m_videoHandler[i].videoSrc, "port", m_videoHandler[i].videoPort,0);
-		//	SET_SRC(i, ss.str().c_str(), m_videoHandler[i].videoPort);
-			// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i].videoPort + 1));
-			// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i].videoPort + 2));
+			m_videoHandler[i]->videoSrc = gst_bin_get_by_name(GST_BIN(GetPipeline()), ss.str().c_str());
+			if (m_videoHandler[i]->videoPort!=0)
+				g_object_set(m_videoHandler[i]->videoSrc, "port", m_videoHandler[i]->videoPort,0);
+		//	SET_SRC(i, ss.str().c_str(), m_videoHandler[i]->videoPort);
+			// 			SET_SINK(i, videoRtcpSink, (m_videoHandler[i]->videoPort + 1));
+			// 			SET_SRC(i, videoRtcpSrc, (m_videoHandler[i]->videoPort + 2));
 		}
 	}
 
@@ -253,10 +252,12 @@ public:
 		m_videoHandler.resize(m_playersCount);
 		for (int i = 0; i < m_playersCount; ++i)
 		{
+			if(m_videoHandler[i]==0)
+				m_videoHandler[i] = new VideoHandler();
 			if (m_baseVideoSrc != 0)
-				m_videoHandler[i].videoPort = m_baseVideoSrc + i;
+				m_videoHandler[i]->videoPort = m_baseVideoSrc + i;
 			else
-				m_videoHandler[i].videoPort = 0;
+				m_videoHandler[i]->videoPort = 0;
 		}
 
 		//set src and sinks elements
@@ -312,25 +313,25 @@ public:
 			{
 				std::stringstream ss;
 				ss << "videoSink" << i;
-				m_videoHandler[i].videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+				m_videoHandler[i]->videoSink = GST_APP_SINK(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 			}
 			{
 
 				std::stringstream ss;
 				ss << "rtplistener" << i;
-				m_videoHandler[i].rtpListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+				m_videoHandler[i]->rtpListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 		}
 			{
 
 				std::stringstream ss;
 				ss << "postdepay" << i;
-				m_videoHandler[i].postdepayListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+				m_videoHandler[i]->postdepayListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 			}
 			{
 
 				std::stringstream ss;
 				ss << "preappsrc" << i;
-				m_videoHandler[i].preappsrcListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+				m_videoHandler[i]->preappsrcListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 			}
 
 			if (m_rtcp)
@@ -338,14 +339,14 @@ public:
 				std::stringstream rtcpSink, rtcpSrc;
 				rtcpSink << "videoRtcpSink" << i;
 				rtcpSrc << "videoRtcpSrc" << i;
-				m_videoHandler[i].videoRtcpSink = gst_bin_get_by_name(GST_BIN(p), rtcpSink.str().c_str());
-				m_videoHandler[i].videoRtcpSrc = gst_bin_get_by_name(GST_BIN(p), rtcpSrc.str().c_str());
+				m_videoHandler[i]->videoRtcpSink = gst_bin_get_by_name(GST_BIN(p), rtcpSink.str().c_str());
+				m_videoHandler[i]->videoRtcpSrc = gst_bin_get_by_name(GST_BIN(p), rtcpSrc.str().c_str());
 			}
 
-			m_videoHandler[i].handler.SetSink(m_videoHandler[i].videoSink);
-			m_videoHandler[i].handler.SetRTPListener(m_videoHandler[i].rtpListener, m_videoHandler[i].postdepayListener, m_videoHandler[i].preappsrcListener);
-			//m_videoHandler[i].handler.SetSource(GST_MyUDPSrc(m_videoHandler[i].videoSrc));
-			g_signal_connect(m_videoHandler[i].videoSink, "new-sample", G_CALLBACK(new_buffer), this);
+			m_videoHandler[i]->handler.SetSink(m_videoHandler[i]->videoSink);
+			m_videoHandler[i]->handler.SetRTPListener(m_videoHandler[i]->rtpListener, m_videoHandler[i]->postdepayListener, m_videoHandler[i]->preappsrcListener);
+			//m_videoHandler[i]->handler.SetSource(GST_MyUDPSrc(m_videoHandler[i]->videoSrc));
+			g_signal_connect(m_videoHandler[i]->videoSink, "new-sample", G_CALLBACK(new_buffer), this);
 			//attach videosink callbacks
 			GstAppSinkCallbacks gstCallbacks;
 			gstCallbacks.eos = &VideoAppSinkHandler::on_eos_from_source;
@@ -355,15 +356,15 @@ public:
 #else
 			gstCallbacks.new_sample = &VideoAppSinkHandler::on_new_buffer_from_source;
 #endif
-			gst_app_sink_set_callbacks(GST_APP_SINK(m_videoHandler[i].videoSink), &gstCallbacks, &m_videoHandler[i].handler, NULL);
+			gst_app_sink_set_callbacks(GST_APP_SINK(m_videoHandler[i]->videoSink), &gstCallbacks, &m_videoHandler[i]->handler, NULL);
 			//gst_app_sink_set_emit_signals(GST_APP_SINK(m_videoSink), true);
 
 
 			// 		gst_base_sink_set_async_enabled(GST_BASE_SINK(m_videoSink), TRUE);
-			gst_base_sink_set_sync(GST_BASE_SINK(m_videoHandler[i].videoSink), false);
-			gst_app_sink_set_drop(GST_APP_SINK(m_videoHandler[i].videoSink), TRUE);
-			gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoHandler[i].videoSink), 2);
-			gst_base_sink_set_max_lateness(GST_BASE_SINK(m_videoHandler[i].videoSink), 0);
+			gst_base_sink_set_sync(GST_BASE_SINK(m_videoHandler[i]->videoSink), false);
+			gst_app_sink_set_drop(GST_APP_SINK(m_videoHandler[i]->videoSink), TRUE);
+			gst_app_sink_set_max_buffers(GST_APP_SINK(m_videoHandler[i]->videoSink), 2);
+			gst_base_sink_set_max_lateness(GST_BASE_SINK(m_videoHandler[i]->videoSink), 0);
 			/*
 			GstCaps* caps;
 			caps = gst_caps_new_simple("video/x-raw",
@@ -390,13 +391,13 @@ public:
 	{
 		if (i >= m_videoHandler.size())
 			return 0;
-		if (m_videoHandler[i].videoSrc){
-			//return m_videoHandler[i].videoSrc->port;
+		if (m_videoHandler[i]->videoSrc){
+			//return m_videoHandler[i]->videoSrc->port;
 			gint port=0;
-			g_object_get(m_videoHandler[i].videoSrc, "port", &port, 0);
+			g_object_get(m_videoHandler[i]->videoSrc, "port", &port, 0);
 			return port;
 		}
-		else return m_videoHandler[i].videoPort;
+		else return m_videoHandler[i]->videoPort;
 	}
 	bool IsStream()
 	{
@@ -407,9 +408,9 @@ public:
 	{
 		for (int i = 0; i < m_playersCount; ++i)
 		{
-			//if (m_videoHandler[i].videoSrc && m_videoHandler[i].videoSrc->m_client)
-			//	m_videoHandler[i].videoSrc->m_client->Close();
-			m_videoHandler[i].handler.Close();
+			//if (m_videoHandler[i]->videoSrc && m_videoHandler[i]->videoSrc->m_client)
+			//	m_videoHandler[i]->videoSrc->m_client->Close();
+			m_videoHandler[i]->handler.Close();
 		}
 		GstPipelineHandler::Close();
 	}
@@ -431,7 +432,7 @@ public:
 
 	virtual const Vector2d& GetFrameSize(int i)
 	{
-		return m_videoHandler[i].handler.GetFrameSize();
+		return m_videoHandler[i]->handler.GetFrameSize();
 	}
 	void SetImageFormat(video::EPixelFormat fmt)
 	{
@@ -439,7 +440,7 @@ public:
 	}
 	virtual video::EPixelFormat GetImageFormat(int i)
 	{
-		return m_videoHandler[i].handler.getPixelsRef()->format;
+		return m_videoHandler[i]->handler.getPixelsRef()->format;
 	}
 	int GetFramesCount()
 	{
@@ -449,25 +450,25 @@ public:
 	{
 		if (i >= m_playersCount)
 			return false;
-		return m_videoHandler[i].handler.GrabFrame();
+		return m_videoHandler[i]->handler.GrabFrame();
 	}
 	virtual bool HasNewFrame(int i)
 	{
 		if (i >= m_playersCount)
 			return false;
-		return m_videoHandler[i].handler.isFrameNew();
+		return m_videoHandler[i]->handler.isFrameNew();
 	}
 	virtual ulong GetBufferID(int i)
 	{
 		if (i >= m_playersCount)
 			return 0;
-		return m_videoHandler[i].handler.GetFrameID();
+		return m_videoHandler[i]->handler.GetFrameID();
 	}
 
 	virtual float GetCaptureFrameRate(int i){
 		if (i>m_videoHandler.size())
 			return 0;
-		return m_videoHandler[i].handler.GetCaptureFrameRate();
+		return m_videoHandler[i]->handler.GetCaptureFrameRate();
 	}
 
 	virtual const ImageInfo* GetLastFrame(int i)
@@ -475,28 +476,28 @@ public:
 		if (i > m_playersCount)
 			return 0;
 		else
-			return m_videoHandler[i].handler.getPixelsRef();
+			return m_videoHandler[i]->handler.getPixelsRef();
 	}
 	virtual unsigned long GetLastFrameTimestamp(int i)
 	{
 		if (i > m_playersCount)
 			return 0;
 		else
-			return m_videoHandler[i].handler.getPixelFrame()->RTPPacket.timestamp;
+			return m_videoHandler[i]->handler.getPixelFrame()->RTPPacket.timestamp;
 	}
 	const GstImageFrame* GetLastDataFrame(int i)
 	{
 		if (i > m_playersCount)
 			return 0;
 		else
-			return m_videoHandler[i].handler.getPixelFrame();
+			return m_videoHandler[i]->handler.getPixelFrame();
 	}
 	void* GetLastFrameRTPMeta(int i)
 	{
 		if (i > m_playersCount)
 			return 0;
 		else
-			return &m_videoHandler[i].handler.getPixelFrame()->RTPPacket;
+			return &m_videoHandler[i]->handler.getPixelFrame()->RTPPacket;
 	}
 
 	virtual int GetPort(int i)
@@ -514,7 +515,7 @@ public:
 		ulong usage = 0;
 		for (int i = 0; i < m_playersCount; ++i)
 		{
-//			usage+=m_videoHandler[i].videoSrc->m_client->GetReceiverNetworkUsage();
+//			usage+=m_videoHandler[i]->videoSrc->m_client->GetReceiverNetworkUsage();
 		}
 		return usage;
 	}
