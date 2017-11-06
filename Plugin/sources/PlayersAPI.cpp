@@ -72,6 +72,20 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetwo
 	}
 }
 
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_multiNetPlayerGetData(GstNetworkMultipleVideoPlayer* p,  int index)
+{
+	if (p == nullptr )
+		return 0;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		return ifo->imageData;
+	}
+	return 0;
+
+}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerCopyData(GstNetworkMultipleVideoPlayer* p, uchar* _data, int index)
 {
 	if (p == nullptr || !_data)
