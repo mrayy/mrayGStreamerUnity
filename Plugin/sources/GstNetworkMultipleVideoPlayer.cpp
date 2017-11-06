@@ -188,7 +188,7 @@ public:
 			ss << m_intermidateElems << " ! ";
 		}
 		//"videorate ! "
-		//ss<< "  video/x-raw,format=" + format + extraElem + "  !";
+		ss<< " videoconvert ! video/x-raw,format=" + format + extraElem + " !";
 		//"videoconvert ! video/x-raw,format=RGB  !"
 		//	" timeoverlay halignment=right text=\"Local Time =\"! "
 
