@@ -113,11 +113,11 @@ public:
 		case mray::video::EPixel_LUMINANCE8:
 		case EPixel_Alpha8:
 			format = "GRAY8";
-			extraElem = " ! videoconvert ";
+		//	extraElem = " ! videoconvert ";
 			break;
 		case mray::video::EPixel_LUMINANCE16:
-			format = "YVYU";
-			extraElem = " ! videoconvert ";
+			format = "Y42B";
+			//extraElem = " ! videoconvert ";
 			break;
 		case mray::video::EPixel_R8G8B8:
 			format = "RGB";
@@ -137,6 +137,9 @@ public:
 			break;
 		case mray::video::EPixel_I420:
 			format = "I420";
+			break;
+		case mray::video::EPixel_Y42B:
+			format = "Y42B";
 			break;
 		default:
 			format = "RGB";
@@ -161,8 +164,7 @@ public:
 		{
 			//propably rtph264depay drops some rtp packets along the way??
 			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i << " !  avdec_h264 output-corrupt=false ! " //! h264parse
-				" videoconvert !"
-				;
+				;//" videoconvert !"
 		//	ss << " videoflip method=5 !";
 		}
 		else if (m_encoderType == "JPEG")
@@ -186,7 +188,7 @@ public:
 			ss << m_intermidateElems << " ! ";
 		}
 		//"videorate ! "
-		ss<< "  video/x-raw,format=" + format + extraElem + "  !";
+		//ss<< "  video/x-raw,format=" + format + extraElem + "  !";
 		//"videoconvert ! video/x-raw,format=RGB  !"
 		//	" timeoverlay halignment=right text=\"Local Time =\"! "
 

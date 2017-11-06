@@ -594,6 +594,24 @@ EPixelType_Byte,
 	//shift
 	0, 0, 0, 0
 },
+{
+	//name
+	mT("Y42B"),
+	//elemSizeB
+	1,
+	//flags
+	EPixelFlags_Compressed,
+	//type
+	EPixelType_Byte,
+	//componentsCount
+	1,
+	//bits
+	0, 0, 0, 0,
+	//mask
+	0, 0, 0, 0,
+	//shift
+	0, 0, 0, 0
+},
     {
         //name
         mT("NV12"),

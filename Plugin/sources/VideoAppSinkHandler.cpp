@@ -280,6 +280,8 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 
 	case GST_VIDEO_FORMAT_I420:
 		return EPixel_I420;
+	case GST_VIDEO_FORMAT_Y42B:
+		return EPixel_Y42B;
     case GST_VIDEO_FORMAT_NV12:
             return EPixel_NV12;
 
@@ -334,7 +336,13 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
         RGBFormat=false;
         //fmt = video::EPixel_LUMINANCE8;
         height *= 2;
-    }
+	}
+	else if (fmt == video::EPixel_Y42B)
+	{
+		RGBFormat = false;
+		//fmt = video::EPixel_LUMINANCE8;
+		height *= 2;
+	}
 
 	if (m_pixels[0].data.imageData && (m_pixels[0].data.Size.x != vinfo.width || m_pixels[0].data.Size.y != height || m_pixels[0].data.format != fmt))
 	{

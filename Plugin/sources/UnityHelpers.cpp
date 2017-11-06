@@ -131,7 +131,8 @@ void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHe
 {
     
     if (ifo->format == video::EPixel_I420 ||
-        ifo->format == video::EPixel_NV12 ||
+		ifo->format == video::EPixel_NV12 ||
+		ifo->format == video::EPixel_Y42B ||
         (ifo->format==video::EPixel_LUMINANCE8 || ifo->format==video::EPixel_Alpha8 ))
     {
         *comps=1;
