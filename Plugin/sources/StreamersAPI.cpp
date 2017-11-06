@@ -382,19 +382,33 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_LocalAudioGrabberInit(LocalAudio
 
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_GetAudioInputInterfacesCount()
 {
-	return LocalAudioGrabber::GetInterfacesCount();
+	return LocalAudioGrabber::GetInputInterfacesCount();
 }
 
 extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioInputInterfaceName(int index)
 {
-	return LocalAudioGrabber::GetInterfaceName(index);
+	return LocalAudioGrabber::GetInputInterfaceName(index);
 }
 
 extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioInputInterfaceGUID(int index)
 {
-	return LocalAudioGrabber::GetInterfaceGUID(index);
+	return LocalAudioGrabber::GetInputInterfaceGUID(index);
 }
 
+extern "C" UNITY_INTERFACE_EXPORT int mray_gst_GetAudioOutputInterfacesCount()
+{
+	return LocalAudioGrabber::GetOutputInterfacesCount();
+}
+
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioOutputInterfaceName(int index)
+{
+	return LocalAudioGrabber::GetOutputInterfaceName(index);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT const char* mray_gst_GetAudioOutputInterfaceGUID(int index)
+{
+	return LocalAudioGrabber::GetOutputInterfaceGUID(index);
+}
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createUnityAudioGrabber()
 {
 

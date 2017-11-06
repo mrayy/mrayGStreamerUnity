@@ -5,6 +5,7 @@
 #include <gst/audio/audio.h>
 #include "UnityHelpers.h"
 #include "IThreadManager.h"
+#include "MutexLocks.h"
 
 namespace mray
 {
@@ -97,20 +98,22 @@ GstFlowReturn AudioAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	m_sampleRate = vinfo.rate;
 	m_channelsCount = vinfo.channels;
 
-	m_mutex->lock();
-
-	AudioInfo* frame=_CreateFrame();
-	frame->CreateData(length, vinfo.channels);
-
-	frame->SetData(mapinfo.data, length, vinfo.channels);
-	m_frames.push_back(frame);
-	if (m_frames.size() > 20) //limit cache to 20 packets
 	{
-		AudioInfo *f = *m_frames.begin();
-		m_frames.erase(m_frames.begin());
-		_RemoveFrame(f);
+
+		OS::ScopedLock m(m_mutex);
+
+		AudioInfo* frame = _CreateFrame();
+		frame->CreateData(length, vinfo.channels);
+
+		frame->SetData(mapinfo.data, length, vinfo.channels);
+		m_frames.push_back(frame);
+		if (m_frames.size() > 20) //limit cache to 20 packets
+		{
+			AudioInfo *f = *m_frames.begin();
+			m_frames.erase(m_frames.begin());
+			_RemoveFrame(f);
+		}
 	}
-	m_mutex->unlock();
 
 	gst_buffer_unmap(_buffer, &mapinfo);
 	return GST_FLOW_OK;
@@ -119,18 +122,19 @@ GstFlowReturn AudioAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 bool AudioAppSinkHandler::GrabFrame(){
 	if (m_closed)return false;
 	bool newFrame = false;
-	m_mutex->lock();
+	OS::ScopedLock m(m_mutex);
 	if (m_frames.size() > 0){
 		m_grabbedFrame = *m_frames.begin();
 		m_frames.erase(m_frames.begin());
 		newFrame = true;
 	}
-	else m_grabbedFrame = 0;
-	m_mutex->unlock();
+	else 
+		m_grabbedFrame = 0;
 	return newFrame;
 }
 int AudioAppSinkHandler::GetFrameSize()
 {
+	OS::ScopedLock m(m_mutex);
 	if (!m_grabbedFrame)
 		return 0;
 	return m_grabbedFrame->dataLength;
@@ -138,12 +142,11 @@ int AudioAppSinkHandler::GetFrameSize()
 
 void AudioAppSinkHandler::CopyAudioFrame(float* output)
 {
+	OS::ScopedLock m(m_mutex);
 	if (!m_grabbedFrame || !output)
 		return ;
-	m_mutex->lock();
 	memcpy(output, m_grabbedFrame->data, m_grabbedFrame->dataLength*sizeof(float));
 	_RemoveFrame(m_grabbedFrame);
-	m_mutex->unlock();
 	m_grabbedFrame = 0;
 
 }

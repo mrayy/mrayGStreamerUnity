@@ -216,11 +216,17 @@
     <ClInclude Include="..\sources\GstCustomDataPlayer.h">
       <Filter>Source Files\Players</Filter>
     </ClInclude>
-    <ClInclude Include="..\sources\GstCustomDataStreamer.h">
-      <Filter>Source Files\Players</Filter>
-    </ClInclude>
     <ClInclude Include="..\sources\GZipCompress.h">
       <Filter>Source Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\GstAppAudioPlayer.h">
+      <Filter>Source Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\DirectSoundOutputStream.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\GstCustomDataStreamer.h">
+      <Filter>Source Files\Streamer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,11 +368,17 @@
     <ClCompile Include="..\sources\GstCustomDataPlayer.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
-    <ClCompile Include="..\sources\GstCustomDataStreamer.cpp">
-      <Filter>Source Files\Players</Filter>
-    </ClCompile>
     <ClCompile Include="..\sources\GZipCompress.cpp">
       <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstAppAudioPlayer.cpp">
+      <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\DirectSoundOutputStream.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\GstCustomDataStreamer.cpp">
+      <Filter>Source Files\Streamer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

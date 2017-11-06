@@ -230,6 +230,8 @@
     <ClInclude Include="..\sources\CMyUDPSrc.h" />
     <ClInclude Include="..\sources\CustomAudioGrabber.h" />
     <ClInclude Include="..\sources\DirectSoundInputStream.h" />
+    <ClInclude Include="..\sources\DirectSoundOutputStream.h" />
+    <ClInclude Include="..\sources\GstAppAudioPlayer.h" />
     <ClInclude Include="..\sources\GstAppNetAudioStreamer.h" />
     <ClInclude Include="..\sources\GstCustomDataPlayer.h" />
     <ClInclude Include="..\sources\GstCustomDataStreamer.h" />
@@ -283,6 +285,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="..\sources\DirectSoundInputStream.cpp" />
+    <ClCompile Include="..\sources\DirectSoundOutputStream.cpp" />
+    <ClCompile Include="..\sources\GstAppAudioPlayer.cpp" />
     <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>

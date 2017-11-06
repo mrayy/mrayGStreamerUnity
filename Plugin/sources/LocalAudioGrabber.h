@@ -19,9 +19,14 @@ public:
 
 	void Init(const std::string &deviceGUID, int channels, int samplingrate);
 
-	static int GetInterfacesCount();
-	static const char* GetInterfaceName(int i);
-	static const char* GetInterfaceGUID(int i);
+	static int GetInputInterfacesCount();
+	static const char* GetInputInterfaceName(int i);
+	static const char* GetInputInterfaceGUID(int i);
+
+
+	static int GetOutputInterfacesCount();
+	static const char* GetOutputInterfaceName(int i);
+	static const char* GetOutputInterfaceGUID(int i);
 };
 
 }

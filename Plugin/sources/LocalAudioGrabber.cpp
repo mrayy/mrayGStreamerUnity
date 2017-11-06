@@ -4,6 +4,7 @@
 #include "LocalAudioGrabber.h"
 
 #include "DirectSoundInputStream.h"
+#include "DirectSoundOutputStream.h"
 
 
 
@@ -11,16 +12,26 @@ namespace mray
 {
 namespace video
 {
-	std::vector<sound::InputStreamDeviceInfo> _dsInterfacesList;
+	std::vector<sound::InputStreamDeviceInfo> _dsInputInterfacesList;
+	std::vector<sound::OutputStreamDeviceInfo> _dsOutputInterfacesList;
 
-	void LoadInterfaces()
+	void LoadInputInterfaces()
 	{
 		sound::DirectSoundInputStream* instance;
 		instance = new sound::DirectSoundInputStream();
-		_dsInterfacesList.clear();
-		instance->ListDevices(_dsInterfacesList);
+		_dsInputInterfacesList.clear();
+		instance->ListDevices(_dsInputInterfacesList);
 		delete instance;
 	}
+	void LoadOutputInterfaces()
+	{
+		sound::DirectSoundOutputStream* instance;
+		instance = new sound::DirectSoundOutputStream();
+		_dsOutputInterfacesList.clear();
+		instance->ListDevices(_dsOutputInterfacesList);
+		delete instance;
+	}
+
 
 LocalAudioGrabber::LocalAudioGrabber()
 {
@@ -43,30 +54,55 @@ void LocalAudioGrabber::Init(const std::string &deviceGUID, int channels, int sa
 	CustomAudioGrabber::Init(audioStr, channels, samplingrate);
 }
 
-int LocalAudioGrabber::GetInterfacesCount()
+int LocalAudioGrabber::GetInputInterfacesCount()
 {
-	LoadInterfaces();
-	return _dsInterfacesList.size();
+	LoadInputInterfaces();
+	return _dsInputInterfacesList.size();
 }
 
 
-const char* LocalAudioGrabber::GetInterfaceName(int i)
+const char* LocalAudioGrabber::GetInputInterfaceName(int i)
 {
-	LoadInterfaces();
-	if (i >= _dsInterfacesList.size())
+	LoadInputInterfaces();
+	if (i >= _dsInputInterfacesList.size())
 		return "";
-	return _dsInterfacesList[i].description.c_str();
+	return _dsInputInterfacesList[i].description.c_str();
 }
 
 
-const char* LocalAudioGrabber::GetInterfaceGUID(int i)
+const char* LocalAudioGrabber::GetInputInterfaceGUID(int i)
 {
-	LoadInterfaces();
-	if (i >= _dsInterfacesList.size())
+	LoadInputInterfaces();
+	if (i >= _dsInputInterfacesList.size())
 		return "";
-	return _dsInterfacesList[i].deviceGUID.c_str();
+	return _dsInputInterfacesList[i].deviceGUID.c_str();
 }
 
+int LocalAudioGrabber::GetOutputInterfacesCount()
+{
+	LoadOutputInterfaces();
+	return _dsOutputInterfacesList.size();
+}
+
+
+const char* LocalAudioGrabber::GetOutputInterfaceName(int i)
+{
+	LoadOutputInterfaces();
+
+	if (i >= _dsOutputInterfacesList.size())
+		return "";
+	return _dsOutputInterfacesList[i].description.c_str();
+}
+
+
+const char* LocalAudioGrabber::GetOutputInterfaceGUID(int i)
+{
+	LoadOutputInterfaces();
+
+	if (i >= _dsOutputInterfacesList.size())
+		return "";
+	return _dsOutputInterfacesList[i].GUID.c_str();
+}
 
 }
 }

@@ -10,10 +10,12 @@
 #include "MutexLocks.h"
 
 #include "GstCustomDataPlayer.h"
+#include "GstAppAudioPlayer.h"
 
 #include <vector>
 
 using namespace mray;
+using namespace video;
 
 struct MultiNetRenderRequest
 {
@@ -470,7 +472,6 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerClose(IGStreamerPlayer* p)
 	}
 
 }
-
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_PlayerSetPosition(IGStreamerPlayer* p,unsigned int pos)
 {
     if (p != NULL)
@@ -802,6 +803,41 @@ extern "C" UNITY_INTERFACE_EXPORT float mray_gst_ProcessAudioPackets(float* srcD
 		}
 	}
 	return average;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createAppAudioPlayer()
+{
+
+	GStreamerCore* c = GStreamerCore::Instance();
+	if (c)
+	{
+		GstAppAudioPlayer* g = new GstAppAudioPlayer();
+		return g;
+	}
+	return 0;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AppAudioPlayerInit(GstAppAudioPlayer* p, int ifaceID,int samplingRate)
+{
+	if (p)
+	{
+		p->Init(ifaceID,samplingRate);
+	}
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_AppAudioPlayerAttachGrabber(GstAppAudioPlayer* a, IAudioGrabber* g)
+{
+	a->SetAudioGrabber(g);
+}
+
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_AppAudioPlayerCreateStream(GstAppAudioPlayer* p)
+{
+	if (p != NULL)
+	{
+		return p->CreateStream();
+	}
+	return false;
+
 }
 
 #endif
