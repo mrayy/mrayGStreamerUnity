@@ -116,7 +116,7 @@ public:
 		//	extraElem = " ! videoconvert ";
 			break;
 		case mray::video::EPixel_LUMINANCE16:
-			format = "Y42B";
+			format = "YUY2";
 			//extraElem = " ! videoconvert ";
 			break;
 		case mray::video::EPixel_R8G8B8:

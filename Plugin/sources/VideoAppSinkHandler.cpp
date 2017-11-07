@@ -261,6 +261,7 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 	case GST_VIDEO_FORMAT_GRAY16_LE:
 	//case GST_VIDEO_FORMAT_VYUY:
 	case GST_VIDEO_FORMAT_YVYU:
+	case GST_VIDEO_FORMAT_YUY2:
 		return EPixel_LUMINANCE16;
 
 	case GST_VIDEO_FORMAT_RGB:
