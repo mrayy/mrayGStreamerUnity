@@ -72,7 +72,9 @@ public:
 
 		float* data = m_audioGrabber->GetAudioFrame();
 		uint length = m_audioGrabber->GetAudioFrameSize() * sizeof(float);
-		*buffer = gst_buffer_new_wrapped_full(GST_MEMORY_FLAG_READONLY, data, length, 0, length, 0, 0);
+		*buffer = gst_buffer_new_allocate(0, length, 0);
+		gst_buffer_fill(*buffer, 0, data, length);
+		//*buffer = gst_buffer_new_wrapped_full(GST_MEMORY_FLAG_READONLY, data, length, 0, length, 0, 0);
 		return GST_FLOW_OK;
 	}
 
@@ -127,16 +129,16 @@ public:
 
 		std::stringstream ss;
 
-		ss << "appsrc name=src block=false format=time is-live=true do-timestamp=0 ";
+		ss << "appsrc name=src is-live=true block=true stream-type=0 format=3 do-timestamp=true ";
 
-		ss << " ! audio/x-raw,endianness=1234,format=F32LE,rate=" << (m_audioGrabber->GetSamplingRate()) <<
-			",channels=" << (m_audioGrabber->GetChannelsCount()) << "   ";
+		ss << " ! audio/x-raw,format=F32LE,rate=" << (m_audioGrabber->GetSamplingRate()) <<
+			",channels=" << (m_audioGrabber->GetChannelsCount()) << " ! audioconvert ";
 // 		ss << " ! audioparse format=F32LE width=32 depth=32 signed=true rate=" << (m_audioGrabber->GetSamplingRate()) <<
 // 			" channels=" << (m_audioGrabber->GetChannelsCount()) << "   ";
 
 		if (m_sampleRate != -1 && m_sampleRate != m_audioGrabber->GetSamplingRate())
 		{
-			ss << " ! audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
+			ss << " !  audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
 		}
 
 /*
@@ -149,14 +151,14 @@ public:
 		}
 		else*/
 		{
-			ss << "  ! audioconvert !  directsoundsink ";
+			ss << "  ! directsoundsink ";
 			if (m_interface > 0)
 			{
 				std::string guid=LocalAudioGrabber::GetOutputInterfaceGUID(m_interface);
 				if(guid!="")
 					ss << " device=\""<< guid<<"\" ";
 			}
-			ss<<"  sync=false";//buffer-time=100000
+			ss<<" buffer-time=40000 sync=true";//buffer-time=100000
 		}
 		m_pipeLineString = ss.str();
 
@@ -180,7 +182,6 @@ public:
 		m_audioSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN((GstElement*)p), "src"));
 
 		//gst_base_src_set_do_timestamp(GST_BASE_SRC(m_audioSrc), true);
-		gst_app_src_set_stream_type(m_audioSrc, GST_APP_STREAM_TYPE_STREAM);
 		/*
 		g_object_set(G_OBJECT(m_audioSrc),
 			"stream-type", GST_APP_STREAM_TYPE_STREAM, // GST_APP_STREAM_TYPE_STREAM

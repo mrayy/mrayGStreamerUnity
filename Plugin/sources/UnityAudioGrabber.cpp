@@ -39,8 +39,8 @@ void UnityAudioGrabber::Init(int bufferLength, int channels, int samplingrate)
 	_channels= channels;
 	_samplingRate = samplingrate;
 	int buffers = 2*samplingrate / bufferLength;
-	if (buffers < 1)
-		buffers = 1;
+	if (buffers < 3)
+		buffers = 3;
 	for (int i = 0; i < buffers; ++i)
 	{
 		_graveyard.push_back(new float[bufferLength]);
