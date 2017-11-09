@@ -3,6 +3,9 @@
 #include "stdafx.h"
 #include "UnityAudioGrabber.h"
 
+#include "MutexLocks.h"
+#include "Win32/WinMutex.h"
+
 namespace mray
 {
 namespace video
@@ -12,6 +15,7 @@ namespace video
 
 UnityAudioGrabber::UnityAudioGrabber()
 {
+	m_mutex = new OS::WinMutex();
 	_samplingRate = 44100;
 	_channels = 1;
 	_bufferLength = 1000;
@@ -45,6 +49,7 @@ void UnityAudioGrabber::Init(int bufferLength, int channels, int samplingrate)
 
 void UnityAudioGrabber::AddFrame(float* data)
 {
+	OS::ScopedLock l(m_mutex);
 	float* ptr = 0;
 	if (_graveyard.size() > 0)
 	{
@@ -106,12 +111,14 @@ uint UnityAudioGrabber::GetChannelsCount()
 
 bool UnityAudioGrabber::GrabFrame()
 {
+	OS::ScopedLock l(m_mutex);
 	return _samples.size() > 0;
 }
 
 
 float* UnityAudioGrabber::GetAudioFrame()
 {
+	OS::ScopedLock l(m_mutex);
 	if (_samples.size() > 0)
 	{
 		float* ptr=_samples.front();

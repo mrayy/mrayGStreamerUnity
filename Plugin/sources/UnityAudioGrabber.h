@@ -4,6 +4,7 @@
 #define __UnityAudioGrabber__
 
 #include "CustomAudioGrabber.h"
+#include "IMutex.h"
 #include <list>
 
 namespace mray
@@ -18,6 +19,7 @@ protected:
 	int _samplingRate;
 	int _bufferLength;
 	bool _started;
+	OS::IMutex* m_mutex;
 	std::list<float*> _samples;
 	std::list<float*> _graveyard;
 public:

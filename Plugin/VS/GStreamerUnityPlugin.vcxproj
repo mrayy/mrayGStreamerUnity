@@ -286,7 +286,9 @@
     </ClCompile>
     <ClCompile Include="..\sources\DirectSoundInputStream.cpp" />
     <ClCompile Include="..\sources\DirectSoundOutputStream.cpp" />
-    <ClCompile Include="..\sources\GstAppAudioPlayer.cpp" />
+    <ClCompile Include="..\sources\GstAppAudioPlayer.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>

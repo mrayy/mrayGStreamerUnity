@@ -202,7 +202,7 @@ public:
 		
 		sstr << " ! rtpgstpay pt=" << (m_payload) << " config-interval=3 ";
 		sstr<< " ! "
-			"udpsink name=dataSink port=" << (m_dataPort) << " host=" << " sync=false ";
+			"udpsink name=dataSink port=" << (m_dataPort) << " host=" <<m_ipAddr << " sync=false ";
 
 		m_pipeLineString = sstr.str();
 	}
