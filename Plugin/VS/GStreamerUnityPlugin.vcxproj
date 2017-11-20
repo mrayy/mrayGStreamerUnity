@@ -233,6 +233,7 @@
     <ClInclude Include="..\sources\DirectSoundOutputStream.h" />
     <ClInclude Include="..\sources\GstAppAudioPlayer.h" />
     <ClInclude Include="..\sources\GstAppNetAudioStreamer.h" />
+    <ClInclude Include="..\sources\GstAudioSampler.h" />
     <ClInclude Include="..\sources\GstCustomDataPlayer.h" />
     <ClInclude Include="..\sources\GstCustomDataStreamer.h" />
     <ClInclude Include="..\sources\GstCustomVideoStreamer.h" />
@@ -292,6 +293,7 @@
     <ClCompile Include="..\sources\GstAppNetAudioStreamer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
+    <ClCompile Include="..\sources\GstAudioSampler.cpp" />
     <ClCompile Include="..\sources\GstCustomDataPlayer.cpp" />
     <ClCompile Include="..\sources\GstCustomDataReceiver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|X64'">true</ExcludedFromBuild>
