@@ -70,10 +70,15 @@ public:
 		}
 		//m_grabber[index]->Lock();
 
+		GstMapInfo map;
 		float* data = m_audioGrabber->GetAudioFrame();
 		uint length = m_audioGrabber->GetAudioFrameSize() * sizeof(float);
-		*buffer = gst_buffer_new_allocate(0, length, 0);
-		gst_buffer_fill(*buffer, 0, data, length);
+		*buffer = gst_buffer_new_and_alloc(length);
+		gst_buffer_map(*buffer, &map, GST_MAP_WRITE);
+		memcpy(map.data, data, length);
+		gst_buffer_unmap(*buffer, &map);
+
+		//gst_buffer_fill(*buffer, 0, data, length);
 		//*buffer = gst_buffer_new_wrapped_full(GST_MEMORY_FLAG_READONLY, data, length, 0, length, 0, 0);
 		return GST_FLOW_OK;
 	}
@@ -141,24 +146,22 @@ public:
 			ss << " !  audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
 		}
 
-/*
+/**/
 
-		if (m_customAudioInterface)
+		if (false)
 		{
-			m_pipeLineString += "! audioresample ! audio/x-raw,format=F32LE,rate=";//! audioresample quality=10
-			m_pipeLineString += buffer;
-			m_pipeLineString += " ! appsink name=audioSink sync=false  emit-signals=false";
+			m_pipeLineString += " ! fakesink ";
 		}
-		else*/
+		else
 		{
-			ss << "  ! directsoundsink ";
+			ss << "  ! autoaudiosink ";
 			if (m_interface > 0)
 			{
 				std::string guid=LocalAudioGrabber::GetOutputInterfaceGUID(m_interface);
 				if(guid!="")
 					ss << " device=\""<< guid<<"\" ";
 			}
-			ss<<" buffer-time=40000 sync=true";//buffer-time=100000
+			ss<<"  sync=true";//buffer-time=100000
 		}
 		m_pipeLineString = ss.str();
 
@@ -178,24 +181,20 @@ public:
 		}
 		if (!p)
 			return false;
+		SetPipeline(p);
 
 		m_audioSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN((GstElement*)p), "src"));
 
-		//gst_base_src_set_do_timestamp(GST_BASE_SRC(m_audioSrc), true);
-		/*
-		g_object_set(G_OBJECT(m_audioSrc),
-			"stream-type", GST_APP_STREAM_TYPE_STREAM, // GST_APP_STREAM_TYPE_STREAM
-			"format", GST_FORMAT_TIME,
-			"is-live", TRUE,
-			NULL);
-		gst_app_src_set_emit_signals(m_audioSrc, false);*/
 
+		gst_app_src_set_stream_type((GstAppSrc*)m_audioSrc, GST_APP_STREAM_TYPE_STREAM);
+		g_signal_connect(m_audioSrc, "need-data", G_CALLBACK(start_feed), this);
+		g_signal_connect(m_audioSrc, "enough-data", G_CALLBACK(stop_feed), this);
+		/*
 		m_srcCB.need_data = &start_feed;
 		m_srcCB.enough_data = &stop_feed;
 		m_srcCB.seek_data = &seek_data;
 		gst_app_src_set_callbacks(m_audioSrc, &m_srcCB, this, NULL);
-		SetPipeline(p);
-
+		*/
 		LogMessage("GstAppAudioPlayer:CreateStream() - Pipeline created", ELL_INFO);
 
 		return CreatePipeline(false);
