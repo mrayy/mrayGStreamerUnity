@@ -55,7 +55,7 @@ public:
 	}
 	virtual ~GstNetworkAudioPlayerImpl()
 	{
-
+		Close();
 	}
 
 #define OPUS_ENC

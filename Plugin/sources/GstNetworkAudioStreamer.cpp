@@ -64,8 +64,8 @@ public:
 		char buffer[128];
 #define OPUS_ENC
 
-		sprintf(buffer, "%d", m_channels);
-		std::string audioStr = "directsoundsrc buffer-time=100  ! audio/x-raw,endianness=1234,signed=true,width=16,depth=16,rate=32000,channels=" + std::string(buffer) + "  ! audioconvert ! audioresample";// !tee name = t ";
+		sprintf(buffer, "%d", m_channels);//,rate=32000
+		std::string audioStr = "directsoundsrc buffer-time=100  ! audio/x-raw,endianness=1234,signed=true,width=16,depth=16,channels=" + std::string(buffer) + "  ! audioconvert ! audioresample";// !tee name = t ";
 
 		for (int i = 0; i < m_clients.size() && i<1; ++i)
 		{

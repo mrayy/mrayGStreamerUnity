@@ -134,6 +134,7 @@ public:
 	}
 	void Close()
 	{
+		audiohandler.Close();
 		GstPipelineHandler::Close();
 	}
 	bool IsStarted()

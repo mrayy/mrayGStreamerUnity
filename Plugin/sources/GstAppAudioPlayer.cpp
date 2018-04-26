@@ -87,6 +87,11 @@ public:
 	{
 		GstFlowReturn ret;
 
+		if (!d->IsPlaying())
+		{
+			ret = gst_app_src_end_of_stream(d->m_audioSrc);
+			return FALSE;
+		}
 		GstBuffer *buffer;
 		if (d->NeedBuffer(&buffer) == GST_FLOW_OK)
 		{
@@ -137,13 +142,13 @@ public:
 		ss << "appsrc name=src is-live=true block=true stream-type=0 format=3 do-timestamp=true ";
 
 		ss << " ! audio/x-raw,format=F32LE,rate=" << (m_audioGrabber->GetSamplingRate()) <<
-			",channels=" << (m_audioGrabber->GetChannelsCount()) << " ! audioconvert ";
+			",channels=" << (m_audioGrabber->GetChannelsCount()) << "  ";
 // 		ss << " ! audioparse format=F32LE width=32 depth=32 signed=true rate=" << (m_audioGrabber->GetSamplingRate()) <<
 // 			" channels=" << (m_audioGrabber->GetChannelsCount()) << "   ";
 
 		if (m_sampleRate != -1 && m_sampleRate != m_audioGrabber->GetSamplingRate())
 		{
-			ss << " !  audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
+			ss << "  ! audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
 		}
 
 /**/
@@ -154,7 +159,7 @@ public:
 		}
 		else
 		{
-			ss << "  ! autoaudiosink ";
+			ss << " ! audiorate ! audioconvert ! autoaudiosink ";
 			if (m_interface > 0)
 			{
 				std::string guid=LocalAudioGrabber::GetOutputInterfaceGUID(m_interface);
@@ -208,6 +213,7 @@ public:
 	virtual void Close()
 	{
 		m_audioHandler.Close();
+		gst_app_src_end_of_stream(m_audioSrc);
 		/*
 		if (m_audioSrc && m_audioSrc->m_client)
 			m_audioSrc->m_client->Close();*/
