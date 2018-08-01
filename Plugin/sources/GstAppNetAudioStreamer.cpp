@@ -74,7 +74,7 @@ public:
 			"! audioconvert  ! audioresample ! ";
 		//	"audiochebband mode=band-pass lower-frequency=1000 upper-frequency=4000 type=2 ! "
 
-		ss<< "opusenc complexity=5 bitrate-type=vbr frame-size=5 ! rtpopuspay  ";
+		ss<< "opusenc  bitrate=96000 frame-size=5 ! rtpopuspay  ";
 #elif defined VORBIS_ENC
 		//actual-buffer-time=0 actual-latency-time=0
 		std::string audioStr = "directsoundsrc buffer-time=200 ";

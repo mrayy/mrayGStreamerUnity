@@ -60,7 +60,7 @@ public:
 				//" ! audiochebband mode=band-pass lower-frequency=1000 upper-frequency=6000 poles=4 "
 				
 		}
-		ss<< " ! audioconvert !audio/x-raw,format=F32LE ";// , rate = " << samplingrate;
+		ss<< " ! audiorate ! audioconvert !audio/x-raw,format=F32LE ";// , rate = " << samplingrate;
 		ss<< " ! volume name=vol volume=1 ! appsink name=sink sync=true ";
 
 		return ss.str();

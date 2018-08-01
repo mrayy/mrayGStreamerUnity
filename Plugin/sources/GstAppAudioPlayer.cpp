@@ -148,7 +148,7 @@ public:
 
 		if (m_sampleRate != -1 && m_sampleRate != m_audioGrabber->GetSamplingRate())
 		{
-			ss << "  ! audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
+			ss << " ! audioresample ! audio/x-raw,rate=" << m_sampleRate << " ";
 		}
 
 /**/

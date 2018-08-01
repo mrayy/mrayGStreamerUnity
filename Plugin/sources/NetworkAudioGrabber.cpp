@@ -70,9 +70,9 @@ NetworkAudioGrabber::~NetworkAudioGrabber()
 
 void NetworkAudioGrabber::Init( uint audioPort, int channels, int samplingrate)
 {
-	std::string audiocaps = "caps=application/x-rtp,media=(string)audio,clock-rate=48000,encoding-name=OPUS,payload=96,encoding-params=2 ";
+	std::string audiocaps = "caps=application/x-rtp ";// ",media=(string)audio,clock-rate=48000,encoding-name=OPUS,payload=96,encoding-params=2 ";
 	
-	std::string audioStr = "  rtpjitterbuffer ! rtpopusdepay ! opusdec ! audioconvert ";
+	std::string audioStr = "  queue ! rtpopusdepay ! opusdec plc=true ! audioconvert ";
 
 	std::stringstream pipeline;
 	 pipeline << "udpsrc name=audioSrc port=" << (audioPort) << " " << audiocaps << "!" << audioStr;//
