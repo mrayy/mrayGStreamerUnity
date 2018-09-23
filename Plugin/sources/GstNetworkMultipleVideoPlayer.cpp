@@ -17,6 +17,9 @@
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
 #include <vector>
+#include <algorithm>
+
+
 namespace mray
 {
 namespace video
@@ -40,6 +43,10 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 
 	bool m_rtcp;
 
+	std::string recordFileName;
+
+	int limitRecordFramerate;
+
 	struct VideoHandler
 	{
 		VideoHandler()
@@ -52,6 +59,7 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 			rtpListener = 0;
 			postdepayListener = 0;
 			preappsrcListener = 0;
+			Mp4Muxer = 0;
 		}
 		VideoAppSinkHandler handler;
 		uint videoPort;
@@ -65,6 +73,7 @@ class GstNetworkMultipleVideoPlayerImpl :public GstPipelineHandler, IPipelineLis
 
 		GstElement* videoRtcpSrc;
 		GstElement* videoRtcpSink;
+		GstElement* Mp4Muxer;
 	};
 
 	std::vector<VideoHandler*> m_videoHandler;
@@ -76,7 +85,9 @@ public:
 		m_ipAddr = "127.0.0.1";
 		m_clockPort = 5010;
 		m_playersCount = 0;
+		recordFileName = "";
 		m_encoderType = "H264";
+		limitRecordFramerate = -1;
 
 		AddListener(this);
 		m_targetFormat = EPixel_B8G8R8;
@@ -94,6 +105,13 @@ public:
 	void SetDecoderType(std::string type)
 	{
 		m_encoderType = type;
+	}
+
+	void SetRecordToFile(std::string filename, int framerate)
+	{
+		limitRecordFramerate = framerate;
+		recordFileName = filename;
+		std::replace(recordFileName.begin(), recordFileName.end(), '\\', '/');
 	}
 
 	std::string _BuildPipeline(int i)
@@ -158,12 +176,28 @@ public:
 		else{
 			ss << " ! rtpjitterbuffer latency=500  ";
 		}
-		
+
 
 		if (m_encoderType == "H264")
-		{
+		{ 
 			//propably rtph264depay drops some rtp packets along the way??
-			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i << " !  avdec_h264 output-corrupt=false ! " //! h264parse
+			ss << " ! mylistener name=rtplistener" << i << "  ! rtph264depay ! mylistener name=postdepay" << i;
+			
+			if (recordFileName=="")
+				ss << " !  avdec_h264 output-corrupt=false ! "; //! h264parse
+			else
+			{
+				if (limitRecordFramerate > 0)
+				{
+					ss << " ! h264parse ! avdec_h264 output-corrupt=false ! tee name=t ";
+					ss << " t. ! queue ! videoscale ! videorate ! video/x-raw,framerate="<<limitRecordFramerate<<"/1 ! videoconvert ! x264enc pass=qual ! mp4mux name=muxer" << i << " ! filesink name=fs" << i << " location=\"" << recordFileName << "\" sync=false ";
+					ss << " t. ! queue ! ";
+				}
+				else {
+					ss << " ! tee name=t t. ! queue ! h264parse ! mp4mux name=muxer" << i << " ! filesink name=fs" << i << " location=\"" << recordFileName << "\" sync=false ";
+					ss << "  t. ! queue ! avdec_h264 output-corrupt=false ! ";
+				}
+			}
 				;//" videoconvert !"
 		//	ss << " videoflip method=5 !";
 		}
@@ -201,7 +235,7 @@ public:
 		}
 		else
 		{
-			ss << " mylistener name=preappsrc" << i << " !  appsink name=videoSink" << i << " sync=false  emit-signals=false "; //fpsdisplaysink ";// "
+			ss << " mylistener name=preappsrc" << i << " !  appsink name=videoSink" << i << " sync=false  emit-signals=true "; //fpsdisplaysink ";// "
 		}
 		//"fpsdisplaysink sync=false";
 
@@ -335,6 +369,12 @@ public:
 				ss << "preappsrc" << i;
 				m_videoHandler[i]->preappsrcListener = GST_MyListener(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
 			}
+			{
+
+				std::stringstream ss;
+				ss << "muxer" << i;
+				m_videoHandler[i]->Mp4Muxer = GST_ELEMENT(gst_bin_get_by_name(GST_BIN(p), ss.str().c_str()));
+			}
 
 			if (m_rtcp)
 			{
@@ -408,8 +448,14 @@ public:
 
 	virtual void Close()
 	{
+		GstFlowReturn ret;
+		
 		for (int i = 0; i < m_playersCount; ++i)
 		{
+// 			if (m_videoHandler[i]->videoSrc != 0)
+// 				gst_element_send_event(m_videoHandler[i]->videoSrc, gst_event_new_eos());
+ 			if(m_videoHandler[i]->Mp4Muxer !=0)
+				gst_element_send_event(m_videoHandler[i]->Mp4Muxer, gst_event_new_eos());
 			//if (m_videoHandler[i]->videoSrc && m_videoHandler[i]->videoSrc->m_client)
 			//	m_videoHandler[i]->videoSrc->m_client->Close();
 			m_videoHandler[i]->handler.Close();
@@ -542,6 +588,10 @@ bool GstNetworkMultipleVideoPlayer::CreateStream()
 	return m_impl->CreateStream();
 }
 
+void GstNetworkMultipleVideoPlayer::SetRecordToFile(std::string filename, int framerate)
+{
+	m_impl->SetRecordToFile(filename,framerate);
+}
 void GstNetworkMultipleVideoPlayer::AddIntermidateElement(const std::string& elems)
 {
 	m_impl->AddIntermidateElement(elems);

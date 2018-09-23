@@ -73,7 +73,7 @@ namespace video
 		//enable logging to stdout
 		g_signal_connect(m_data->gstPipeline, "deep-notify", G_CALLBACK(gst_object_default_deep_notify), NULL);
 
-
+		g_object_set(GST_BIN(m_data->gstPipeline), "message-forward", TRUE, NULL);
 		m_data->clockIP = clockIP;
 		m_data->clockPort = clockPort;
 		m_data->isMasterClock = isMasterClock;
@@ -160,6 +160,7 @@ namespace video
 	{
 		if (!m_data->Loaded)return;
 		GstState state;
+		//gst_element_send_event(m_data->gstPipeline, gst_event_new_eos());
 		//if (!m_data->paused) 
 		{
 			state = GST_STATE_PAUSED;
@@ -223,7 +224,10 @@ namespace video
 // 		if (m_data->closing)
 // 			return true;
 		switch (GST_MESSAGE_TYPE(msg)) {
+		case GST_MESSAGE_EOS:
+			LogMessage(std::string("GstPipelineHandler::HandleMessage(): Received EOS message ") , ELL_INFO);
 
+			break;
 		case GST_MESSAGE_BUFFERING:
 			gint pctBuffered;
 			gst_message_parse_buffering(msg, &pctBuffered);

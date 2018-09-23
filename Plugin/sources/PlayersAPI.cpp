@@ -99,6 +99,16 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerCopyData(GstNetwor
 	}
 
 }
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetSetRecordToFile(GstNetworkMultipleVideoPlayer* p, const char* filename, int framerate)
+{
+	if (p == nullptr)
+		return;
+
+	if (filename == 0)
+		p->SetRecordToFile("");
+	p->SetRecordToFile(filename,framerate);
+
+}
 
 extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
@@ -111,7 +121,6 @@ extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitIma
 	__multiNetRequests.push_back(r);
 	return mray_gst_customPlayerBlitImageNativeEvent;
 }
-
 #ifdef USE_UNITY_NETWORK
 extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_createNetworkPlayer()
 {

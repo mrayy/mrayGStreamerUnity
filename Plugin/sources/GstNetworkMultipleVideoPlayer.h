@@ -32,6 +32,8 @@ public:
 	void SetIPAddress(const std::string& ip, uint baseVideoPort, uint count, uint clockPort, bool rtcp);
 	bool CreateStream();
 
+	void SetRecordToFile(std::string filename,int framerate=-1);
+
 	//add custom elements to pipeline. Should be set before calling CreateStream
 	void AddIntermidateElement(const std::string& elems);
 
