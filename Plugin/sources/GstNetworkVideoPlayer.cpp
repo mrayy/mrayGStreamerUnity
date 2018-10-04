@@ -385,7 +385,7 @@ video::EPixelFormat GstNetworkVideoPlayer::GetImageFormat()
 	return m_impl->GetImageFormat();
 }
 
-bool GstNetworkVideoPlayer::GrabFrame()
+bool GstNetworkVideoPlayer::GrabFrame(int i)
 {
 	return m_impl->GrabFrame();
 }

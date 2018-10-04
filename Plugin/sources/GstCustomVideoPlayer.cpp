@@ -261,7 +261,7 @@ namespace mray
             return m_impl->GetImageFormat();
         }
         
-        bool GstCustomVideoPlayer::GrabFrame()
+        bool GstCustomVideoPlayer::GrabFrame(int i)
         {
             return m_impl->GrabFrame();
         }

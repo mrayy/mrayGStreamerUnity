@@ -38,67 +38,6 @@ static void __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
 	__multiNetRequests.clear();
 }
 
-//for GL.IssuePluginEvent
-static void __stdcall mray_gst_multiNetPlayerBlitImageNativeEvent(int eventID)
-{
-	if (__multiNetRequests.size() == 0)
-		return;
-	MultiNetRenderRequest r = __multiNetRequests[0];
-	__multiNetRequests.erase(__multiNetRequests.begin());
-	mray_gst_multiNetPlayerBlitImage((GstNetworkMultipleVideoPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight, r.index);
-}
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_multiNetPlayerBlitImageNativeGLCall(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
-{
-	MultiNetRenderRequest r;
-	r.p = p;
-	r.index = index;
-	r._TextureNativePtr = _TextureNativePtr;
-	r._UnityTextureWidth = _UnityTextureWidth;
-	r._UnityTextureHeight = _UnityTextureHeight;
-	__multiNetRequests.push_back(r);
-	return mray_gst_multiNetPlayerBlitImageNativeEvent;
-}
-
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerBlitImage(GstNetworkMultipleVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
-{
-	if (p == NULL || !_TextureNativePtr)
-		return;
-
-	const video::ImageInfo* ifo = p->GetLastFrame(index);
-
-	if (ifo)
-	{
-		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
-	}
-}
-
-extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_multiNetPlayerGetData(GstNetworkMultipleVideoPlayer* p,  int index)
-{
-	if (p == nullptr )
-		return 0;
-
-	const video::ImageInfo* ifo = p->GetLastFrame(index);
-
-	if (ifo)
-	{
-		return ifo->imageData;
-	}
-	return 0;
-
-}
-extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerCopyData(GstNetworkMultipleVideoPlayer* p, uchar* _data, int index)
-{
-	if (p == nullptr || !_data)
-		return;
-
-	const video::ImageInfo* ifo = p->GetLastFrame(index);
-
-	if (ifo)
-	{
-		memcpy(_data, ifo->imageData, ifo->imageDataSize);
-	}
-
-}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetSetRecordToFile(GstNetworkMultipleVideoPlayer* p, const char* filename, int framerate)
 {
 	if (p == nullptr)
@@ -150,22 +89,7 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netPlayerCreateStream(GstNetwork
 	return false;
 
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netPlayerGrabFrame(GstNetworkVideoPlayer* p, int &w, int &h)
-{
-	if (p != NULL)
-	{
-		if (p->GrabFrame())
-		{
-			Vector2d sz = p->GetFrameSize();
-			w = sz.x;
-			h = sz.y;
-			return true;
-		}
-		return false;
-	}
-	return false;
 
-}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerGetFrameSize(GstNetworkVideoPlayer* p, int &w, int &h, int& components)
 {
 	if (p != NULL)
@@ -173,7 +97,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerGetFrameSize(GstNetwork
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
-		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).elemSizeB;
 	}
 	else
 		w = h = components = 0;
@@ -245,22 +169,6 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetPlayerGetFrameSize(GstNe
 	else
 		w = h = components = 0;
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetPlayerGrabFrame(GstNetworkMultipleVideoPlayer* p, int &w, int &h, int index)
-{
-	if (p != NULL)
-	{
-		if (p->GrabFrame(index))
-		{
-			Vector2d sz = p->GetFrameSize();
-			w = sz.x;
-			h = sz.y;
-			return true;
-		}
-		return false;
-	}
-	return false;
-
-}
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_multiNetPlayerFrameCount(GstNetworkMultipleVideoPlayer* p,int index)
 {
 	if (p == NULL)
@@ -305,6 +213,85 @@ extern "C" UNITY_INTERFACE_EXPORT void  mray_gst_multiNetPlayerSetDecoderType(Gs
 
 //////////////////////////////////////////////////////////////////////////
 
+//for GL.IssuePluginEvent
+static void __stdcall mray_gst_playerBlitImageNativeEvent(int eventID)
+{
+	if (__multiNetRequests.size() == 0)
+		return;
+	MultiNetRenderRequest r = __multiNetRequests[0];
+	__multiNetRequests.erase(__multiNetRequests.begin());
+	mray_gst_playerBlitImage((IGStreamerPlayer*)r.p, r._TextureNativePtr, r._UnityTextureWidth, r._UnityTextureHeight, r.index);
+}
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_playerBlitImageNativeGLCall(IGStreamerPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+{
+	MultiNetRenderRequest r;
+	r.p = p;
+	r.index = index;
+	r._TextureNativePtr = _TextureNativePtr;
+	r._UnityTextureWidth = _UnityTextureWidth;
+	r._UnityTextureHeight = _UnityTextureHeight;
+	__multiNetRequests.push_back(r);
+	return mray_gst_playerBlitImageNativeEvent;
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_playerBlitImage(IGStreamerPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight, int index)
+{
+	if (p == NULL || !_TextureNativePtr)
+		return;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
+	}
+}
+
+extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_playerGetData(IGStreamerPlayer* p, int index)
+{
+	if (p == nullptr)
+		return 0;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		return ifo->imageData;
+	}
+	return 0;
+
+}
+extern "C" UNITY_INTERFACE_EXPORT void mray_gst_playerCopyData(IGStreamerPlayer* p, uchar* _data, int index)
+{
+	if (p == nullptr || !_data)
+		return;
+
+	const video::ImageInfo* ifo = p->GetLastFrame(index);
+
+	if (ifo)
+	{
+		memcpy(_data, ifo->imageData, ifo->imageDataSize);
+	}
+
+}
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_playerGrabFrame(IGStreamerPlayer* p, int &w, int &h, int index)
+{
+	if (p != NULL)
+	{
+		if (p->GrabFrame(index))
+		{
+			const video::ImageInfo* frame = p->GetLastFrame(index);
+			if (frame) {
+				w = frame->Size.x;
+				h = frame->Size.y;
+			}
+			return true;
+		}
+		return false;
+	}
+	return false;
+
+}
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerDestroy(IGStreamerPlayer* p)
 {
     
@@ -343,22 +330,6 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCreateStream(GstCust
 	return false;
 
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerGrabFrame(GstCustomVideoPlayer* p, int &w, int &h)
-{
-	if (p != NULL)
-	{
-		if (p->GrabFrame())
-		{
-			Vector2d sz = p->GetFrameSize();
-			w = sz.x;
-			h = sz.y;
-			return true;
-		}
-		return false;
-	}
-	return false;
-
-}
 
 
 
@@ -389,7 +360,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customPlayerGetFrameSize(GstCust
 		Vector2d sz = p->GetFrameSize();
 		w = sz.x;
 		h = sz.y;
-		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).componentsCount;
+		components = video::PixelUtil::getPixelDescription(p->GetImageFormat()).elemSizeB;
 	}
 	else
 		w = h = components=0;
@@ -641,16 +612,7 @@ extern "C" UNITY_INTERFACE_EXPORT void* mray_gst_customDataPlayerCreate()
 	}
 	return 0;
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customDataPlayerGrabFrame(video::GstCustomDataPlayer* player)
-{
 
-	GStreamerCore* c = GStreamerCore::Instance();
-	if (c)
-	{
-		return player->GrabFrame();
-	}
-	return false;
-}
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customDataPlayerCreateStream(video::GstCustomDataPlayer* player)
 {
 
@@ -769,13 +731,6 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerIsUsingCustomOutpu
 	if (!p)
 		return false;
 	return p->IsUsingCustomAudioInterface();
-}
-
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_netAudioPlayerGrabFrame(GstNetworkAudioPlayer* p)
-{
-	if (!p)
-		return false;
-	return p->GrabFrame();
 }
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netAudioPlayerGetFrameSize(GstNetworkAudioPlayer* p)
 {

@@ -50,7 +50,7 @@ public:
 	virtual void SetImageFormat(video::EPixelFormat fmt){}
 	virtual video::EPixelFormat GetImageFormat();
 
-	virtual bool GrabFrame();
+	virtual bool GrabFrame(int i=0);
 	virtual bool GrabAudioFrame();
 	virtual bool HasNewFrame();
 	virtual ulong GetBufferID();// incremented once per frame

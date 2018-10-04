@@ -54,7 +54,7 @@ public:
 
 	void SetSampleRate(int Rate);
 	int GetSampleRate();
-	bool GrabFrame();
+	bool GrabFrame(int i=0);
 	int GetFrameSize();
 	bool CopyAudioFrame(float* output);
 	int ChannelsCount();

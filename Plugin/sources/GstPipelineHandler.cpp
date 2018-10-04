@@ -302,10 +302,11 @@ namespace video
 			g_error_free(err);
 			g_free(debug);
 
-			FIRE_LISTENR_METHOD(OnPipelineError, (this));
 			if (m_data)
+			{
+				FIRE_LISTENR_METHOD(OnPipelineError, (this));
 				gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_NULL);
-
+			}
 		}break;
 
 

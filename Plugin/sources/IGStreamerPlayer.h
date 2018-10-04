@@ -73,6 +73,7 @@ public:
     virtual bool SetPosition(signed long pos)=0;
     virtual signed long  GetPosition()=0;
     virtual signed long GetDuration()=0;
+	virtual bool GrabFrame(int i = 0) = 0;
 	virtual const ImageInfo* GetLastFrame(int i = 0) = 0;
 	virtual unsigned long GetLastFrameTimestamp(int i = 0) = 0;
 	virtual void* GetLastFrameRTPMeta(int i = 0) = 0;

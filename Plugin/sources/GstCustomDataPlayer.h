@@ -43,7 +43,7 @@ public:
 
 	virtual int GetPort(int i);
 
-	bool GrabFrame();
+	bool GrabFrame(int i=0);
 	virtual bool HasNewFrame();
 	virtual ulong GetBufferID();// incremented once per frame
 

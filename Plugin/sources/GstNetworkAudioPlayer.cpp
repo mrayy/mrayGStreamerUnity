@@ -408,7 +408,7 @@ bool GstNetworkAudioPlayer::IsUsingCustomAudioInterface()
 	return m_impl->IsUsingCustomAudioInterface();
 }
 
-bool GstNetworkAudioPlayer::GrabFrame()
+bool GstNetworkAudioPlayer::GrabFrame(int i)
 {
 	return m_impl->GrabFrame();
 }

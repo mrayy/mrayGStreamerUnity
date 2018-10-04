@@ -40,6 +40,7 @@ public:
 	virtual bool IsLoaded();
 	virtual bool IsPlaying();
 	virtual void Close();
+	virtual bool GrabFrame(int i = 0) { return false; }
 	virtual const ImageInfo* GetLastFrame(int i = 0){ return 0; }
 	virtual unsigned long GetLastFrameTimestamp(int i = 0){ return 0; }
 	virtual void* GetLastFrameRTPMeta(int i = 0){return 0;}

@@ -432,7 +432,7 @@ namespace video
 	}
 
 
-	bool GstCustomDataPlayer::GrabFrame() {
+	bool GstCustomDataPlayer::GrabFrame(int i) {
 		return m_impl->GrabFrame();
 	}
 	bool GstCustomDataPlayer::HasNewFrame() {
