@@ -18,6 +18,7 @@
 #include <gst/app/gstappsink.h>
 #include <vector>
 #include <algorithm>
+#include <windows.h>
 
 
 namespace mray
@@ -112,6 +113,17 @@ public:
 		limitRecordFramerate = framerate;
 		recordFileName = filename;
 		std::replace(recordFileName.begin(), recordFileName.end(), '\\', '/');
+	}
+
+	bool GetRecordStarted()
+	{
+		if (recordFileName == "")
+			return false;
+
+		for (int i = 0; i < m_videoHandler.size(); ++i)
+			if (m_videoHandler[i]->handler.GetSamplesCount() > 0)
+				return true;
+		return false;
 	}
 
 	std::string _BuildPipeline(int i)
@@ -458,9 +470,14 @@ public:
 				gst_element_send_event(m_videoHandler[i]->Mp4Muxer, gst_event_new_eos());
 			//if (m_videoHandler[i]->videoSrc && m_videoHandler[i]->videoSrc->m_client)
 			//	m_videoHandler[i]->videoSrc->m_client->Close();
-			m_videoHandler[i]->handler.Close();
 		}
 		GstPipelineHandler::Close();
+		Sleep(50);
+
+		for (int i = 0; i < m_playersCount; ++i)
+		{
+			m_videoHandler[i]->handler.Close();
+		}
 	}
 
 	void Play()
@@ -591,6 +608,10 @@ bool GstNetworkMultipleVideoPlayer::CreateStream()
 void GstNetworkMultipleVideoPlayer::SetRecordToFile(std::string filename, int framerate)
 {
 	m_impl->SetRecordToFile(filename,framerate);
+}
+bool GstNetworkMultipleVideoPlayer::GetRecordStarted()
+{
+	return m_impl->GetRecordStarted();
 }
 void GstNetworkMultipleVideoPlayer::AddIntermidateElement(const std::string& elems)
 {

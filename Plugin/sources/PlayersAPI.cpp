@@ -49,6 +49,13 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_multiNetSetRecordToFile(GstNetwo
 
 }
 
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_multiNetGetRecordStarted(GstNetworkMultipleVideoPlayer* p)
+{
+
+	if (p == nullptr)
+		return false;
+	return p->GetRecordStarted();
+}
 extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_customPlayerBlitImageNativeGLCall(GstCustomVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
 	MultiNetRenderRequest r;

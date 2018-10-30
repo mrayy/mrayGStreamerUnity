@@ -33,6 +33,7 @@ public:
 	bool CreateStream();
 
 	void SetRecordToFile(std::string filename,int framerate=-1);
+	bool GetRecordStarted();
 
 	//add custom elements to pipeline. Should be set before calling CreateStream
 	void AddIntermidateElement(const std::string& elems);

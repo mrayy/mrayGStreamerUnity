@@ -205,6 +205,7 @@ namespace video
 VideoAppSinkHandler::VideoAppSinkHandler()
 {
 	m_sink = 0;
+	m_samplesCount = 0;
 	m_IsFrameNew = false;
 	m_HavePixelsChanged = false;
 	m_BackPixelsChanged = false;
@@ -233,6 +234,7 @@ VideoAppSinkHandler::~VideoAppSinkHandler()
 void VideoAppSinkHandler::Close()
 {
 	m_frameID = 0;
+	m_samplesCount = 0;
 	m_IsAllocated = false;
 	for (int i = 0; i < m_surfaceCount; ++i)
 	{
@@ -458,6 +460,8 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 
 	}
 	gst_buffer_unmap(_buffer, &mapinfo);
+
+	++m_samplesCount;
 	return GST_FLOW_OK;
 }
 bool VideoAppSinkHandler::_Allocate(int width, int height, video::EPixelFormat fmt)

@@ -41,6 +41,7 @@ protected:
 
 	int m_captureFPS;
 	int m_frameCount;
+	int m_samplesCount;
 	float m_timeAcc;
 	float m_lastT;
 
@@ -56,7 +57,10 @@ public:
 	VideoAppSinkHandler();
 	virtual ~VideoAppSinkHandler();
 
-	void SetSink(GstAppSink* s){ m_sink = s; }
+	void SetSink(GstAppSink* s) {
+		m_sink = s;
+		m_samplesCount= 0;
+	}
 	void SetRTPListener(GstMyListener* preRTP, GstMyListener* postRTP, GstMyListener* preapp);
 
 	void Close();
@@ -69,6 +73,8 @@ public:
 	virtual const Vector2d& GetFrameSize(){ return m_frameSize; }
 
 	float GetCaptureFrameRate();
+
+	int GetSamplesCount() { return m_samplesCount; }
 
 	virtual GstFlowReturn process_sample(std::shared_ptr<GstSample> sample);
 };
