@@ -132,7 +132,11 @@ public:
 		std::string videoStr;
 		ss << "udpsrc name=videoSrc" << i << " port=" << m_videoHandler[i]->videoPort << " !"
 			//"udpsrc port=7000 buffer-size=2097152 do-timestamp=true !"
-			"application/x-rtp ";
+			"application/x-rtp";
+		if (m_encoderType == "VP9")
+		{
+			ss << ",encoding-name=VP9";
+		}
 		videoStr = ss.str();
 
 		std::string format;
@@ -220,6 +224,10 @@ public:
 		else if (m_encoderType == "VP8")
 		{
 			ss << "  ! rtpvp8depay ! vp8dec ! videoconvert !";
+		}
+		else if (m_encoderType == "VP9")
+		{
+			ss << "  ! mylistener name=rtplistener" << i << "  ! rtpvp9depay ! mylistener name=postdepay" << i << " ! vp9dec  threads=3  !";
 		}
 		else
 			return "";
