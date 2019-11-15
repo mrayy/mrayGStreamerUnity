@@ -3,11 +3,15 @@
 #ifndef __UNITYHELPERS__
 #define __UNITYHELPERS__
 
+#include <stdio.h>
 #include <string>
 #include <sstream>
 #include "mTypes.h"
 #include "Unity/IUnityInterface.h"
 
+#ifdef __ANDROID__
+#define __stdcall
+#endif
 namespace mray
 {
 	namespace video

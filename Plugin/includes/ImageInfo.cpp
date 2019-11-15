@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "ImageInfo.h"
-#include <memory>
 
 #include "PixelUtil.h"
 
@@ -71,11 +70,11 @@ inline float clip(float v, float a, float b)
 
 void ImageInfo::_copyCroppedFromI420(const ImageInfo* src, Vector2d pos, Vector2d sz, bool clamp, EPixelFormat targetFormat)
 {
-	if (targetFormat == EPixelFormat::EPixel_Alpha8 ||
-		targetFormat == EPixelFormat::EPixel_LUMINANCE8)
-		targetFormat = EPixelFormat::EPixel_Alpha8;
+	if (targetFormat == EPixel_Alpha8 ||
+		targetFormat == EPixel_LUMINANCE8)
+		targetFormat = EPixel_Alpha8;
 	else 
-		targetFormat = EPixelFormat::EPixel_R8G8B8;
+		targetFormat = EPixel_R8G8B8;
 
 
 	//Sample only Y Channel
@@ -116,7 +115,7 @@ void ImageInfo::_copyCroppedFromI420(const ImageInfo* src, Vector2d pos, Vector2
 	int srcRowpitch = src->Size.x;
 
 
-	if(targetFormat==EPixelFormat::EPixel_Alpha8)
+	if(targetFormat==EPixel_Alpha8)
 	{
 
 		int rowpitch = sz.x;

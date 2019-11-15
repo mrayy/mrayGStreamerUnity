@@ -15,7 +15,7 @@ purpose:
 #define ___PixelUtil___
 
 #include <string>
-#include "mtypes.h"
+#include "mTypes.h"
 #include "videoCommon.h"
 
 namespace mray{
