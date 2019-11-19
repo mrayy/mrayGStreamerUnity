@@ -1,6 +1,9 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
+
+GSTREAMER_ROOT_ANDROID := E:\Development\gstreamer-1.0-android-universal-1.14.4
+
 ifndef GSTREAMER_ROOT
 ifndef GSTREAMER_ROOT_ANDROID
 $(error GSTREAMER_ROOT_ANDROID is not defined!)
