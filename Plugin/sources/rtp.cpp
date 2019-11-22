@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "rtp.h"
+
+#ifdef _WIN32
 #include <winsock.h>
+#endif
+
+#ifdef __ANDROID__
+#include <sys/endian.h>
+#endif
+
 
 static unsigned int header_offset = (4 + 1 + 1 + 2 + 7 + 1 + 16 + 32 + 32) / sizeof(char);
 

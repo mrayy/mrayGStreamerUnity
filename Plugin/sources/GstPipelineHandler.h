@@ -3,7 +3,7 @@
 #ifndef GstPipelineHandler_h__
 #define GstPipelineHandler_h__
 
-#include "mtypes.h"
+#include "mTypes.h"
 #include <string>
 #include "ListenerContainer.h"
 #include <gst/gst.h>

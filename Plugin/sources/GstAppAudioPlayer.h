@@ -6,7 +6,7 @@
 
 
 #include "IGStreamerPlayer.h"
-#include "mtypes.h"
+#include "mTypes.h"
 
 namespace mray
 {

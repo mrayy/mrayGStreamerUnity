@@ -16,12 +16,6 @@
     <Filter Include="Source Files\Elements">
       <UniqueIdentifier>{9f1b2e8a-6e44-4b14-ba9e-3eb2ff8c6861}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine">
-      <UniqueIdentifier>{2de5499f-a6e1-41e1-92df-6c2ce855510f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Headers">
-      <UniqueIdentifier>{66f08993-3e01-47d8-b52e-211fe3905496}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\API">
       <UniqueIdentifier>{e574c74c-40e7-4c61-80ca-f817c02f38cf}</UniqueIdentifier>
     </Filter>
@@ -33,6 +27,12 @@
     </Filter>
     <Filter Include="Source Files\Streamer">
       <UniqueIdentifier>{3be6591e-78a9-4b7a-800e-ac354152667a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Elements\Engine">
+      <UniqueIdentifier>{2de5499f-a6e1-41e1-92df-6c2ce855510f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Elements\Engine\Headers">
+      <UniqueIdentifier>{66f08993-3e01-47d8-b52e-211fe3905496}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -208,7 +208,7 @@
       <Filter>Source Files\AudioGrabber</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\DirectSoundInputStream.h">
-      <Filter>Source Files\Engine</Filter>
+      <Filter>Source Files\Elements\Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\NetworkAudioGrabber.h">
       <Filter>Source Files\AudioGrabber</Filter>
@@ -223,7 +223,7 @@
       <Filter>Source Files\Players</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\DirectSoundOutputStream.h">
-      <Filter>Source Files\Engine</Filter>
+      <Filter>Source Files\Elements\Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\sources\GstCustomDataStreamer.h">
       <Filter>Source Files\Streamer</Filter>
@@ -363,7 +363,7 @@
       <Filter>Source Files\AudioGrabber</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\DirectSoundInputStream.cpp">
-      <Filter>Source Files\Engine</Filter>
+      <Filter>Source Files\Elements\Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\NetworkAudioGrabber.cpp">
       <Filter>Source Files\AudioGrabber</Filter>
@@ -378,13 +378,16 @@
       <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\DirectSoundOutputStream.cpp">
-      <Filter>Source Files\Engine</Filter>
+      <Filter>Source Files\Elements\Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\GstCustomDataStreamer.cpp">
       <Filter>Source Files\Streamer</Filter>
     </ClCompile>
     <ClCompile Include="..\sources\GstAudioSampler.cpp">
       <Filter>Source Files\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\includes\RenderAPI_OpenGLCoreES.cpp">
+      <Filter>Source Files\API</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -88,15 +88,18 @@ void* RenderAPI_OpenGLCoreES::BeginModifyTexture(void* textureHandle, int textur
 }
 
 
-GLint fmt=GL_RED;
 void RenderAPI_OpenGLCoreES::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight,int components, int rowPitch, void* dataPtr)
 {
+
 	GLuint gltex = (GLuint)(size_t)(textureHandle);
 	// Update texture data, and free the memory buffer
     
     //if(components==1)
     //    fmt=GL_ALPHA8;
 	glBindTexture(GL_TEXTURE_2D, gltex);
+	GLuint fmt = GL_RGBA;
+	if (components == 1)
+		fmt = GL_LUMINANCE;
     //glGetTexLevelParameteriv(GL_TEXTURE_2D,0,GL_TEXTURE_INTERNAL_FORMAT,&fmt);
     
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, fmt, GL_UNSIGNED_BYTE, dataPtr);

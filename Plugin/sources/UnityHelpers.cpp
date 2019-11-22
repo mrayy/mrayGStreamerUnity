@@ -6,7 +6,7 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#include <gl/gl.h>
+//#include <gl/gl.h>
 
 
 
@@ -96,8 +96,9 @@ void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
 {
 	if (fmt == video::EPixel_I420 || fmt==video::EPixelFormat::EPixel_LUMINANCE8
 		|| fmt == video::EPixelFormat::EPixel_R8G8B8 || fmt == video::EPixelFormat::EPixel_B8G8R8
-        || (fmt==video::EPixel_LUMINANCE8 || fmt==video::EPixel_Alpha8 ) &&
-		(src->format == video::EPixel_LUMINANCE8 || src->format == video::EPixel_Alpha8 || src->format == video::EPixel_LUMINANCE16))
+        || 
+		((fmt==video::EPixel_LUMINANCE8 || fmt==video::EPixel_Alpha8 ) &&
+		(src->format == video::EPixel_LUMINANCE8 || src->format == video::EPixel_Alpha8 || src->format == video::EPixel_LUMINANCE16)))
 	{
 		memcpy(dst, src->imageData, src->imageDataSize);
 		return;

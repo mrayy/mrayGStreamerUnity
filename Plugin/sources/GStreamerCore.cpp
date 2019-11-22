@@ -12,13 +12,25 @@
 #include <glib-object.h>
 #include <glib.h>
 #include <algorithm>
+
+#if false
 #include "CMySrc.h"
 #include "CMySink.h"
+#endif
 
 #ifdef USE_UNITY_NETWORK
 #include "CMyUDPSrc.h"
 #include "CMyUDPSink.h"
 #include "CMyListener.h"
+#endif
+
+#ifdef __ANDROID__
+
+void
+gst_android_register_static_plugins(void);
+/* Call this function to load GIO modules */
+void
+gst_android_load_gio_modules(void);
 #endif
 
 
@@ -63,7 +75,8 @@ public:
 
 GStreamerCore::GStreamerCore()
 {
-	m_mainLoopThread = 0;
+	gub_main_loop_thread = 0;
+	gub_main_loop = 0;
 	_Init();
 }
 
@@ -89,6 +102,14 @@ void g_logFunction(const gchar   *log_domain,
         LogMessage(message, ELL_INFO);
 }
 
+gpointer gst_main_loop_func(gpointer data)
+{
+	GStreamerCore* core = (GStreamerCore*)data;
+	core->_loopFunction();
+
+	return NULL;
+}
+
 void GStreamerCore::_Init()
 {
 
@@ -107,6 +128,12 @@ void GStreamerCore::_Init()
         g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
 		g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
 		g_log_set_default_handler(g_logFunction, 0);
+
+
+#if defined (__ANDROID__)
+		//gst_android_register_static_plugins();
+		//gst_android_load_gio_modules();
+#endif
         
         LogManager::Instance()->LogMessage("GStreamerCore - Registering Elements!");
 		//fclose(stderr);
@@ -151,17 +178,36 @@ void GStreamerCore::_Init()
 		g_thread_init(NULL);
 	}
 #endif
+
+
+	gub_main_loop_thread = g_thread_new("GstUnityBridge Main Thread", gst_main_loop_func, this);
+	if (!gub_main_loop_thread) {
+		LogManager::Instance()->LogMessage(std::string("Failed to create GLib main thread: ") + std::string(err ? err->message : "<No error message>"));
+		return;
+	}
+
 	_StartLoop();
 }
+
+
+void GStreamerCore::_loopFunction() {
+	LogManager::Instance()->LogMessage("Entering main loop");
+	gub_main_loop = g_main_loop_new(NULL, FALSE);
+	g_main_loop_run(gub_main_loop);
+	LogManager::Instance()->LogMessage("Quitting main loop");
+}
+
+
 void GStreamerCore::_StartLoop()
 {
-	m_threadFunc = new GstMainLoopThread();
+	/*m_threadFunc = new GstMainLoopThread();
 	m_mainLoopThread = OS::IThreadManager::getInstance().createThread(m_threadFunc);
-	m_mainLoopThread->start(0);
+	m_mainLoopThread->start(0);*/
 }
 
 void GStreamerCore::_StopLoop()
 {
+	/*
 	if (!m_threadFunc)
 		return;
 	GstMainLoopThread* mainLoop = (GstMainLoopThread*)m_threadFunc;
@@ -173,6 +219,16 @@ void GStreamerCore::_StopLoop()
 	delete m_mainLoopThread;
 	m_threadFunc = 0;
 	m_mainLoopThread = 0;
+	*/
+
+
+	if (!gub_main_loop) {
+		return;
+	}
+	g_main_loop_quit(gub_main_loop);
+	gub_main_loop = NULL;
+	g_thread_join(gub_main_loop_thread);
+	gub_main_loop_thread = NULL;
 }
 
 		

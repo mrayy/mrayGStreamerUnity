@@ -10,7 +10,10 @@
 #include "IMutex.h"
 #include "IAppSinkHandler.h"
 #include "IGStreamerPlayer.h"
+
+
 #include "CMyListener.h"
+
 
 namespace mray
 {
@@ -46,7 +49,6 @@ protected:
 	float m_lastT;
 
 	uint m_frameID;
-
 	GstMyListener* m_rtpDataListener;
 	GstMyListener* m_preappsrcListener;
 

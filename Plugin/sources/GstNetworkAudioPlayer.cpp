@@ -7,8 +7,6 @@
 //#include "CMyUDPSrc.h"
 //#include "CMyUDPSink.h"
 
-#include "CMySrc.h"
-#include "CMySink.h"
 #include "GstPipelineHandler.h"
 #include "UnityHelpers.h"
 #include "AudioAppSinkHandler.h"

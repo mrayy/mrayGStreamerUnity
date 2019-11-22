@@ -8,8 +8,17 @@
 #include "Win32/WinThreadManager.h"
 #include "Win32/Win32Network.h"
 #else
-#include "OSX/OSXThreadManager.h"
 
+#ifdef __APPLE__
+#include "OSX/OSXThreadManager.h"
+#else
+
+
+#ifdef __ANDROID__
+#include "Android/AndroidThreadManager.h"
+#endif
+
+#endif
 #endif
 #include <vector>
 
@@ -24,8 +33,17 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 #ifdef WIN32
 		new OS::WinThreadManager();
 		new network::Win32Network();
-#else
+#else 
+#ifdef __APPLE__
         new OS::OSXThreadManager();
+#else
+#ifdef __ANDROID__
+		new OS::AndroidThreadManager();
+
+
+#endif
+
+#endif
 #endif
 		LogManager::Instance()->LogMessage("Initializing GStreamer Engine - Done");
 	}
@@ -43,7 +61,15 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
 		delete OS::WinThreadManager::getInstancePtr();
 		delete network::Win32Network::getInstancePtr();
 #else
-        delete OS::OSXThreadManager::getInstancePtr();
+#ifdef __APPLE__
+		delete OS::OSXThreadManager::getInstancePtr();
+#else
+#ifdef __ANDROID__
+		delete OS::AndroidThreadManager::getInstancePtr();
+
+
+#endif
+#endif
 #endif
 	}
 

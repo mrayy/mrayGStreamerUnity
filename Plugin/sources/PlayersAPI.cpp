@@ -11,7 +11,7 @@
 
 #include "GstCustomDataPlayer.h"
 #include "GstAppAudioPlayer.h"
-
+#include "IUDPClient.h"
 #include <vector>
 
 using namespace mray;
@@ -518,8 +518,8 @@ extern "C" UNITY_INTERFACE_EXPORT unsigned long mray_gst_PlayerGetLastImageTimes
 }
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_PlayerSendRTPMetaToHost(IGStreamerPlayer* p, int index, const char* host, int port)
 {
-	static OS::IMutex* mutex;
-	static network::IUDPClient* client;
+	static OS::IMutex* mutex=0;
+	static network::IUDPClient* client=0;
 	if (client == 0)
 	{
 		client=network::INetwork::getInstance().createUDPClient();

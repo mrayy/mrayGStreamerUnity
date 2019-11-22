@@ -20,8 +20,12 @@
 #include "IStreamListener.h"
 #include "ListenerContainer.h"
 #include "UnityHelpers.h"
-#include "CMyUDPSrc.h"
+//#include "CMyUDPSrc.h"
 
+#ifdef __ANDROID__
+#include <inttypes.h>
+#define  __int64 long long
+#endif
 
 namespace mray
 {

@@ -3,11 +3,11 @@
 #include "stdafx.h"
 #include "GstNetworkMultipleVideoPlayer.h"
 
-#include "CMyUDPSrc.h"
-#include "CMyUDPSink.h"
+//#include "CMyUDPSrc.h"
+//#include "CMyUDPSink.h"
 
-#include "CMySrc.h"
-#include "CMySink.h"
+//#include "CMySrc.h"
+//#include "CMySink.h"
 
 #include "VideoAppSinkHandler.h"
 #include "GstPipelineHandler.h"
@@ -18,7 +18,9 @@
 #include <gst/app/gstappsink.h>
 #include <vector>
 #include <algorithm>
-#include <windows.h>
+
+
+//#include <windows.h>
 
 
 namespace mray
@@ -181,7 +183,7 @@ public:
 			break;
 		}
 
-		ss = std::stringstream();
+		ss.str("");
 		ss << videoStr;
 
 		if (m_rtcp)
@@ -480,7 +482,7 @@ public:
 			//	m_videoHandler[i]->videoSrc->m_client->Close();
 		}
 		GstPipelineHandler::Close();
-		Sleep(50);
+		//Sleep(50);
 
 		for (int i = 0; i < m_playersCount; ++i)
 		{
