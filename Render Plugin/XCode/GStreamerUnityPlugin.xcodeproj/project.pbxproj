@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		403DF7C41E03757000FDBDF9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403DF7C31E03757000FDBDF9 /* OpenGL.framework */; };
+		403DF7C71E037F0500FDBDF9 /* OSXThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7C51E037F0500FDBDF9 /* OSXThreadManager.cpp */; };
+		403DF7CA1E037F6500FDBDF9 /* OSXThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7C81E037F6500FDBDF9 /* OSXThread.cpp */; };
+		403DF7CD1E03829400FDBDF9 /* OSXMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7CB1E03829400FDBDF9 /* OSXMutex.cpp */; };
+		403DF7D01E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */; };
+		403DF7D31E03CD2500FDBDF9 /* IAppSinkHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */; };
+		403DF7E01E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */; };
+		403DF7E11E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */; };
+		403DF7E21E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */; };
+		403DF7E31E03DE3400FDBDF9 /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */; };
+		403DF7E41E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */; };
+		403DF7E51E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */; };
+		403DF7E61E03DE3400FDBDF9 /* RenderAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */; };
+		403DF7E81E03DE5900FDBDF9 /* Unity in Resources */ = {isa = PBXBuildFile; fileRef = 403DF7E71E03DE5900FDBDF9 /* Unity */; };
+		403DF7EA1E03E02C00FDBDF9 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */; };
+		403DF7EF1E03E08000FDBDF9 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7EB1E03E08000FDBDF9 /* glew.c */; };
+		403DF7F41E0493F700FDBDF9 /* UnityImageGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */; };
+		40428CF71E036DA8004F1D58 /* GStreamer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40428CF61E036DA8004F1D58 /* GStreamer.framework */; };
+		40F5F31B1E03652F006A010E /* CMySink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F01E03652F006A010E /* CMySink.cpp */; };
+		40F5F31C1E03652F006A010E /* CMySrc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F21E03652F006A010E /* CMySrc.cpp */; };
+		40F5F31F1E03652F006A010E /* CoreAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2F81E03652F006A010E /* CoreAPI.cpp */; };
+		40F5F3201E03652F006A010E /* GstCustomVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F2FA1E03652F006A010E /* GstCustomVideoPlayer.cpp */; };
+		40F5F3251E03652F006A010E /* GstPipelineHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3041E03652F006A010E /* GstPipelineHandler.cpp */; };
+		40F5F3261E03652F006A010E /* GstPlayerBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3061E03652F006A010E /* GstPlayerBin.cpp */; };
+		40F5F3271E03652F006A010E /* GStreamerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3081E03652F006A010E /* GStreamerCore.cpp */; };
+		40F5F3281E03652F006A010E /* IGStreamerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F30A1E03652F006A010E /* IGStreamerPlayer.cpp */; };
+		40F5F3291E03652F006A010E /* IGStreamerStreamer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F30C1E03652F006A010E /* IGStreamerStreamer.cpp */; };
+		40F5F32A1E03652F006A010E /* PlayersAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F30F1E03652F006A010E /* PlayersAPI.cpp */; };
+		40F5F32B1E03652F006A010E /* StreamersAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3121E03652F006A010E /* StreamersAPI.cpp */; };
+		40F5F32C1E03652F006A010E /* UnityHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3141E03652F006A010E /* UnityHelpers.cpp */; };
+		40F5F32E1E03652F006A010E /* VideoAppSinkHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3191E03652F006A010E /* VideoAppSinkHandler.cpp */; };
+		40F5F3451E03654D006A010E /* ImageInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3321E03654D006A010E /* ImageInfo.cpp */; };
+		40F5F3461E03654D006A010E /* IThreadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3391E03654D006A010E /* IThreadManager.cpp */; };
+		40F5F3471E03654D006A010E /* NetAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F33F1E03654D006A010E /* NetAddress.cpp */; };
+		40F5F3481E03654D006A010E /* PixelUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3411E03654D006A010E /* PixelUtil.cpp */; };
+		40F5F3491E03654D006A010E /* UnityGraphicsDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F5F3431E03654D006A010E /* UnityGraphicsDevice.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		403DF7C31E03757000FDBDF9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		403DF7C51E037F0500FDBDF9 /* OSXThreadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSXThreadManager.cpp; path = ../includes/OSX/OSXThreadManager.cpp; sourceTree = "<group>"; };
+		403DF7C61E037F0500FDBDF9 /* OSXThreadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXThreadManager.h; path = ../includes/OSX/OSXThreadManager.h; sourceTree = "<group>"; };
+		403DF7C81E037F6500FDBDF9 /* OSXThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSXThread.cpp; path = ../includes/OSX/OSXThread.cpp; sourceTree = "<group>"; };
+		403DF7C91E037F6500FDBDF9 /* OSXThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXThread.h; path = ../includes/OSX/OSXThread.h; sourceTree = "<group>"; };
+		403DF7CB1E03829400FDBDF9 /* OSXMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OSXMutex.cpp; path = ../includes/OSX/OSXMutex.cpp; sourceTree = "<group>"; };
+		403DF7CC1E03829400FDBDF9 /* OSXMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXMutex.h; path = ../includes/OSX/OSXMutex.h; sourceTree = "<group>"; };
+		403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioAppSinkHandler.cpp; path = ../sources/AudioAppSinkHandler.cpp; sourceTree = "<group>"; };
+		403DF7CF1E03CD0200FDBDF9 /* AudioAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioAppSinkHandler.h; path = ../sources/AudioAppSinkHandler.h; sourceTree = "<group>"; };
+		403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IAppSinkHandler.cpp; path = ../sources/IAppSinkHandler.cpp; sourceTree = "<group>"; };
+		403DF7D21E03CD2500FDBDF9 /* IAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IAppSinkHandler.h; path = ../sources/IAppSinkHandler.h; sourceTree = "<group>"; };
+		403DF7D61E03DE3400FDBDF9 /* PlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlatformBase.h; path = ../includes/PlatformBase.h; sourceTree = "<group>"; };
+		403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D9.cpp; path = ../includes/RenderAPI_D3D9.cpp; sourceTree = "<group>"; };
+		403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D11.cpp; path = ../includes/RenderAPI_D3D11.cpp; sourceTree = "<group>"; };
+		403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_D3D12.cpp; path = ../includes/RenderAPI_D3D12.cpp; sourceTree = "<group>"; };
+		403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RenderAPI_Metal.mm; path = ../includes/RenderAPI_Metal.mm; sourceTree = "<group>"; };
+		403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGL2.cpp; path = ../includes/RenderAPI_OpenGL2.cpp; sourceTree = "<group>"; };
+		403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI_OpenGLCoreES.cpp; path = ../includes/RenderAPI_OpenGLCoreES.cpp; sourceTree = "<group>"; };
+		403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderAPI.cpp; path = ../includes/RenderAPI.cpp; sourceTree = "<group>"; };
+		403DF7DE1E03DE3400FDBDF9 /* RenderAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderAPI.h; path = ../includes/RenderAPI.h; sourceTree = "<group>"; };
+		403DF7E71E03DE5900FDBDF9 /* Unity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Unity; path = ../includes/Unity; sourceTree = "<group>"; };
+		403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		403DF7EB1E03E08000FDBDF9 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = ../includes/GLEW/glew.c; sourceTree = "<group>"; };
+		403DF7EC1E03E08000FDBDF9 /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glew.h; path = ../includes/GLEW/glew.h; sourceTree = "<group>"; };
+		403DF7ED1E03E08000FDBDF9 /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = ../includes/GLEW/glxew.h; sourceTree = "<group>"; };
+		403DF7EE1E03E08000FDBDF9 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = ../includes/GLEW/wglew.h; sourceTree = "<group>"; };
+		403DF7F11E03EC5800FDBDF9 /* UnityGraphicsDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnityGraphicsDevice.h; path = ../includes/UnityGraphicsDevice.h; sourceTree = "<group>"; };
+		403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityImageGrabber.cpp; path = ../sources/UnityImageGrabber.cpp; sourceTree = "<group>"; };
+		403DF7F31E0493F700FDBDF9 /* UnityImageGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityImageGrabber.h; path = ../sources/UnityImageGrabber.h; sourceTree = "<group>"; };
+		40428CF61E036DA8004F1D58 /* GStreamer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GStreamer.framework; path = ../../../../../../../../Library/Frameworks/GStreamer.framework; sourceTree = "<group>"; };
+		40D7339E1E25C344007A66EB /* gl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
+		40F5F2F01E03652F006A010E /* CMySink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CMySink.cpp; path = ../sources/CMySink.cpp; sourceTree = "<group>"; };
+		40F5F2F11E03652F006A010E /* CMySink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMySink.h; path = ../sources/CMySink.h; sourceTree = "<group>"; };
+		40F5F2F21E03652F006A010E /* CMySrc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CMySrc.cpp; path = ../sources/CMySrc.cpp; sourceTree = "<group>"; };
+		40F5F2F31E03652F006A010E /* CMySrc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMySrc.h; path = ../sources/CMySrc.h; sourceTree = "<group>"; };
+		40F5F2F81E03652F006A010E /* CoreAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoreAPI.cpp; path = ../sources/CoreAPI.cpp; sourceTree = "<group>"; };
+		40F5F2F91E03652F006A010E /* CoreAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreAPI.h; path = ../sources/CoreAPI.h; sourceTree = "<group>"; };
+		40F5F2FA1E03652F006A010E /* GstCustomVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GstCustomVideoPlayer.cpp; path = ../sources/GstCustomVideoPlayer.cpp; sourceTree = "<group>"; };
+		40F5F2FB1E03652F006A010E /* GstCustomVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GstCustomVideoPlayer.h; path = ../sources/GstCustomVideoPlayer.h; sourceTree = "<group>"; };
+		40F5F3041E03652F006A010E /* GstPipelineHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GstPipelineHandler.cpp; path = ../sources/GstPipelineHandler.cpp; sourceTree = "<group>"; };
+		40F5F3051E03652F006A010E /* GstPipelineHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GstPipelineHandler.h; path = ../sources/GstPipelineHandler.h; sourceTree = "<group>"; };
+		40F5F3061E03652F006A010E /* GstPlayerBin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GstPlayerBin.cpp; path = ../sources/GstPlayerBin.cpp; sourceTree = "<group>"; };
+		40F5F3071E03652F006A010E /* GstPlayerBin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GstPlayerBin.h; path = ../sources/GstPlayerBin.h; sourceTree = "<group>"; };
+		40F5F3081E03652F006A010E /* GStreamerCore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GStreamerCore.cpp; path = ../sources/GStreamerCore.cpp; sourceTree = "<group>"; };
+		40F5F3091E03652F006A010E /* GStreamerCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GStreamerCore.h; path = ../sources/GStreamerCore.h; sourceTree = "<group>"; };
+		40F5F30A1E03652F006A010E /* IGStreamerPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IGStreamerPlayer.cpp; path = ../sources/IGStreamerPlayer.cpp; sourceTree = "<group>"; };
+		40F5F30B1E03652F006A010E /* IGStreamerPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGStreamerPlayer.h; path = ../sources/IGStreamerPlayer.h; sourceTree = "<group>"; };
+		40F5F30C1E03652F006A010E /* IGStreamerStreamer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IGStreamerStreamer.cpp; path = ../sources/IGStreamerStreamer.cpp; sourceTree = "<group>"; };
+		40F5F30D1E03652F006A010E /* IGStreamerStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGStreamerStreamer.h; path = ../sources/IGStreamerStreamer.h; sourceTree = "<group>"; };
+		40F5F30E1E03652F006A010E /* IStreamListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IStreamListener.h; path = ../sources/IStreamListener.h; sourceTree = "<group>"; };
+		40F5F30F1E03652F006A010E /* PlayersAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayersAPI.cpp; path = ../sources/PlayersAPI.cpp; sourceTree = "<group>"; };
+		40F5F3101E03652F006A010E /* PlayersAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayersAPI.h; path = ../sources/PlayersAPI.h; sourceTree = "<group>"; };
+		40F5F3111E03652F006A010E /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = ../sources/stdafx.h; sourceTree = "<group>"; };
+		40F5F3121E03652F006A010E /* StreamersAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StreamersAPI.cpp; path = ../sources/StreamersAPI.cpp; sourceTree = "<group>"; };
+		40F5F3131E03652F006A010E /* StreamersAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamersAPI.h; path = ../sources/StreamersAPI.h; sourceTree = "<group>"; };
+		40F5F3141E03652F006A010E /* UnityHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityHelpers.cpp; path = ../sources/UnityHelpers.cpp; sourceTree = "<group>"; };
+		40F5F3151E03652F006A010E /* UnityHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnityHelpers.h; path = ../sources/UnityHelpers.h; sourceTree = "<group>"; };
+		40F5F3191E03652F006A010E /* VideoAppSinkHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoAppSinkHandler.cpp; path = ../sources/VideoAppSinkHandler.cpp; sourceTree = "<group>"; };
+		40F5F31A1E03652F006A010E /* VideoAppSinkHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoAppSinkHandler.h; path = ../sources/VideoAppSinkHandler.h; sourceTree = "<group>"; };
+		40F5F3301E03654D006A010E /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../includes/common.h; sourceTree = "<group>"; };
+		40F5F3311E03654D006A010E /* GraphicsInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsInclude.h; path = ../includes/GraphicsInclude.h; sourceTree = "<group>"; };
+		40F5F3321E03654D006A010E /* ImageInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageInfo.cpp; path = ../includes/ImageInfo.cpp; sourceTree = "<group>"; };
+		40F5F3331E03654D006A010E /* ImageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageInfo.h; path = ../includes/ImageInfo.h; sourceTree = "<group>"; };
+		40F5F3341E03654D006A010E /* IMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMutex.h; path = ../includes/IMutex.h; sourceTree = "<group>"; };
+		40F5F3351E03654D006A010E /* INetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = INetwork.h; path = ../includes/INetwork.h; sourceTree = "<group>"; };
+		40F5F3361E03654D006A010E /* ISingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISingleton.h; path = ../includes/ISingleton.h; sourceTree = "<group>"; };
+		40F5F3371E03654D006A010E /* IThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IThread.h; path = ../includes/IThread.h; sourceTree = "<group>"; };
+		40F5F3381E03654D006A010E /* IThreadFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IThreadFunction.h; path = ../includes/IThreadFunction.h; sourceTree = "<group>"; };
+		40F5F3391E03654D006A010E /* IThreadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadManager.cpp; path = ../includes/IThreadManager.cpp; sourceTree = "<group>"; };
+		40F5F33A1E03654D006A010E /* IThreadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IThreadManager.h; path = ../includes/IThreadManager.h; sourceTree = "<group>"; };
+		40F5F33B1E03654D006A010E /* IUDPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUDPClient.h; path = ../includes/IUDPClient.h; sourceTree = "<group>"; };
+		40F5F33C1E03654D006A010E /* IVideoGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IVideoGrabber.h; path = ../includes/IVideoGrabber.h; sourceTree = "<group>"; };
+		40F5F33D1E03654D006A010E /* ListenerContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListenerContainer.h; path = ../includes/ListenerContainer.h; sourceTree = "<group>"; };
+		40F5F33E1E03654D006A010E /* mTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mTypes.h; path = ../includes/mTypes.h; sourceTree = "<group>"; };
+		40F5F33F1E03654D006A010E /* NetAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NetAddress.cpp; path = ../includes/NetAddress.cpp; sourceTree = "<group>"; };
+		40F5F3401E03654D006A010E /* NetAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetAddress.h; path = ../includes/NetAddress.h; sourceTree = "<group>"; };
+		40F5F3411E03654D006A010E /* PixelUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PixelUtil.cpp; path = ../includes/PixelUtil.cpp; sourceTree = "<group>"; };
+		40F5F3421E03654D006A010E /* PixelUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PixelUtil.h; path = ../includes/PixelUtil.h; sourceTree = "<group>"; };
+		40F5F3431E03654D006A010E /* UnityGraphicsDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UnityGraphicsDevice.cpp; path = ../includes/UnityGraphicsDevice.cpp; sourceTree = "<group>"; };
+		40F5F3441E03654D006A010E /* videoCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = videoCommon.h; path = ../includes/videoCommon.h; sourceTree = "<group>"; };
+		6A3F7F7E10AC146D00948A73 /* GStreamerUnityPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GStreamerUnityPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A3F7F7F10AC146D00948A73 /* ASimplePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ASimplePlugin-Info.plist"; sourceTree = "<group>"; };
+		8D01CCD10486CAD60068D4B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6A3F7F7C10AC146D00948A73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				403DF7EA1E03E02C00FDBDF9 /* CoreFoundation.framework in Frameworks */,
+				403DF7C41E03757000FDBDF9 /* OpenGL.framework in Frameworks */,
+				40428CF71E036DA8004F1D58 /* GStreamer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* XCodePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7D41E03DE2200FDBDF9 /* Unity */,
+				40F5F32F1E036539006A010E /* Includes */,
+				08FB77ADFE841716C02AAC07 /* Source */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				19C28FB4FE9D528D11CA2CBB /* Products */,
+				6A3F7F7F10AC146D00948A73 /* ASimplePlugin-Info.plist */,
+				40428CF51E036DA8004F1D58 /* Frameworks */,
+			);
+			name = XCodePlugin;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				08EA7FFBFE8413EDC02AAC07 /* Carbon.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D01CCD10486CAD60068D4B7 /* Info.plist */,
+				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77ADFE841716C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7F21E0493F700FDBDF9 /* UnityImageGrabber.cpp */,
+				403DF7F31E0493F700FDBDF9 /* UnityImageGrabber.h */,
+				40F5F2F01E03652F006A010E /* CMySink.cpp */,
+				40F5F2F11E03652F006A010E /* CMySink.h */,
+				40F5F2F21E03652F006A010E /* CMySrc.cpp */,
+				40F5F2F31E03652F006A010E /* CMySrc.h */,
+				403DF7D11E03CD2500FDBDF9 /* IAppSinkHandler.cpp */,
+				403DF7D21E03CD2500FDBDF9 /* IAppSinkHandler.h */,
+				403DF7CE1E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp */,
+				403DF7CF1E03CD0200FDBDF9 /* AudioAppSinkHandler.h */,
+				40F5F2FA1E03652F006A010E /* GstCustomVideoPlayer.cpp */,
+				40F5F2FB1E03652F006A010E /* GstCustomVideoPlayer.h */,
+				40F5F3041E03652F006A010E /* GstPipelineHandler.cpp */,
+				40F5F3051E03652F006A010E /* GstPipelineHandler.h */,
+				40F5F3061E03652F006A010E /* GstPlayerBin.cpp */,
+				40F5F3071E03652F006A010E /* GstPlayerBin.h */,
+				40F5F3081E03652F006A010E /* GStreamerCore.cpp */,
+				40F5F3091E03652F006A010E /* GStreamerCore.h */,
+				40F5F30A1E03652F006A010E /* IGStreamerPlayer.cpp */,
+				40F5F30B1E03652F006A010E /* IGStreamerPlayer.h */,
+				40F5F30C1E03652F006A010E /* IGStreamerStreamer.cpp */,
+				40F5F30D1E03652F006A010E /* IGStreamerStreamer.h */,
+				40F5F30E1E03652F006A010E /* IStreamListener.h */,
+				40F5F3111E03652F006A010E /* stdafx.h */,
+				40F5F3191E03652F006A010E /* VideoAppSinkHandler.cpp */,
+				40F5F31A1E03652F006A010E /* VideoAppSinkHandler.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB4FE9D528D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6A3F7F7E10AC146D00948A73 /* GStreamerUnityPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		403DF7D41E03DE2200FDBDF9 /* Unity */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7E71E03DE5900FDBDF9 /* Unity */,
+				403DF7D61E03DE3400FDBDF9 /* PlatformBase.h */,
+				403DF7D71E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp */,
+				403DF7D81E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp */,
+				403DF7D91E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp */,
+				403DF7DA1E03DE3400FDBDF9 /* RenderAPI_Metal.mm */,
+				403DF7DB1E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp */,
+				403DF7DC1E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp */,
+				403DF7DD1E03DE3400FDBDF9 /* RenderAPI.cpp */,
+				403DF7DE1E03DE3400FDBDF9 /* RenderAPI.h */,
+				40F5F2F81E03652F006A010E /* CoreAPI.cpp */,
+				40F5F2F91E03652F006A010E /* CoreAPI.h */,
+				40F5F30F1E03652F006A010E /* PlayersAPI.cpp */,
+				40F5F3101E03652F006A010E /* PlayersAPI.h */,
+				40F5F3121E03652F006A010E /* StreamersAPI.cpp */,
+				40F5F3131E03652F006A010E /* StreamersAPI.h */,
+				40F5F3141E03652F006A010E /* UnityHelpers.cpp */,
+				40F5F3151E03652F006A010E /* UnityHelpers.h */,
+				40F5F3431E03654D006A010E /* UnityGraphicsDevice.cpp */,
+				403DF7F11E03EC5800FDBDF9 /* UnityGraphicsDevice.h */,
+			);
+			name = Unity;
+			sourceTree = "<group>";
+		};
+		403DF7F01E03E08B00FDBDF9 /* GLEW */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7EB1E03E08000FDBDF9 /* glew.c */,
+				403DF7EC1E03E08000FDBDF9 /* glew.h */,
+				403DF7ED1E03E08000FDBDF9 /* glxew.h */,
+				403DF7EE1E03E08000FDBDF9 /* wglew.h */,
+			);
+			name = GLEW;
+			sourceTree = "<group>";
+		};
+		40428CF51E036DA8004F1D58 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				403DF7E91E03E02C00FDBDF9 /* CoreFoundation.framework */,
+				403DF7C31E03757000FDBDF9 /* OpenGL.framework */,
+				40428CF61E036DA8004F1D58 /* GStreamer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		40F5F32F1E036539006A010E /* Includes */ = {
+			isa = PBXGroup;
+			children = (
+				40D7339E1E25C344007A66EB /* gl.h */,
+				403DF7F01E03E08B00FDBDF9 /* GLEW */,
+				403DF7C81E037F6500FDBDF9 /* OSXThread.cpp */,
+				403DF7C91E037F6500FDBDF9 /* OSXThread.h */,
+				403DF7C51E037F0500FDBDF9 /* OSXThreadManager.cpp */,
+				403DF7C61E037F0500FDBDF9 /* OSXThreadManager.h */,
+				40F5F3301E03654D006A010E /* common.h */,
+				40F5F3311E03654D006A010E /* GraphicsInclude.h */,
+				40F5F3321E03654D006A010E /* ImageInfo.cpp */,
+				40F5F3331E03654D006A010E /* ImageInfo.h */,
+				40F5F3341E03654D006A010E /* IMutex.h */,
+				40F5F3351E03654D006A010E /* INetwork.h */,
+				40F5F3361E03654D006A010E /* ISingleton.h */,
+				40F5F3371E03654D006A010E /* IThread.h */,
+				40F5F3381E03654D006A010E /* IThreadFunction.h */,
+				40F5F3391E03654D006A010E /* IThreadManager.cpp */,
+				40F5F33A1E03654D006A010E /* IThreadManager.h */,
+				40F5F33B1E03654D006A010E /* IUDPClient.h */,
+				40F5F33C1E03654D006A010E /* IVideoGrabber.h */,
+				40F5F33D1E03654D006A010E /* ListenerContainer.h */,
+				40F5F33E1E03654D006A010E /* mTypes.h */,
+				40F5F33F1E03654D006A010E /* NetAddress.cpp */,
+				403DF7CB1E03829400FDBDF9 /* OSXMutex.cpp */,
+				403DF7CC1E03829400FDBDF9 /* OSXMutex.h */,
+				40F5F3401E03654D006A010E /* NetAddress.h */,
+				40F5F3411E03654D006A010E /* PixelUtil.cpp */,
+				40F5F3421E03654D006A010E /* PixelUtil.h */,
+				40F5F3441E03654D006A010E /* videoCommon.h */,
+			);
+			name = Includes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6A3F7F7D10AC146D00948A73 /* ASimplePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A3F7F8210AC146D00948A73 /* Build configuration list for PBXNativeTarget "ASimplePlugin" */;
+			buildPhases = (
+				6A3F7F7A10AC146D00948A73 /* Resources */,
+				6A3F7F7B10AC146D00948A73 /* Sources */,
+				6A3F7F7C10AC146D00948A73 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ASimplePlugin;
+			productName = ASimplePlugin;
+			productReference = 6A3F7F7E10AC146D00948A73 /* GStreamerUnityPlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = 4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "GStreamerUnityPlugin" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* XCodePlugin */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6A3F7F7D10AC146D00948A73 /* ASimplePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A3F7F7A10AC146D00948A73 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				403DF7E81E03DE5900FDBDF9 /* Unity in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6A3F7F7B10AC146D00948A73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				403DF7CD1E03829400FDBDF9 /* OSXMutex.cpp in Sources */,
+				403DF7D31E03CD2500FDBDF9 /* IAppSinkHandler.cpp in Sources */,
+				40F5F3451E03654D006A010E /* ImageInfo.cpp in Sources */,
+				403DF7E11E03DE3400FDBDF9 /* RenderAPI_D3D11.cpp in Sources */,
+				403DF7C71E037F0500FDBDF9 /* OSXThreadManager.cpp in Sources */,
+				40F5F3471E03654D006A010E /* NetAddress.cpp in Sources */,
+				40F5F3251E03652F006A010E /* GstPipelineHandler.cpp in Sources */,
+				40F5F32E1E03652F006A010E /* VideoAppSinkHandler.cpp in Sources */,
+				40F5F32C1E03652F006A010E /* UnityHelpers.cpp in Sources */,
+				403DF7E01E03DE3400FDBDF9 /* RenderAPI_D3D9.cpp in Sources */,
+				403DF7E31E03DE3400FDBDF9 /* RenderAPI_Metal.mm in Sources */,
+				40F5F31F1E03652F006A010E /* CoreAPI.cpp in Sources */,
+				40F5F3291E03652F006A010E /* IGStreamerStreamer.cpp in Sources */,
+				403DF7E51E03DE3400FDBDF9 /* RenderAPI_OpenGLCoreES.cpp in Sources */,
+				40F5F3491E03654D006A010E /* UnityGraphicsDevice.cpp in Sources */,
+				40F5F32A1E03652F006A010E /* PlayersAPI.cpp in Sources */,
+				40F5F31C1E03652F006A010E /* CMySrc.cpp in Sources */,
+				40F5F3271E03652F006A010E /* GStreamerCore.cpp in Sources */,
+				403DF7EF1E03E08000FDBDF9 /* glew.c in Sources */,
+				403DF7CA1E037F6500FDBDF9 /* OSXThread.cpp in Sources */,
+				403DF7E41E03DE3400FDBDF9 /* RenderAPI_OpenGL2.cpp in Sources */,
+				403DF7E61E03DE3400FDBDF9 /* RenderAPI.cpp in Sources */,
+				40F5F32B1E03652F006A010E /* StreamersAPI.cpp in Sources */,
+				403DF7F41E0493F700FDBDF9 /* UnityImageGrabber.cpp in Sources */,
+				40F5F3261E03652F006A010E /* GstPlayerBin.cpp in Sources */,
+				40F5F3281E03652F006A010E /* IGStreamerPlayer.cpp in Sources */,
+				40F5F3461E03654D006A010E /* IThreadManager.cpp in Sources */,
+				403DF7D01E03CD0200FDBDF9 /* AudioAppSinkHandler.cpp in Sources */,
+				40F5F3201E03652F006A010E /* GstCustomVideoPlayer.cpp in Sources */,
+				403DF7E21E03DE3400FDBDF9 /* RenderAPI_D3D12.cpp in Sources */,
+				40F5F3481E03654D006A010E /* PixelUtil.cpp in Sources */,
+				40F5F31B1E03652F006A010E /* CMySink.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C167EFE841241C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4FADC23808B4156C00ABE55E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Library/Frameworks/GStreamer.framework/Versions/1.0/Headers/**";
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4FADC23908B4156C00ABE55E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Library/Frameworks/GStreamer.framework/Versions/1.0/Headers/**";
+				PREBINDING = NO;
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		6A3F7F8010AC146D00948A73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_POSTPROCESSING = NO;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"/Library/Frameworks/GStreamer.framework/Headers/**",
+					../includes,
+					../Sources,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = ./Deployment/;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mrayy.GStreamerUnityPlugin;
+				PRODUCT_NAME = GStreamerUnityPlugin;
+				SYMROOT = ./build;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		6A3F7F8110AC146D00948A73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_POSTPROCESSING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"/Library/Frameworks/GStreamer.framework/Headers/**",
+					../includes,
+					../Sources,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = ./Deployment/;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mrayy.GStreamerUnityPlugin;
+				PRODUCT_NAME = GStreamerUnityPlugin;
+				SYMROOT = ./build;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4FADC23708B4156C00ABE55E /* Build configuration list for PBXProject "GStreamerUnityPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FADC23808B4156C00ABE55E /* Debug */,
+				4FADC23908B4156C00ABE55E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A3F7F8210AC146D00948A73 /* Build configuration list for PBXNativeTarget "ASimplePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A3F7F8010AC146D00948A73 /* Debug */,
+				6A3F7F8110AC146D00948A73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

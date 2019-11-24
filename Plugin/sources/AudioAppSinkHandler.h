@@ -4,6 +4,7 @@
 
 #include "IAppSinkHandler.h"
 #include "IMutex.h"
+#include <memory.h>
 
 namespace mray
 {

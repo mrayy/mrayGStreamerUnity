@@ -7,6 +7,7 @@
 #include <windows.h>
 #endif
 //#include <gl/gl.h>
+#include <memory.h>
 
 
 
@@ -16,23 +17,27 @@
 #include "ImageInfo.h"
 #include "UnityGraphicsDevice.h"
 
+
+#include <vector>
+
 using namespace mray;
 using namespace video;
 
 FuncPtr Debug;
 FuncFloatRetPtr GetEngineTimePtr;
 
+std::vector<std::string> log_buffer;
 void LogMessage(const std::string& msg, ELogLevel level)
 {
-	std::string m;
+	std::string m= "GST: " ;
 	if (level == ELL_INFO)
-		m = "Info: ";
+		m += "Info: ";
 	if (level == ELL_WARNING)
-		m = "Warning: ";
+		m += "Warning: ";
 	if (level == ELL_SUCCESS)
-		m = "Success: ";
+		m += "Success: ";
 	if (level == ELL_ERROR)
-		m = "Error: ";
+		m += "Error: ";
 
 	m += msg;
 #if UNITY_WIN
@@ -40,9 +45,16 @@ void LogMessage(const std::string& msg, ELogLevel level)
 #else
 	printf("%s", m.c_str());
 #endif
-	LogManager::Instance()->LogMessage(m);
-// 	if (Debug)
-// 		Debug(m.c_str());
+	if (Debug)
+	{
+		for (int i = 0; i < log_buffer.size(); ++i)
+			Debug(log_buffer[i].c_str());
+		log_buffer.clear();
+		Debug(m.c_str());
+	}
+	else
+		log_buffer.push_back(m);
+	//LogManager::Instance()->LogMessage(m);
 }
 float GetEngineTime()
 {
@@ -167,7 +179,7 @@ void CheckData(const ImageInfo* ifo, int _UnityTextureWidth, int _UnityTextureHe
 
 void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
-    
+	LogMessage("BlitImage()", ELL_INFO);
     if (!ifo || !_TextureNativePtr)
         return;
     
@@ -232,11 +244,15 @@ void BlitImage(const ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureW
     
         if (_TextureNativePtr)
         {
-            CheckData(ifo,_UnityTextureWidth,_UnityTextureHeight,&data,&pitch,&comps);
+			LogMessage("CheckData()", ELL_INFO);
+			CheckData(ifo, _UnityTextureWidth, _UnityTextureHeight, &data, &pitch, &comps);
             
-            GetRenderer()->BeginModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, &pitch);
-            GetRenderer()->EndModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight,comps, pitch, data);
-            
+			LogMessage("BeginModifyTexture()", ELL_INFO);
+			GetRenderer()->BeginModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, &pitch);
+			LogMessage("EndModifyTexture()", ELL_INFO);
+			GetRenderer()->EndModifyTexture(_TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight, comps, pitch, data);
+			LogMessage("Done EndModifyTexture()", ELL_INFO);
+
         }
 
 }

@@ -1,10 +1,12 @@
 #include "RenderAPI.h"
 #include "PlatformBase.h"
 #include "Unity/IUnityGraphics.h"
+#include "UnityHelpers.h"
 
 
 RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 {
+	LogMessage("CreateRenderAPI() ",ELL_INFO);
 #	if SUPPORT_D3D11
 	if (apiType == kUnityGfxRendererD3D11)
 	{
@@ -54,6 +56,13 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 	}
 #	endif // if SUPPORT_METAL
 
+#	if SUPPORT_VULKAN
+	if (apiType == kUnityGfxRendererVulkan)
+	{
+		extern RenderAPI* CreateRenderAPI_Vulkan();
+		return CreateRenderAPI_Vulkan();
+	}
+#	endif // if SUPPORT_VULKAN
 
 	// Unknown or unsupported graphics API
 	return NULL;

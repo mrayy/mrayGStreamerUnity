@@ -3,6 +3,8 @@
 
 #include "AndroidMutex.h"
 
+#include <memory.h>
+#include<errno.h>
 
 namespace mray{
 namespace OS{

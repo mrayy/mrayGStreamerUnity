@@ -13,6 +13,7 @@
 #include "GstAppAudioPlayer.h"
 #include "IUDPClient.h"
 #include <vector>
+#include <memory.h>
 
 using namespace mray;
 using namespace video;
@@ -350,6 +351,14 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCopyFrame(GstCustomV
     return false;
 }
 
+extern "C" UNITY_INTERFACE_EXPORT const video::ImageInfo* mray_gst_customPlayerGetLastFrame(GstCustomVideoPlayer* p)
+{
+	if (p == NULL)
+		return 0;
+
+	const video::ImageInfo* ifo = p->GetLastFrame();
+	return ifo;
+}
 extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_customPlayerCropFrame(GstCustomVideoPlayer* p, video::ImageInfo* target,int x,int y,int width,int height)
 {
     if(p!=NULL && target!=NULL)

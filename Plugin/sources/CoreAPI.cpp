@@ -24,12 +24,14 @@
 
 #include "UnityGraphicsDevice.h"
 
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
+
+
+EXPORT_CDECL UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 {
-	LogManager::Instance()->LogMessage("mray_gstreamer_initialize");
+	LogMessage("mray_gstreamer_initialize",ELL_INFO);
 	if (video::GStreamerCore::RefCount() == 0)
 	{
-		LogManager::Instance()->LogMessage("Initializing GStreamer Engine");
+		LogMessage("Initializing GStreamer Engine", ELL_INFO);
 #ifdef WIN32
 		new OS::WinThreadManager();
 		new network::Win32Network();
@@ -45,13 +47,13 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 
 #endif
 #endif
-		LogManager::Instance()->LogMessage("Initializing GStreamer Engine - Done");
+		LogMessage("Initializing GStreamer Engine - Done", ELL_INFO);
 	}
 	video::GStreamerCore::Ref();
 	return true;
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
 {
 	video::GStreamerCore::Unref();
 	if (video::GStreamerCore::RefCount() == 0)
@@ -75,7 +77,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
 
 }
 
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
+EXPORT_CDECL UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
 {
 	LogMessage("Checking is active", ELL_INFO);
 	return video::GStreamerCore::Instance()!=0;
@@ -84,39 +86,39 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
 
 /////////////////
 
-extern "C" UNITY_INTERFACE_EXPORT video::ImageInfo* mray_createImageData(int width,int height,video::EPixelFormat format)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT video::ImageInfo* mray_createImageData(int width,int height,video::EPixelFormat format)
 {
     video::ImageInfo* ifo=new video::ImageInfo();
     ifo->createData(Vector2d(width,height), format);
     return ifo;
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_resizeImageData(video::ImageInfo* ifo,int width,int height,video::EPixelFormat format)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_resizeImageData(video::ImageInfo* ifo,int width,int height,video::EPixelFormat format)
 {
     ifo->createData(Vector2d(width,height), format);
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_getImageDataInfo(video::ImageInfo* ifo,int& width,int& height,video::EPixelFormat&  format)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_getImageDataInfo(video::ImageInfo* ifo,int& width,int& height,video::EPixelFormat&  format)
 {
     width=ifo->Size.x;
     height=ifo->Size.y;
     format=ifo->format;
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_cloneImageData(video::ImageInfo* ifo,video::ImageInfo* dst)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_cloneImageData(video::ImageInfo* ifo,video::ImageInfo* dst)
 {
     dst->copyFrom(ifo);
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_copyCroppedImageData(video::ImageInfo* ifo, video::ImageInfo* dst, int x, int y, int width, int height, bool clamp)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_copyCroppedImageData(video::ImageInfo* ifo, video::ImageInfo* dst, int x, int y, int width, int height, bool clamp)
 {
 	dst->copyCroppedFrom(ifo, Vector2d(x, y), Vector2d(width, height), clamp, dst->format);
 }
-extern "C" UNITY_INTERFACE_EXPORT void mray_deleteImageData(video::ImageInfo* ifo)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_deleteImageData(video::ImageInfo* ifo)
 {
     if(ifo!=NULL)
         delete ifo;
     ifo=NULL;
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_BlitImageDataInfo(video::ImageInfo* ifo,void* _TextureNativePtr)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_BlitImageDataInfo(video::ImageInfo* ifo,void* _TextureNativePtr)
 {
     
     if (ifo == NULL || !_TextureNativePtr)
@@ -129,7 +131,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_BlitImageDataInfo(video::ImageInfo* 
 
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void* mray_getImageDataPtr(video::ImageInfo* ifo)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void* mray_getImageDataPtr(video::ImageInfo* ifo)
 {
     
     if (ifo == NULL)
@@ -137,7 +139,7 @@ extern "C" UNITY_INTERFACE_EXPORT void* mray_getImageDataPtr(video::ImageInfo* i
     return ifo->imageData;
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void mray_FlipImageData(video::ImageInfo* ifo,bool horizontal,bool vertical)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_FlipImageData(video::ImageInfo* ifo,bool horizontal,bool vertical)
 {
     if (ifo == NULL)
         return;
@@ -164,7 +166,7 @@ static void  __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
     }
     _data.clear();
 }
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(video::ImageInfo* ifo, void* _TextureNativePtr)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(video::ImageInfo* ifo, void* _TextureNativePtr)
 {
     ImageBlitData r;
     r.ifo = ifo;
@@ -174,12 +176,12 @@ extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(v
 }
 
 
-extern "C" UNITY_INTERFACE_EXPORT void*  mray_GetTextureData(void* texturePtr)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void*  mray_GetTextureData(void* texturePtr)
 {
 	return GetRenderer()->GetTextureDataPtr(texturePtr);
 }
 
-extern "C" UNITY_INTERFACE_EXPORT void  mray_ReleaseTextureData(void* texturePtr)
+EXPORT_CDECL UNITY_INTERFACE_EXPORT void  mray_ReleaseTextureData(void* texturePtr)
 {
 	GetRenderer()->ReleaseTextureDataPtr(texturePtr);
 }

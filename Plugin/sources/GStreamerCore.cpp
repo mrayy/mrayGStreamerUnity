@@ -26,11 +26,13 @@
 
 #ifdef __ANDROID__
 
+extern "C" {
 void
 gst_android_register_static_plugins(void);
 /* Call this function to load GIO modules */
 void
 gst_android_load_gio_modules(void);
+}
 #endif
 
 
@@ -117,7 +119,7 @@ void GStreamerCore::_Init()
 	_gst_debug_enabled = false; 
 	if (!gst_init_check(0,0, &err))
 	{
-		LogManager::Instance()->LogMessage("GStreamerCore - Failed to init GStreamer!");
+		LogMessage("GStreamerCore - Failed to init GStreamer!",ELL_WARNING);
 	}
 	else
     {
@@ -131,11 +133,11 @@ void GStreamerCore::_Init()
 
 
 #if defined (__ANDROID__)
-		//gst_android_register_static_plugins();
-		//gst_android_load_gio_modules();
+		gst_android_register_static_plugins();
+		gst_android_load_gio_modules();
 #endif
         
-        LogManager::Instance()->LogMessage("GStreamerCore - Registering Elements!");
+        LogMessage("GStreamerCore - Registering Elements!", ELL_INFO);
 		//fclose(stderr);
         
 		//register plugin path
@@ -170,7 +172,7 @@ void GStreamerCore::_Init()
 			_GstMyListenerClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
 			"");
 #endif
-		LogManager::Instance()->LogMessage("GStreamerCore - GStreamer inited");
+		LogMessage("GStreamerCore - GStreamer inited", ELL_INFO);
 	}
 
 #if GLIB_MINOR_VERSION<32
@@ -182,7 +184,7 @@ void GStreamerCore::_Init()
 
 	gub_main_loop_thread = g_thread_new("GstUnityBridge Main Thread", gst_main_loop_func, this);
 	if (!gub_main_loop_thread) {
-		LogManager::Instance()->LogMessage(std::string("Failed to create GLib main thread: ") + std::string(err ? err->message : "<No error message>"));
+		LogMessage(std::string("Failed to create GLib main thread: ") + std::string(err ? err->message : "<No error message>"), ELL_INFO);
 		return;
 	}
 
@@ -191,10 +193,10 @@ void GStreamerCore::_Init()
 
 
 void GStreamerCore::_loopFunction() {
-	LogManager::Instance()->LogMessage("Entering main loop");
+	LogMessage("Entering main loop", ELL_INFO);
 	gub_main_loop = g_main_loop_new(NULL, FALSE);
 	g_main_loop_run(gub_main_loop);
-	LogManager::Instance()->LogMessage("Quitting main loop");
+	LogMessage("Quitting main loop", ELL_INFO);
 }
 
 
@@ -237,9 +239,9 @@ void GStreamerCore::Ref()
 	m_refCount++;
 	if (m_refCount==1)
 	{
-		LogManager::Instance()->LogMessage("Initializing GStreamer");
+		LogMessage("Initializing GStreamer",ELL_INFO);
 		m_instance = new GStreamerCore();
-		LogManager::Instance()->LogMessage("Initializing GStreamer - Done");
+		LogMessage("Initializing GStreamer - Done", ELL_INFO);
 	}
 
 }

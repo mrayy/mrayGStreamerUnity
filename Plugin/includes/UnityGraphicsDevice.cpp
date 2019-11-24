@@ -3,6 +3,7 @@
 
 #include "PlatformBase.h"
 #include "RenderAPI.h"
+#include "UnityHelpers.h"
 
 #include <assert.h>
 #include <math.h>
@@ -30,10 +31,18 @@ static IUnityGraphics* s_Graphics = NULL;
 
 extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 {
+	LogMessage("UnityPluginLoad", ELL_INFO);
     s_UnityInterfaces = unityInterfaces;
     s_Graphics = s_UnityInterfaces->Get<IUnityGraphics>();
     s_Graphics->RegisterDeviceEventCallback(OnGraphicsDeviceEvent);
-    
+
+#if SUPPORT_VULKAN
+	if (s_Graphics->GetRenderer() == kUnityGfxRendererNull)
+	{
+		extern void RenderAPI_Vulkan_OnPluginLoad(IUnityInterfaces*);
+		RenderAPI_Vulkan_OnPluginLoad(unityInterfaces);
+	}
+#endif // SUPPORT_VULKAN
     // Run OnGraphicsDeviceEvent(initialize) manually on plugin load
     OnGraphicsDeviceEvent(kUnityGfxDeviceEventInitialize);
 }
@@ -64,6 +73,17 @@ static UnityGfxRenderer s_DeviceType = kUnityGfxRendererNull;
 
 RenderAPI* GetRenderer()
 {
+	if (!s_CurrentAPI)
+	{
+		LogMessage("s_CurrentAPI is null", ELL_WARNING);
+		if(!s_Graphics)
+		{
+			LogMessage("s_Graphics is null!!", ELL_WARNING);
+		}
+		else {
+			s_CurrentAPI = CreateRenderAPI(s_DeviceType);
+		}
+	}
     return s_CurrentAPI;
 }
 
@@ -74,6 +94,7 @@ UnityGfxRenderer GetDeviceType()
 
 static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType)
 {
+	LogMessage("OnGraphicsDeviceEvent",ELL_INFO);
     // Create graphics API implementation upon initialization
     if (eventType == kUnityGfxDeviceEventInitialize)
     {
