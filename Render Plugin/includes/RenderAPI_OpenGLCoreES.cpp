@@ -272,20 +272,18 @@ void RenderAPI_OpenGLCoreES::EndModifyTexture(void* textureHandle, int textureWi
 	LogMessage("RenderAPI_OpenGLCoreES::EndModifyTexture()", ELL_INFO);
 	GLuint gltex = (GLuint)(size_t)(textureHandle);
 	// Update texture data, and free the memory buffer
-	//char buffer[256];
-	//if(components==1)
-	//    fmt=GL_ALPHA8;
+	char buffer[256];
 	glBindTexture(GL_TEXTURE_2D, gltex);
 	GLuint fmt = GL_RGBA;
 	if (comps == 1)
 #ifdef UNITY_WIN
 		fmt = GL_ALPHA;
 #else
-		fmt = GL_LUMINANCE;
+		fmt = GL_ALPHA;
 #endif
 	//glGetTexLevelParameteriv(GL_TEXTURE_2D,0,GL_TEXTURE_INTERNAL_FORMAT,&fmt);
 
-	//sprintf(buffer,"Texture %d, width: %d, height: %d, comps: %d, data: %d",(int)gltex,textureWidth,textureHeight,comps,(int)dataPtr);
+	sprintf(buffer,"Texture %d, width: %d, height: %d, comps: %d, data: %d",(int)gltex,textureWidth,textureHeight,comps,(int)dataPtr);
 	//LogMessage(buffer,ELL_INFO);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, fmt, GL_UNSIGNED_BYTE, dataPtr);
 	LogMessage("RenderAPI_OpenGLCoreES::glTexSubImage2D()", ELL_INFO);
