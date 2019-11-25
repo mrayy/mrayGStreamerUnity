@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include "mTypes.h"
+
 #include "Unity/IUnityInterface.h"
 
 #ifdef __ANDROID__
@@ -27,9 +28,8 @@ enum ELogLevel{
 	ELL_ERROR
 };
 
-extern void LogMessage(const std::string& msg, ELogLevel level);
+void LogMessage(ELogLevel level, const char *format, ...);
 extern float GetEngineTime();
-extern void BlitImage(const mray::video::ImageInfo* ifo, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
 typedef void(__stdcall * UnityRenderNative)(int eventID);
 

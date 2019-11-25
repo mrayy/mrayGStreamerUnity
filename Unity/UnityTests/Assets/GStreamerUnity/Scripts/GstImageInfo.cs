@@ -67,13 +67,14 @@ public class GstImageInfo {
 	[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_deleteImageData(System.IntPtr ifo);
 
-	[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
-	extern static private void mray_BlitImageDataInfo(System.IntPtr ifo,System.IntPtr TextureNativePtr);
 
-	[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
-	extern static private System.IntPtr mray_BlitImageNativeGLCall(System.IntPtr p, System.IntPtr _TextureNativePtr);
+	//[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
+	//extern static private System.IntPtr mray_BlitImageNativeGLCall(System.IntPtr p, System.IntPtr _TextureNativePtr);
 
-	[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("RenderUnityPlugin", CallingConvention = CallingConvention.Cdecl)]
+    extern static private System.IntPtr mray_gst_ImageInfoBlitImageNativeGLCall(System.IntPtr p, System.IntPtr _TextureNativePtr);
+
+    [DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private System.IntPtr mray_FlipImageData(System.IntPtr p, bool horizontal,bool vertical);
 
 	[DllImport(GStreamerCore.DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -188,8 +189,8 @@ public class GstImageInfo {
 			tex.Apply (false,false);
 
 		}
-		GL.IssuePluginEvent(mray_BlitImageNativeGLCall(_instance, tex.GetNativeTexturePtr()), 1);
-		//mray_BlitImageDataInfo (_instance, tex.GetNativeTexturePtr ());
+        Debug.Log("GstImageInfo:: Trying to BlitToTexture");
+		GL.IssuePluginEvent(mray_gst_ImageInfoBlitImageNativeGLCall(_instance, tex.GetNativeTexturePtr()), 1);
 	}
 
 	public void FlipImage(bool horizontal,bool vertical)

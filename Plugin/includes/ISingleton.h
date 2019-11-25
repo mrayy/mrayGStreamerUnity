@@ -17,7 +17,7 @@ public:
 	ISingleton(){
 		if (m_instance != 0)
 		{
-			LogMessage("Instance is already created!", ELL_ERROR);
+			LogMessage(ELL_ERROR,"Instance is already created!");
 			//throw new std::exception("Instance is already created");
 		}
 
@@ -34,7 +34,7 @@ public:
 	static T&getInstance(){
 		if (m_instance == 0)
 		{
-			LogMessage("Instance object not created!", ELL_ERROR);
+			LogMessage(ELL_ERROR,"Instance object not created!");
 			//throw new std::exception("Instance object not created");
 		}
 		return *m_instance;

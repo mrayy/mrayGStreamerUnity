@@ -186,7 +186,7 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage("GstNetworkVideoPlayer: Pipeline error: " + std::string(err->message), ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstNetworkVideoPlayer: Pipeline error: %s " ,err->message);
 		}
 		if (!p)
 			return false;

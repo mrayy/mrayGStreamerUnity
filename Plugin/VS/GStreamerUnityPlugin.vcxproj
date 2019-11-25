@@ -258,7 +258,6 @@
     <ClCompile Include="../includes/IThreadManager.cpp" />
     <ClCompile Include="../includes/NetAddress.cpp" />
     <ClCompile Include="../includes/PixelUtil.cpp" />
-    <ClCompile Include="../includes/UnityGraphicsDevice.cpp" />
     <ClCompile Include="../includes/Win32/Win32Network.cpp" />
     <ClCompile Include="../includes/Win32/Win32UDPClient.cpp" />
     <ClCompile Include="../includes/Win32/WinMutex.cpp" />
@@ -271,15 +270,10 @@
     <ClCompile Include="../sources/VideoAppSinkHandler.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="../includes/RenderAPI.cpp" />
-    <ClCompile Include="../includes/RenderAPI_D3D11.cpp" />
-    <ClCompile Include="../includes/RenderAPI_D3D9.cpp" />
-    <ClCompile Include="../includes/RenderAPI_OpenGL2.cpp" />
     <ClCompile Include="../sources/AudioAppSinkHandler.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="../sources/IAppSinkHandler.cpp" />
-    <ClCompile Include="..\includes\RenderAPI_OpenGLCoreES.cpp" />
     <ClCompile Include="..\sources\CMyListener.cpp" />
     <ClCompile Include="..\sources\CMyUDPSink.cpp" />
     <ClCompile Include="..\sources\CMyUDPSrc.cpp" />
@@ -314,6 +308,10 @@
     <ClCompile Include="..\sources\UnityAudioGrabber.cpp" />
     <ClCompile Include="..\sources\LocalAudioGrabber.cpp" />
     <ClCompile Include="..\sources\rtp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Android\jni\Android.mk" />
+    <None Include="..\Android\jni\Application.mk" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

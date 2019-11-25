@@ -16,7 +16,10 @@ public class GstCustomPlayer:IGstPlayer  {
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private bool mray_gst_customPlayerCreateStream(System.IntPtr p);
 
-	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    extern static private System.IntPtr mray_gst_customPlayerGetLastFrame(System.IntPtr p);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_customPlayerGetFrameSize(System.IntPtr p, ref int w, ref int h, ref int comp);
 
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -30,11 +33,10 @@ public class GstCustomPlayer:IGstPlayer  {
 	extern static private bool mray_gst_customPlayerCropFrame (System.IntPtr p, System.IntPtr target,int x,int y,int width,int height);
 
 
-	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-	extern static private void mray_gst_customPlayerBlitImage(System.IntPtr p, System.IntPtr _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
 
-	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-	extern static private System.IntPtr mray_gst_customPlayerBlitImageNativeGLCall(System.IntPtr p, System.IntPtr _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+    [DllImport("RenderUnityPlugin", CallingConvention = CallingConvention.Cdecl)]
+    extern static private System.IntPtr mray_gst_BlitImageNativeGLCall(System.IntPtr p, System.IntPtr _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight);
+
 
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private int mray_gst_customPlayerFrameCount(System.IntPtr p);
@@ -164,7 +166,7 @@ public class GstCustomPlayer:IGstPlayer  {
 	public bool GrabFrame(out Vector2 frameSize,out int components)
 	{
 		int w=0,h=0,c=0;
-		if(mray_gst_customPlayerGrabFrame(m_Instance,ref w,ref h))
+		if(mray_gst_playerGrabFrame(m_Instance,ref w,ref h,0))
 		{
 			mray_gst_customPlayerGetFrameSize(m_Instance,ref w,ref h,ref c);
 			components=c;
@@ -198,8 +200,10 @@ public class GstCustomPlayer:IGstPlayer  {
 		Vector2 sz = FrameSize;
 		if (_TextureWidth != sz.x || _TextureHeight != sz.y) return;	// For now, only works if the texture has the exact same size as the webview.
 
-		GL.IssuePluginEvent(mray_gst_customPlayerBlitImageNativeGLCall(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight), 1);
-		//mray_gst_customPlayerBlitImage(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight);	// We pass Unity's width and height values of the texture
+        //Debug.Log("GstCustomPlayer::BlitTexture()");
+        var frame = mray_gst_customPlayerGetLastFrame(m_Instance);
+
+        GL.IssuePluginEvent(mray_gst_BlitImageNativeGLCall(frame, _NativeTexturePtr, _TextureWidth, _TextureHeight), 1);
 	}
 
 	public bool GrabAudioFrame()

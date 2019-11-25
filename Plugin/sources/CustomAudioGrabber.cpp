@@ -76,16 +76,16 @@ public:
 		GError *err = 0;
 		std::string pipline = BuildPipeline();
 		GstElement* p = gst_parse_launch(pipline.c_str(), &err);
-		LogMessage("CustomAudioGrabber::Starting with pipeline: " + pipline, ELL_INFO);
+		LogMessage(ELL_INFO,"CustomAudioGrabber::Starting with pipeline:  %s",pipline);
 		if (err)
 		{
-			LogMessage("CustomAudioGrabber: Pipeline error: " + std::string(err->message), ELL_WARNING);
+			LogMessage(ELL_WARNING,"CustomAudioGrabber: Pipeline error: %s",(err->message));
 			gst_object_unref(p);
 			p = 0;
 		}
 		if (!p)
 			return false;
-		LogMessage("CustomAudioGrabber::Finished Linking Pipeline", ELL_INFO);
+		LogMessage(ELL_INFO,"CustomAudioGrabber::Finished Linking Pipeline");
 		SetPipeline(p);
 
 		m_volume = gst_bin_get_by_name(GST_BIN(p), "vol");

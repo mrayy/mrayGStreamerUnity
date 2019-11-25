@@ -21,8 +21,10 @@ public:
 
 	virtual bool GetUsesReverseZ() { return true; }
 
-    virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
-	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
+	virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
+
+	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
+	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int comps, int rowPitch, void* dataPtr);
 
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
@@ -186,7 +188,7 @@ void* RenderAPI_D3D12::BeginModifyTexture(void* textureHandle, int textureWidth,
 }
 
 
-void RenderAPI_D3D12::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr)
+void RenderAPI_D3D12::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int comps, int rowPitch, void* dataPtr)
 {
 	ID3D12Device* device = s_D3D12->GetDevice();
 

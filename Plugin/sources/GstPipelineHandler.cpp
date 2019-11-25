@@ -92,17 +92,17 @@ namespace video
 
 
 		if (gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_READY) == GST_STATE_CHANGE_FAILURE) {
-			LogMessage("GstPipelineHandler::Play(): unable to set pipeline to ready",ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstPipelineHandler::Play(): unable to set pipeline to ready");
 			return false;
 		}
 		if (gst_element_get_state(GST_ELEMENT(m_data->gstPipeline), NULL, NULL, 10 * GST_SECOND) == GST_STATE_CHANGE_FAILURE){
-			LogMessage("GstPipelineHandler::Play(): unable to get pipeline ready status", ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstPipelineHandler::Play(): unable to get pipeline ready status");
 			return false;
 		}
 
 		// pause the pipeline
 		if (gst_element_set_state(GST_ELEMENT(m_data->gstPipeline), GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE) {
-			LogMessage("GstPipelineHandler::Play(): unable to pause pipeline", ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstPipelineHandler::Play(): unable to pause pipeline");
 			return false;
 		}
 
@@ -225,7 +225,7 @@ namespace video
 // 			return true;
 		switch (GST_MESSAGE_TYPE(msg)) {
 		case GST_MESSAGE_EOS:
-			LogMessage(std::string("GstPipelineHandler::HandleMessage(): Received EOS message ") , ELL_INFO);
+			LogMessage(ELL_INFO,"GstPipelineHandler::HandleMessage(): Received EOS message ");
 
 			break;
 		case GST_MESSAGE_BUFFERING:
@@ -279,7 +279,7 @@ namespace video
 			gst_message_parse_warning(msg, &err, &debug);
 			gchar * name = gst_element_get_name(GST_MESSAGE_SRC(msg));
 
-			LogMessage(std::string("GstPipelineHandler::HandleMessage(): warning in module ") + name + std::string("  reported: ") + err->message, ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstPipelineHandler::HandleMessage(): warning in module [%s] reported %s", name , err->message);
 
 			g_free(name);
 			g_error_free(err);
@@ -295,8 +295,7 @@ namespace video
 			gst_message_parse_error(msg, &err, &debug);
 			gchar * name = gst_element_get_name(GST_MESSAGE_SRC(msg));
 
-			LogMessage(std::string("GstPipelineHandler::HandleMessage(): error in module ")
-				+ name + std::string("  reported: ") + err->message + std::string(" - ") + debug, ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstPipelineHandler::HandleMessage(): error in module [%s] reported %s/%s",name , err->message , debug);
 
 			g_free(name);
 			g_error_free(err);

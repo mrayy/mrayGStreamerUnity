@@ -59,7 +59,7 @@ namespace mray
                 GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
                 if (err)
                 {
-                    LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
+                    LogMessage(ELL_ERROR,"GstCustomVideoPlayer: Pipeline error: %s", err->message);
                 }
                 if (!p)
                     return false;

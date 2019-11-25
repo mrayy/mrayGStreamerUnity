@@ -63,7 +63,7 @@ public:
 
 		if (!m_audioGrabber)
 		{
-			LogMessage("GstAudioSampler::NeedBuffer() -No audio grabber is assigned to GstAudioSampler", ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstAudioSampler::NeedBuffer() -No audio grabber is assigned to GstAudioSampler");
 			return GST_FLOW_ERROR;
 		}
 		if (!m_audioGrabber->GrabFrame())
@@ -91,7 +91,7 @@ public:
 			ret = gst_app_src_push_buffer(d->m_audioSrc, buffer);
 			//	LogMessage("pushing data to: ", std::StringConverter::toString(d->index),ELL_INFO);
 			if (ret != GST_FLOW_OK) {
-				LogMessage("GstAudioSampler::read_data() - Failed to push data to AppSrc ", ELL_WARNING);
+				LogMessage(ELL_WARNING,"GstAudioSampler::read_data() - Failed to push data to AppSrc ");
 				ret = gst_app_src_end_of_stream(d->m_audioSrc);
 				return FALSE;
 			}
@@ -159,7 +159,7 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage("GstAudioSampler:CreateStream() - Pipeline error:" + std::string(err->message), ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstAudioSampler:CreateStream() - Pipeline error: %s",err->message);
 		}
 		if (!p)
 			return false;
@@ -205,7 +205,7 @@ public:
 
 		SetPipeline(p);
 
-		LogMessage("GstAudioSampler:CreateStream() - Pipeline created", ELL_INFO);
+		LogMessage(ELL_INFO,"GstAudioSampler:CreateStream() - Pipeline created");
 
 		return CreatePipeline(false);
 
@@ -223,7 +223,7 @@ public:
 		m_audioSrc->m_client->Close();*/
 
 		GstPipelineHandler::Close();
-		LogMessage("GstAudioSampler:Close() - Connection closed", ELL_INFO);
+		LogMessage(ELL_INFO,"GstAudioSampler:Close() - Connection closed");
 	}
 
 	void Play()

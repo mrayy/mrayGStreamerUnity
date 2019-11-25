@@ -44,6 +44,8 @@ namespace video
 GStreamerCore* GStreamerCore::m_instance=0;
 uint GStreamerCore::m_refCount = 0;
 
+static GstClockTime _priv_gst_info_start_time;
+
 static gboolean appsink_plugin_init(GstPlugin * plugin)
 {
 	gst_element_register(plugin, "appsink", GST_RANK_NONE, GST_TYPE_APP_SINK);
@@ -67,7 +69,7 @@ public:
 	void execute(OS::IThread*caller, void*arg){
 		main_loop = g_main_loop_new(NULL, FALSE);
 		g_main_loop_run(main_loop);
-		LogMessage("GST Thread shutdown",ELL_INFO);
+		LogMessage(ELL_INFO,"GST Thread shutdown");
 	}
 };
 
@@ -89,19 +91,85 @@ GStreamerCore::~GStreamerCore()
 }
 
 
+
+static void gst_debug_gub(GstDebugCategory * category, GstDebugLevel level,
+	const gchar * file, const gchar * function, gint line,
+	GObject * object, GstDebugMessage * message, gpointer unused)
+{
+	GstClockTime elapsed;
+	gchar *tag;
+	const gchar *level_str;
+
+	if (level > gst_debug_category_get_threshold(category))
+		return;
+
+	elapsed = GST_CLOCK_DIFF(_priv_gst_info_start_time,
+		gst_util_get_timestamp());
+
+	switch (level) {
+	case GST_LEVEL_ERROR:
+		level_str = "ERR";
+		break;
+	case GST_LEVEL_WARNING:
+		level_str = "WRN";
+		break;
+	case GST_LEVEL_INFO:
+		level_str = "NFO";
+		break;
+	case GST_LEVEL_DEBUG:
+		level_str = "DBG";
+		break;
+	default:
+		level_str = "LOG";
+		break;
+	}
+
+	tag = g_strdup_printf("%s", gst_debug_category_get_name(category));
+
+	if (object) {
+		gchar *obj;
+
+		if (GST_IS_PAD(object) && GST_OBJECT_NAME(object)) {
+			obj = g_strdup_printf("<%s:%s>", GST_DEBUG_PAD_NAME(object));
+		}
+		else if (GST_IS_OBJECT(object) && GST_OBJECT_NAME(object)) {
+			obj = g_strdup_printf("<%s>", GST_OBJECT_NAME(object));
+		}
+		else if (G_IS_OBJECT(object)) {
+			obj = g_strdup_printf("<%s@%p>", G_OBJECT_TYPE_NAME(object), object);
+		}
+		else {
+			obj = g_strdup_printf("<%p>", object);
+		}
+
+		LogMessage(ELL_INFO,
+			"%" GST_TIME_FORMAT " %p %s %s %s:%d:%s:%s %s",
+			GST_TIME_ARGS(elapsed), g_thread_self(), level_str, tag,
+			file, line, function, obj, gst_debug_message_get(message));
+
+		g_free(obj);
+	}
+	else {
+		LogMessage(ELL_INFO,
+			"%" GST_TIME_FORMAT " %p %s %s %s:%d:%s %s",
+			GST_TIME_ARGS(elapsed), g_thread_self(), level_str, tag,
+			file, line, function, gst_debug_message_get(message));
+	}
+	g_free(tag);
+}
 void g_logFunction(const gchar   *log_domain,
 	GLogLevelFlags log_level,
 	const gchar   *message,
 	gpointer       user_data)
 {
     if(log_level==G_LOG_LEVEL_INFO || log_level==G_LOG_LEVEL_DEBUG)
-        LogMessage(message, ELL_INFO);
+        LogMessage(ELL_INFO,message);
     else if(log_level==G_LOG_LEVEL_WARNING)
-        LogMessage(message, ELL_WARNING);
+        LogMessage(ELL_WARNING,message);
     else if(log_level==G_LOG_LEVEL_CRITICAL || log_level==G_LOG_FLAG_FATAL)
-        LogMessage(message, ELL_ERROR);
+        LogMessage(ELL_ERROR,message);
     else
-        LogMessage(message, ELL_INFO);
+        LogMessage(ELL_INFO,message);
 }
 
 gpointer gst_main_loop_func(gpointer data)
@@ -119,10 +187,15 @@ void GStreamerCore::_Init()
 	_gst_debug_enabled = false; 
 	if (!gst_init_check(0,0, &err))
 	{
-		LogMessage("GStreamerCore - Failed to init GStreamer!",ELL_WARNING);
+		LogMessage(ELL_WARNING,"GStreamerCore - Failed to init GStreamer!");
 	}
 	else
-    {
+	{
+
+		_priv_gst_info_start_time = gst_util_get_timestamp();
+		gst_debug_remove_log_function(gst_debug_log_default);
+		gst_debug_add_log_function((GstLogFunction)gst_debug_gub, NULL, NULL);
+/*
         g_log_set_handler(0,  G_LOG_LEVEL_WARNING, g_logFunction, 0);
         g_log_set_handler(0,  G_LOG_LEVEL_MESSAGE, g_logFunction, 0);
         g_log_set_handler(0,  G_LOG_LEVEL_INFO, g_logFunction, 0);
@@ -130,14 +203,17 @@ void GStreamerCore::_Init()
         g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
 		g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
 		g_log_set_default_handler(g_logFunction, 0);
+		*/
 
+		gst_debug_set_active(FALSE);
+		//gst_debug_set_threshold_from_string("2,dashdemux:5", TRUE);
 
 #if defined (__ANDROID__)
 		gst_android_register_static_plugins();
 		gst_android_load_gio_modules();
 #endif
         
-        LogMessage("GStreamerCore - Registering Elements!", ELL_INFO);
+        LogMessage(ELL_INFO,"GStreamerCore - Registering Elements!");
 		//fclose(stderr);
         
 		//register plugin path
@@ -172,7 +248,11 @@ void GStreamerCore::_Init()
 			_GstMyListenerClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
 			"");
 #endif
-		LogMessage("GStreamerCore - GStreamer inited", ELL_INFO);
+
+		gchar* version = gst_version_string();
+		LogMessage(ELL_INFO,"%s initialized", version);
+		g_free(version);
+		LogMessage(ELL_INFO,"GStreamerCore - GStreamer inited");
 	}
 
 #if GLIB_MINOR_VERSION<32
@@ -184,7 +264,7 @@ void GStreamerCore::_Init()
 
 	gub_main_loop_thread = g_thread_new("GstUnityBridge Main Thread", gst_main_loop_func, this);
 	if (!gub_main_loop_thread) {
-		LogMessage(std::string("Failed to create GLib main thread: ") + std::string(err ? err->message : "<No error message>"), ELL_INFO);
+		LogMessage(ELL_INFO,"Failed to create GLib main thread: %s",err ? err->message : "<No error message>");
 		return;
 	}
 
@@ -193,10 +273,10 @@ void GStreamerCore::_Init()
 
 
 void GStreamerCore::_loopFunction() {
-	LogMessage("Entering main loop", ELL_INFO);
+	LogMessage(ELL_INFO,"Entering main loop");
 	gub_main_loop = g_main_loop_new(NULL, FALSE);
 	g_main_loop_run(gub_main_loop);
-	LogMessage("Quitting main loop", ELL_INFO);
+	LogMessage(ELL_INFO,"Quitting main loop");
 }
 
 
@@ -239,9 +319,9 @@ void GStreamerCore::Ref()
 	m_refCount++;
 	if (m_refCount==1)
 	{
-		LogMessage("Initializing GStreamer",ELL_INFO);
+		LogMessage(ELL_INFO,"Initializing GStreamer");
 		m_instance = new GStreamerCore();
-		LogMessage("Initializing GStreamer - Done", ELL_INFO);
+		LogMessage(ELL_INFO,"Initializing GStreamer - Done");
 	}
 
 }
@@ -250,10 +330,10 @@ void GStreamerCore::Unref()
 {
 	if (m_refCount == 0)
 	{
-		LogMessage("GStreamerCore::Unref() - unreferencing GStreamer with no reference! ", ELL_ERROR);
+		LogMessage(ELL_ERROR,"GStreamerCore::Unref() - unreferencing GStreamer with no reference! ");
 		return;
 	}
-	//m_refCount--;
+	m_refCount--;
 	if (m_refCount == 0)
 	{
 		delete m_instance;

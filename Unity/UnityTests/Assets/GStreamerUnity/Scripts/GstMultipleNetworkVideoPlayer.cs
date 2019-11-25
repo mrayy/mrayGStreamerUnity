@@ -151,9 +151,10 @@ public class GstMultipleNetworkPlayer:IGstPlayer  {
 		Vector2 sz = FrameSize;
 		if (_TextureWidth != sz.x || _TextureHeight != sz.y) return;	// For now, only works if the texture has the exact same size as the webview.
 		
-		GL.IssuePluginEvent(mray_gst_multiNetPlayerBlitImageNativeGLCall(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight,index), 1);
-		//mray_gst_multiNetPlayerBlitImage(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight,index);	// We pass Unity's width and height values of the texture
-	}
+        Debug.Log("GstMultipleNetworkPlayer::Trying to BlitToTexture");
+        //GL.IssuePluginEvent(mray_gst_multiNetPlayerBlitImageNativeGLCall(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight,index), 1);
+        //mray_gst_multiNetPlayerBlitImage(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight,index);	// We pass Unity's width and height values of the texture
+    }
 }
 
 

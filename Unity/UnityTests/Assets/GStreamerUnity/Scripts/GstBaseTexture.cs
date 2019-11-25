@@ -166,9 +166,10 @@ public abstract class GstBaseTexture : MonoBehaviour {
 			Debug.Log("Creating Texture video stream: "+_Width.ToString()+"x"+_Height.ToString());
 			m_Texture [index].Resize (_Width, _Height, GetFormat (components), false);
 			m_Texture [index].Apply (false, false);
-		}
-		
-	}
+            Debug.Log("Texture Created");
+        }
+
+    }
 
 	// Use this for initialization
 	void Start () {

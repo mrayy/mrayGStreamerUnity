@@ -28,10 +28,10 @@
 
 EXPORT_CDECL UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 {
-	LogMessage("mray_gstreamer_initialize",ELL_INFO);
+	LogMessage(ELL_INFO,"mray_gstreamer_initialize");
 	if (video::GStreamerCore::RefCount() == 0)
 	{
-		LogMessage("Initializing GStreamer Engine", ELL_INFO);
+		LogMessage(ELL_INFO, "Initializing GStreamer Engine");
 #ifdef WIN32
 		new OS::WinThreadManager();
 		new network::Win32Network();
@@ -47,7 +47,7 @@ EXPORT_CDECL UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 
 #endif
 #endif
-		LogMessage("Initializing GStreamer Engine - Done", ELL_INFO);
+		LogMessage(ELL_INFO,"Initializing GStreamer Engine - Done");
 	}
 	video::GStreamerCore::Ref();
 	return true;
@@ -79,7 +79,7 @@ EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_gstreamer_shutdown()
 
 EXPORT_CDECL UNITY_INTERFACE_EXPORT bool mray_gstreamer_isActive()
 {
-	LogMessage("Checking is active", ELL_INFO);
+	LogMessage(ELL_INFO, "Checking is active");
 	return video::GStreamerCore::Instance()!=0;
 
 }
@@ -118,18 +118,6 @@ EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_deleteImageData(video::ImageInfo* 
     ifo=NULL;
 }
 
-EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_BlitImageDataInfo(video::ImageInfo* ifo,void* _TextureNativePtr)
-{
-    
-    if (ifo == NULL || !_TextureNativePtr)
-        return;
-    
-    if (ifo)
-    {
-        BlitImage(ifo, _TextureNativePtr, ifo->Size.x,ifo->Size.y);
-    }
-
-}
 
 EXPORT_CDECL UNITY_INTERFACE_EXPORT void* mray_getImageDataPtr(video::ImageInfo* ifo)
 {
@@ -145,43 +133,4 @@ EXPORT_CDECL UNITY_INTERFACE_EXPORT void mray_FlipImageData(video::ImageInfo* if
         return;
     ifo->FlipImage(horizontal, vertical);
     
-}
-
-struct ImageBlitData
-{
-    video::ImageInfo* ifo;
-    void* _TextureNativePtr;
-};
-
-std::vector<ImageBlitData> _data;
-
-static void  __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
-{
-    if (_data.size() == 0)
-        return;
-    for(int i=0;i<_data.size();++i)
-    {
-        ImageBlitData& r=_data[i];
-        mray_BlitImageDataInfo(r.ifo, r._TextureNativePtr);
-    }
-    _data.clear();
-}
-EXPORT_CDECL UNITY_INTERFACE_EXPORT UnityRenderNative mray_BlitImageNativeGLCall(video::ImageInfo* ifo, void* _TextureNativePtr)
-{
-    ImageBlitData r;
-    r.ifo = ifo;
-    r._TextureNativePtr = _TextureNativePtr;
-    _data.push_back(r);
-    return mray_gst_customPlayerBlitImageNativeEvent;
-}
-
-
-EXPORT_CDECL UNITY_INTERFACE_EXPORT void*  mray_GetTextureData(void* texturePtr)
-{
-	return GetRenderer()->GetTextureDataPtr(texturePtr);
-}
-
-EXPORT_CDECL UNITY_INTERFACE_EXPORT void  mray_ReleaseTextureData(void* texturePtr)
-{
-	GetRenderer()->ReleaseTextureDataPtr(texturePtr);
 }

@@ -37,13 +37,34 @@ public class GstCustomTexture : GstBaseTexture {
 	Thread _imageGrabber;
 	bool _isDone=false;
 
-	protected override void _initialize()
+    bool _newFrame;
+
+    private IEnumerator GrabAtEndOfFrames()
+    {
+        while (true)
+        {
+            // Wait until all frame rendering is done
+            yield return new WaitForEndOfFrame();
+
+            if (_newFrame)
+            {
+                _player.BlitTexture(m_Texture[0].GetNativeTexturePtr(), m_Texture[0].width, m_Texture[0].height);
+                OnFrameCaptured(0);
+                _triggerOnFrameBlitted(0);
+                _newFrame = false;
+            }
+        }
+    }
+
+    protected override void _initialize()
 	{
 		_player = new GstCustomPlayer ();
 
 		_imageGrabber = new Thread (new ThreadStart (ImageGrabberThread));
 		_imageGrabber.Start ();
-	}
+        StartCoroutine("GrabAtEndOfFrames");
+
+    }
 	public override void Destroy ()
 	{
 		_isDone = true;
@@ -98,11 +119,9 @@ public class GstCustomTexture : GstBaseTexture {
 					if (m_Texture[0] == null)
 						Debug.LogError ("The GstTexture does not have a texture assigned and will not paint.");
 					else {
-						_player.BlitTexture (m_Texture [0].GetNativeTexturePtr (), m_Texture [0].width, m_Texture [0].height);
-					}
-					_imageGrabed = false;
-					OnFrameCaptured(0);
-					_triggerOnFrameBlitted (0);
+                            _newFrame = true;
+                        }
+                        _imageGrabed = false;
 				}
 				break;	
 			}

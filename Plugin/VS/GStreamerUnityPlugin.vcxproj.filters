@@ -254,9 +254,6 @@
     <ClCompile Include="../includes/PixelUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="../includes/UnityGraphicsDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="../sources/UnityHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -292,18 +289,6 @@
     </ClCompile>
     <ClCompile Include="..\sources\GstNetworkVideoPlayer.cpp">
       <Filter>Source Files\Players</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_OpenGL2.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_D3D9.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
-    <ClCompile Include="../includes/RenderAPI_D3D11.cpp">
-      <Filter>Source Files\API</Filter>
     </ClCompile>
     <ClCompile Include="../sources/PlayersAPI.cpp">
       <Filter>Source Files\API</Filter>
@@ -386,8 +371,13 @@
     <ClCompile Include="..\sources\GstAudioSampler.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
-    <ClCompile Include="..\includes\RenderAPI_OpenGLCoreES.cpp">
-      <Filter>Source Files\API</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Android\jni\Android.mk">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\Android\jni\Application.mk">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

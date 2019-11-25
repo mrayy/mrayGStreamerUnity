@@ -2,15 +2,13 @@
 
 // Unity native plugin API
 // Compatible with C99
-
-#define EXPORT_CDECL extern "C"
-
+#define EXPORT_CDECL extern "C" 
 #if defined(__CYGWIN32__)
     #define UNITY_INTERFACE_API __stdcall
     #define UNITY_INTERFACE_EXPORT __declspec(dllexport)
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN64) || defined(WINAPI_FAMILY)
     #define UNITY_INTERFACE_API __stdcall
-#define UNITY_INTERFACE_EXPORT __declspec(dllexport)
+    #define UNITY_INTERFACE_EXPORT __declspec(dllexport)
 #elif defined(__MACH__) || defined(__ANDROID__) || defined(__linux__)
     #define UNITY_INTERFACE_API
     #define UNITY_INTERFACE_EXPORT
@@ -184,14 +182,18 @@ typedef struct IUnityInterfaces
 } IUnityInterfaces;
 
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 // If exported by a plugin, this function will be called when the plugin is loaded.
 void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces);
 // If exported by a plugin, this function will be called when the plugin is about to be unloaded.
 void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload();
 
+#ifdef __cplusplus
 }
+#endif
 
 struct RenderSurfaceBase;
 typedef struct RenderSurfaceBase* UnityRenderBuffer;

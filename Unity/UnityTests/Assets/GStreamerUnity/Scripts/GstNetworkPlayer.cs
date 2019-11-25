@@ -78,10 +78,11 @@ public class GstNetworkPlayer:IGstPlayer  {
 		if (_NativeTexturePtr == System.IntPtr.Zero) return;
 
 		Vector2 sz = FrameSize;
-		if (_TextureWidth != sz.x || _TextureHeight != sz.y) return;	// For now, only works if the texture has the exact same size as the webview.
-		
-		mray_gst_netPlayerBlitImage(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight);	// We pass Unity's width and height values of the texture
-	}
+		if (_TextureWidth != sz.x || _TextureHeight != sz.y) return;    // For now, only works if the texture has the exact same size as the webview.
+
+        Debug.Log("GstNetworkPlayer::Trying to BlitToTexture");
+        //mray_gst_netPlayerBlitImage(m_Instance, _NativeTexturePtr, _TextureWidth, _TextureHeight);	// We pass Unity's width and height values of the texture
+    }
 }
 
 

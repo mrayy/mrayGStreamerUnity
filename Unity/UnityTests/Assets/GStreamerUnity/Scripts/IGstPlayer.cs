@@ -7,7 +7,10 @@ public abstract class IGstPlayer {
 
 	internal const string DllName = "GStreamerUnityPlugin";
 
-	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    extern static protected bool mray_gst_playerGrabFrame(System.IntPtr p, ref int w, ref int h, int index);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private void mray_gst_PlayerDestroy(System.IntPtr p);
 
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]

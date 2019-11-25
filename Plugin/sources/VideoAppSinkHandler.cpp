@@ -365,9 +365,7 @@ GstFlowReturn VideoAppSinkHandler::process_sample(std::shared_ptr<GstSample> sam
 	if (m_pixels[0].data.imageData && dataSize != (int)size){
 		if (vinfo.stride[0] < (m_pixels[0].data.Size.x * pxSize)) {
 			gst_buffer_unmap(_buffer, &mapinfo);
-			std::stringstream ss;
-			ss << "VideoAppSinkHandler::process_sample(): error on new buffer, buffer size: " << size << "!= init size: " << dataSize;
-			LogMessage(ss.str(), ELL_WARNING);
+			LogMessage(ELL_WARNING, "VideoAppSinkHandler::process_sample(): error on new buffer, buffer size: %d != initial size %d" ,size ,dataSize);
 			return GST_FLOW_ERROR;
 		}
 	}

@@ -163,7 +163,7 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage("GstAudioNetworkStreamer: Pipeline error: "+std::string( err->message),ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstAudioNetworkStreamer: Pipeline error: %s", err->message);
 		}
 		if (!p)
 			return false;

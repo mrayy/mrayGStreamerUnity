@@ -157,7 +157,7 @@ public:
 
 		if (!m_audioGrabber)
 		{
-			LogMessage("GstAppNetAudioStreamer::NeedBuffer() -No audio grabber is assigned to GstAppNetAudioStreamer", ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstAppNetAudioStreamer::NeedBuffer() -No audio grabber is assigned to GstAppNetAudioStreamer");
 			return GST_FLOW_ERROR;
 		}
 		if (!m_audioGrabber->GrabFrame())
@@ -194,7 +194,7 @@ public:
 			ret = gst_app_src_push_buffer(d->m_audioSrc, buffer);
 			//	LogMessage("pushing data to: ", std::StringConverter::toString(d->index),ELL_INFO);
 			if (ret != GST_FLOW_OK){
-				LogMessage("GstAppNetAudioStreamer::read_data() - Failed to push data to AppSrc " , ELL_WARNING);
+				LogMessage(ELL_WARNING,"GstAppNetAudioStreamer::read_data() - Failed to push data to AppSrc " );
 				ret = gst_app_src_end_of_stream(d->m_audioSrc);
 				return FALSE;
 			}
@@ -238,16 +238,16 @@ public:
 		GError *err = 0;
 		BuildString();
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
-		LogMessage("GstAppNetAudioStreamer::Starting with pipeline: " + m_pipeLineString, ELL_INFO);
+		LogMessage(ELL_INFO,"GstAppNetAudioStreamer::Starting with pipeline: %s" ,m_pipeLineString);
 		if (err)
 		{
-			LogMessage("GstAppNetAudioStreamer: Pipeline error: " + std::string(err->message), ELL_WARNING);
+			LogMessage(ELL_WARNING,"GstAppNetAudioStreamer: Pipeline error: %s" ,(err->message));
 			gst_object_unref(p);
 			p = 0;
 		}
 		if (!p)
 			return false;
-		LogMessage("GstAppNetAudioStreamer::Finished Linking Pipeline", ELL_INFO);
+		LogMessage(ELL_INFO,"GstAppNetAudioStreamer::Finished Linking Pipeline");
 
 		m_audioSrc = GST_APP_SRC(gst_bin_get_by_name(GST_BIN((GstElement*)p), "src"));
 

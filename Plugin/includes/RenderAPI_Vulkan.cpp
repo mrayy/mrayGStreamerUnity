@@ -7,6 +7,7 @@
 #include <map>
 #include <vector>
 #include <math.h>
+#include "UnityHelpers.h"
 
 // This plugin does not link to the Vulkan loader, easier to support multiple APIs and systems that don't have Vulkan support
 #define VK_NO_PROTOTYPES
@@ -442,7 +443,7 @@ public:
     virtual bool GetUsesReverseZ() { return true; }
     virtual void DrawSimpleTriangles(const float worldMatrix[16], int triangleCount, const void* verticesFloat3Byte4);
     virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
-    virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int components, int rowPitch, void* dataPtr);
+    virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int comps,int rowPitch, void* dataPtr);
     virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
     virtual void EndModifyVertexBuffer(void* bufferHandle);
 
@@ -700,9 +701,10 @@ void* RenderAPI_Vulkan::BeginModifyTexture(void* textureHandle, int textureWidth
     return m_TextureStagingBuffer.mapped;
 }
 
-void RenderAPI_Vulkan::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int components, int rowPitch, void* dataPtr)
+void RenderAPI_Vulkan::EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int comps, int rowPitch, void* dataPtr)
 {
-    // cannot do resource uploads inside renderpass
+	LogMessage("RenderAPI_Vulkan::EndModifyTexture()", ELL_INFO);
+	// cannot do resource uploads inside renderpass
     m_UnityVulkan->EnsureOutsideRenderPass();
 
     UnityVulkanImage image;
@@ -729,6 +731,7 @@ void RenderAPI_Vulkan::EndModifyTexture(void* textureHandle, int textureWidth, i
     region.imageSubresource.layerCount = 1;
     region.imageSubresource.mipLevel = 0;
     vkCmdCopyBufferToImage(recordingState.commandBuffer, m_TextureStagingBuffer.buffer, image.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+	LogMessage("RenderAPI_Vulkan::vkCmdCopyBufferToImage()", ELL_INFO);
 }
 
 void* RenderAPI_Vulkan::BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize)

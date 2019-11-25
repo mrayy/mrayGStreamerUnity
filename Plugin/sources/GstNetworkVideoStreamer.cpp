@@ -260,7 +260,7 @@ public:
 			return GST_FLOW_ERROR;
 		if (!m_grabber)
 		{
-			LogMessage(std::string("No video grabber is assigned to CustomVideoStreamer"), ELL_WARNING);
+			LogMessage(ELL_WARNING,"No video grabber is assigned to CustomVideoStreamer");
 			return GST_FLOW_ERROR;
 		}
 // 		do 
@@ -418,7 +418,7 @@ public:
 		GstElement* pipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
+			LogMessage(ELL_ERROR,"GstCustomVideoPlayer: Pipeline error: %s",err->message);
 		}
 		if (!pipeline)
 			return false;

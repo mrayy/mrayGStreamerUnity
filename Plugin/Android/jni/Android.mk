@@ -23,10 +23,6 @@ LOCAL_SRC_FILES         :=   $(EXT_SOURCE_PATH)/Android/AndroidMutex.cpp \
 							$(EXT_SOURCE_PATH)/IThreadManager.cpp\
 							$(EXT_SOURCE_PATH)/ImageInfo.cpp\
 							$(EXT_SOURCE_PATH)/PixelUtil.cpp\
-							$(EXT_SOURCE_PATH)/RenderAPI.cpp\
-							$(EXT_SOURCE_PATH)/UnityGraphicsDevice.cpp\
-							$(EXT_SOURCE_PATH)/RenderAPI_OpenGLCoreES.cpp\
-							$(EXT_SOURCE_PATH)/RenderAPI_Vulkan.cpp\
 							$(EXT_SOURCE_PATH)/NetAddress.cpp\
 							$(PLUGIN_SOURCE_PATH)/GZipCompress.cpp\
 							$(PLUGIN_SOURCE_PATH)/CMyListener.cpp\

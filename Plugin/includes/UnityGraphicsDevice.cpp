@@ -31,7 +31,7 @@ static IUnityGraphics* s_Graphics = NULL;
 
 extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 {
-	LogMessage("UnityPluginLoad", ELL_INFO);
+	LogMessage(ELL_INFO,"UnityPluginLoad");
     s_UnityInterfaces = unityInterfaces;
     s_Graphics = s_UnityInterfaces->Get<IUnityGraphics>();
     s_Graphics->RegisterDeviceEventCallback(OnGraphicsDeviceEvent);
@@ -75,10 +75,10 @@ RenderAPI* GetRenderer()
 {
 	if (!s_CurrentAPI)
 	{
-		LogMessage("s_CurrentAPI is null", ELL_WARNING);
+		LogMessage(ELL_WARNING,"s_CurrentAPI is null");
 		if(!s_Graphics)
 		{
-			LogMessage("s_Graphics is null!!", ELL_WARNING);
+			LogMessage(ELL_WARNING,"s_Graphics is null!!");
 		}
 		else {
 			s_CurrentAPI = CreateRenderAPI(s_DeviceType);
@@ -94,7 +94,7 @@ UnityGfxRenderer GetDeviceType()
 
 static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType)
 {
-	LogMessage("OnGraphicsDeviceEvent",ELL_INFO);
+	LogMessage(ELL_INFO,"OnGraphicsDeviceEvent");
     // Create graphics API implementation upon initialization
     if (eventType == kUnityGfxDeviceEventInitialize)
     {

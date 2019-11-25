@@ -163,7 +163,7 @@ public:
 		GstElement* p = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage("NetworkAudioPlayer:CreateStream() - Pipeline error:" + std::string(err->message), ELL_WARNING);
+			LogMessage(ELL_WARNING,"NetworkAudioPlayer:CreateStream() - Pipeline error: %s",err->message);
 		}
 		if (!p)
 			return false;
@@ -198,7 +198,7 @@ public:
 			gst_base_sink_set_max_lateness(GST_BASE_SINK(m_audioSink), 0);
 		}
 
-		LogMessage("NetworkAudioPlayer:CreateStream() - Pipeline created", ELL_INFO);
+		LogMessage(ELL_INFO,"NetworkAudioPlayer:CreateStream() - Pipeline created");
 
 		return CreatePipeline(false,m_ipAddr,m_clockPort);
 
@@ -228,7 +228,7 @@ public:
 			m_audioSrc->m_client->Close();*/
 
 		GstPipelineHandler::Close();
-		LogMessage("NetworkAudioPlayer:Close() - Connection closed", ELL_INFO);
+		LogMessage(ELL_INFO,"NetworkAudioPlayer:Close() - Connection closed");
 	}
 
 	void Play()

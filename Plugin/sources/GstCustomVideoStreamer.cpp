@@ -314,8 +314,8 @@ public:
 		GstElement* pipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
 		if (err)
 		{
-			LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") + err->message, ELL_ERROR);
-			LogMessage(m_pipeLineString, ELL_ERROR);
+			LogMessage(ELL_ERROR,"GstCustomVideoPlayer: Pipeline error: %s",err->message);
+			LogMessage(ELL_ERROR,m_pipeLineString.c_str());
 		}
 		if (!pipeline)
 			return false;
