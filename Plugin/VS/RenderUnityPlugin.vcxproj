@@ -162,7 +162,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USE_UNITY_GRABBER;__USE_UNITY_NETWORK;WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;../includes;../includes/Win32;../sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -231,7 +231,9 @@
     <ClCompile Include="..\includes\RenderAPI_D3D12.cpp" />
     <ClCompile Include="..\includes\RenderAPI_OpenGLCoreES.cpp" />
     <ClCompile Include="..\sources\GstRendererAPI.cpp" />
-    <ClCompile Include="..\sources\RendererHelpers.cpp" />
+    <ClCompile Include="..\sources\RendererHelpers.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="..\sources\UnityHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>

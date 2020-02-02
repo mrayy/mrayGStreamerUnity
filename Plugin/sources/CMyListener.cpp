@@ -265,9 +265,6 @@ gst_udpsrc_uri_get_type(GType type)
 gboolean
 _GstMyListenerClass::plugin_init(GstPlugin * plugin)
 {
-	if (!gst_element_register(plugin, "mylistener", GST_RANK_NONE,
-		GST_TYPE_MyListener))
-		return FALSE;
-
-	return TRUE;
+	return gst_element_register(plugin, "mylistener", GST_RANK_NONE,
+		GST_TYPE_MyListener);
 }

@@ -88,6 +88,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerGetFrameSize(GstNetwork
 	else
 		w = h = components = 0;
 }
+/*
 extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerBlitImage(GstNetworkVideoPlayer* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
 {
 	if (p == NULL || !_TextureNativePtr)
@@ -100,7 +101,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_netPlayerBlitImage(GstNetworkVid
 		BlitImage(ifo, _TextureNativePtr, _UnityTextureWidth, _UnityTextureHeight);
 	}
 
-}
+}*/
 extern "C" UNITY_INTERFACE_EXPORT int mray_gst_netPlayerFrameCount(GstNetworkVideoPlayer* p)
 {
 	if (p == NULL)

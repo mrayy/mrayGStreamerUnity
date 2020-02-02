@@ -15,6 +15,7 @@
 #ifndef __GStreamerCore__
 #define __GStreamerCore__
 
+#include "IThread.h"
 #include <gst/gst.h>
 #include "mTypes.h"
 
@@ -30,8 +31,8 @@ protected:
 	static GStreamerCore* m_instance;
 	static uint m_refCount;
 
-	//OS::IThread* m_mainLoopThread;
-	//OS::IThreadFunction* m_threadFunc;
+	OS::IThread* m_mainLoopThread;
+	OS::IThreadFunction* m_threadFunc;
 
 	GThread *gub_main_loop_thread ;
 	GMainLoop *gub_main_loop ;

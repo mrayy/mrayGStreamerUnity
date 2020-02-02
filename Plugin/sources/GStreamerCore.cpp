@@ -79,6 +79,7 @@ public:
 
 GStreamerCore::GStreamerCore()
 {
+	m_mainLoopThread = 0;
 	gub_main_loop_thread = 0;
 	gub_main_loop = 0;
 	_Init();
@@ -224,7 +225,7 @@ void GStreamerCore::_Init()
 #ifdef USE_UNITY_NETWORK
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"appsink", (char*)"Element application sink",
-			appsink_plugin_init, "0.1", "LGPL", "ofVideoPlayer", "openFrameworks",
+			appsink_plugin_init, "0.1", "LGPL", "GStreamerUnity", "mray",
                                    "http://openframeworks.cc/");
 	/*	gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysrc", (char*)"Element application src",
@@ -233,20 +234,20 @@ void GStreamerCore::_Init()
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mysink", (char*)"Element application sink",
 			_GstMySinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
-                                   "");*/
+                                   "");
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsrc", (char*)"Element udp src",
-			_GstMyUDPSrcClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
+			_GstMyUDPSrcClass::plugin_init, "0.1", "LGPL", "GStreamerUnity", "mray",
 			"");
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"myudpsink", (char*)"Element udp sink",
-			_GstMyUDPSinkClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
-			"");
+			_GstMyUDPSinkClass::plugin_init, "0.1", "LGPL", "GStreamerUnity", "mray",
+			"");*/
 
 		gst_plugin_register_static(GST_VERSION_MAJOR, GST_VERSION_MINOR,
 			"mylistener", (char*)"Custom listener element",
-			_GstMyListenerClass::plugin_init, "0.1", "LGPL", "GstVideoProvider", "mray",
-			"");
+			_GstMyListenerClass::plugin_init, "0.1", "LGPL", "GStreamerUnity", "mray",
+			"http://gstreamer.net/");
 #endif
 
 		gchar* version = gst_version_string();
@@ -262,11 +263,7 @@ void GStreamerCore::_Init()
 #endif
 
 
-	gub_main_loop_thread = g_thread_new("GstUnityBridge Main Thread", gst_main_loop_func, this);
-	if (!gub_main_loop_thread) {
-		LogMessage(ELL_INFO,"Failed to create GLib main thread: %s",err ? err->message : "<No error message>");
-		return;
-	}
+	/**/
 
 	_StartLoop();
 }
@@ -282,35 +279,48 @@ void GStreamerCore::_loopFunction() {
 
 void GStreamerCore::_StartLoop()
 {
-	/*m_threadFunc = new GstMainLoopThread();
-	m_mainLoopThread = OS::IThreadManager::getInstance().createThread(m_threadFunc);
-	m_mainLoopThread->start(0);*/
+	if (true)
+	{
+		GError *err = 0;
+		gub_main_loop_thread = g_thread_new("GStreamerUnityPlugin Main Thread", gst_main_loop_func, this);
+		if (!gub_main_loop_thread) {
+			LogMessage(ELL_INFO, "Failed to create GLib main thread: %s", err ? err->message : "<No error message>");
+			return;
+		}
+
+	}
+	else {
+		m_threadFunc = new GstMainLoopThread();
+		m_mainLoopThread = OS::IThreadManager::getInstance().createThread(m_threadFunc);
+		m_mainLoopThread->start(0);
+	}
 }
 
 void GStreamerCore::_StopLoop()
 {
-	/*
-	if (!m_threadFunc)
-		return;
-	GstMainLoopThread* mainLoop = (GstMainLoopThread*)m_threadFunc;
-	g_main_loop_quit(mainLoop->main_loop);
-	bool running = g_main_loop_is_running(mainLoop->main_loop);
-	g_main_loop_unref(mainLoop->main_loop);
-	delete m_threadFunc;
-	OS::IThreadManager::getInstance().killThread(m_mainLoopThread);
-	delete m_mainLoopThread;
-	m_threadFunc = 0;
-	m_mainLoopThread = 0;
-	*/
+	if (true) {
 
-
-	if (!gub_main_loop) {
-		return;
+		if (!gub_main_loop) {
+			return;
+		}
+		g_main_loop_quit(gub_main_loop);
+		gub_main_loop = NULL;
+		g_thread_join(gub_main_loop_thread);
+		gub_main_loop_thread = NULL;
+	}else{
+		if (!m_threadFunc)
+			return;
+		GstMainLoopThread* mainLoop = (GstMainLoopThread*)m_threadFunc;
+		g_main_loop_quit(mainLoop->main_loop);
+		bool running = g_main_loop_is_running(mainLoop->main_loop);
+		g_main_loop_unref(mainLoop->main_loop);
+		delete m_threadFunc;
+		OS::IThreadManager::getInstance().killThread(m_mainLoopThread);
+		delete m_mainLoopThread;
+		m_threadFunc = 0;
+		m_mainLoopThread = 0;
 	}
-	g_main_loop_quit(gub_main_loop);
-	gub_main_loop = NULL;
-	g_thread_join(gub_main_loop_thread);
-	gub_main_loop_thread = NULL;
+
 }
 
 		

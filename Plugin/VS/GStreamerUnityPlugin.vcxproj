@@ -163,7 +163,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>USE_UNITY_GRABBER;__USE_UNITY_NETWORK;WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_UNITY_GRABBER;USE_UNITY_NETWORK;WIN32;NDEBUG;_WINDOWS;_USRDLL;GSTREAMERUNITYPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;../includes;../includes/Win32;../sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -251,7 +251,9 @@
     <ClCompile Include="../sources/GstCustomVideoPlayer.cpp" />
     <ClCompile Include="../sources/GstPipelineHandler.cpp" />
     <ClCompile Include="../sources/GstPlayerBin.cpp" />
-    <ClCompile Include="../sources/GStreamerCore.cpp" />
+    <ClCompile Include="../sources/GStreamerCore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|X64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="../sources/IGStreamerPlayer.cpp" />
     <ClCompile Include="../sources/IGStreamerStreamer.cpp" />
     <ClCompile Include="../includes/ImageInfo.cpp" />

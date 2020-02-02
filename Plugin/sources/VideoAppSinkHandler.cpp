@@ -297,12 +297,17 @@ video::EPixelFormat getVideoFormat(GstVideoFormat format){
 void VideoAppSinkHandler::SetRTPListener(GstMyListener* preRTP, GstMyListener* postRTP, GstMyListener* preapp)
 { 
 	m_rtpDataListener = preRTP; 
-	m_rtpDataListener->listeners->AddListener(m_data->rtplistener);
-	postRTP->listeners->AddListener(m_data->rtplistener);
+	if(m_rtpDataListener)
+		m_rtpDataListener->listeners->AddListener(m_data->rtplistener);
+	if(postRTP)
+		postRTP->listeners->AddListener(m_data->rtplistener);
+	
+	
 	m_data->rtplistener->Init(preRTP, postRTP);
 
 	m_preappsrcListener = preapp;
-	m_preappsrcListener->listeners->AddListener(m_data->preapplistener);
+	if(m_preappsrcListener)
+		m_preappsrcListener->listeners->AddListener(m_data->preapplistener);
 }
 
 

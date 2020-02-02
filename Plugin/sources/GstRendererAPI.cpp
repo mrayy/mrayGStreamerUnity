@@ -33,7 +33,7 @@ static void __stdcall mray_gst_customPlayerBlitImageNativeEvent(int eventID)
 	__multiNetRequests.clear();
 }
 
-extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_BlitImageNativeGLCall(video::ImageInfo* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight)
+extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_BlitImageNativeGLCall(video::ImageInfo* p, void* _TextureNativePtr, int _UnityTextureWidth, int _UnityTextureHeight,int index)
 {
 	//LogMessage("mray_gst_BlitImageNativeGLCall()", ELL_INFO);
 	MultiNetRenderRequest r;
@@ -41,7 +41,7 @@ extern "C" UNITY_INTERFACE_EXPORT UnityRenderNative mray_gst_BlitImageNativeGLCa
 	r._TextureNativePtr = _TextureNativePtr;
 	r._UnityTextureWidth = _UnityTextureWidth;
 	r._UnityTextureHeight = _UnityTextureHeight;
-	r.index = 0;
+	r.index = index;
 	__multiNetRequests.push_back(r);
 	return mray_gst_customPlayerBlitImageNativeEvent;
 }
