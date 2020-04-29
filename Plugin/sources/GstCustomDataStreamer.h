@@ -4,6 +4,7 @@
 #define __GSTCUSTOMDATASTREAMER__
 
 #include "IGStreamerStreamer.h"
+#include <string>
 
 namespace mray
 {

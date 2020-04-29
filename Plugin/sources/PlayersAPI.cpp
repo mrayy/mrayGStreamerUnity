@@ -281,7 +281,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_playerCopyData(IGStreamerPlayer*
 	}
 
 }
-extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_playerGrabFrame(IGStreamerPlayer* p, int &w, int &h, int index)
+extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_playerGrabFrame(IGStreamerPlayer* p, int &w, int &h, int& c, int index)
 {
 	if (p != NULL)
 	{
@@ -291,6 +291,8 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gst_playerGrabFrame(IGStreamerPlayer
 			if (frame) {
 				w = frame->Size.x;
 				h = frame->Size.y;
+				c = video::PixelUtil::getPixelDescription(frame->format).elemSizeB;
+				
 			}
 			return true;
 		}

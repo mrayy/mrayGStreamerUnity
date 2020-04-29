@@ -6,6 +6,7 @@
 #include "IStreamListener.h"
 #include "ListenerContainer.h"
 #include "mTypes.h"
+#include <string>
 
 namespace mray
 {
