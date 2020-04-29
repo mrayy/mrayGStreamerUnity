@@ -1,6 +1,14 @@
 # mrayGStreamerUnity
 GStreamer Integration with Unity using a Native plugin 
 
+Updated 29/April/2020:
+
+The current plugin uses GStreamer 1.16.2:
+
+https://gstreamer.freedesktop.org/data/pkg/windows/1.16.2/
+
+If you had run time issues of missing libraries, make sure to install 1.16.2, and add the bin folder to the PATH environment.
+
 Updated 11/April/2017:
 
 Currently designed to run under Unity 64bit version - Windows
