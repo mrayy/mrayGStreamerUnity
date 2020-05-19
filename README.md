@@ -31,6 +31,7 @@ https://www.microsoft.com/en-us/download/details.aspx?id=40784
 
 Computer -> System properties -> Advanced System Settings -> Advanced Tab -> Environment Variables... -> System Variables -> Variable: Path -> Edit -> New -> C:\gstreamer\1.0\x86_64\bin
 
+New Variable: GST_SDK_PATH= C:\gstreamer\1.0\x86_64\
 
 GStreamer path should be similar to this (depending on installation directory):
 C:\gstreamer\1.0\x86_64\bin
