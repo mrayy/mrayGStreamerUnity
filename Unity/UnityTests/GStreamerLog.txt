@@ -8,6 +8,3 @@ Initializing GStreamer - Done
 Entering main loop
 Info: Checking is active
 mray_gstreamer_initialize
-Info: Checking is active
-mray_gstreamer_initialize
-Info: Checking is active

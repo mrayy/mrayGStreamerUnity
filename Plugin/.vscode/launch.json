@@ -1,0 +1,40 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(gdb) Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "args": ["RTP"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/release/bin/x86_64_Darwin",
+      "environment": [],
+      "externalConsole": false,
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "launchCompleteCommand": "exec-run",
+      "linux": {
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+      "osx": {
+        "MIMode": "lldb",
+        "terminal":"console"
+      },
+      "windows": {
+        "MIMode": "gdb",
+        "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+      },
+      "visualizerFile": "/Users/yamen/Library/Application Support/Code/User/workspaceStorage/703e77232154842d683e7d44f2628f3c/tonka3000.qtvsctools/qt.natvis.xml"
+    }
+  ]
+}

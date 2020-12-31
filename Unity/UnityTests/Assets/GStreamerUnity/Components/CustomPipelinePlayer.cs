@@ -25,7 +25,7 @@ public class CustomPipelinePlayer : MonoBehaviour {
 		m_Texture = gameObject.GetComponent<GstCustomTexture>();
 		m_Texture.Initialize ();
 		m_Texture.SetPipeline (pipeline+" ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink");
-		m_Texture.Player.CreateStream ();
+		/*m_Texture.Player.CreateStream ();
 		m_Texture.Player.Play ();
 
 		m_Texture.OnFrameBlitted += OnFrameBlitted;
@@ -38,7 +38,7 @@ public class CustomPipelinePlayer : MonoBehaviour {
 		BlittedImage.wrapMode=TextureWrapMode.Clamp;
 
 		if(TargetMaterial!=null)
-			TargetMaterial.mainTexture=BlittedImage;
+			TargetMaterial.mainTexture=BlittedImage;*/
 	}
 	void OnFrameBlitted(GstBaseTexture src,int index)
 	{

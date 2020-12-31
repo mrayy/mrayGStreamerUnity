@@ -16,11 +16,13 @@
 #if _MSC_VER
 	#define UNITY_WIN 1
 #elif defined(__APPLE__)
-	#if defined(__arm__) || defined(__arm64__)
-		#define UNITY_IPHONE 1
-	#else
 		#define UNITY_OSX 1
-	#endif
+
+	//#if defined(__arm__) || defined(__arm64__)
+//		#define UNITY_IPHONE 1
+//	#else
+//		#define UNITY_OSX 1
+//	#endif
 #elif defined(__ANDROID__)
 	#define UNITY_ANDROID 1
 #elif defined(UNITY_METRO) || defined(UNITY_LINUX) || defined(UNITY_WEBGL)
@@ -59,7 +61,7 @@
 	#define SUPPORT_OPENGL_CORE 1
 #endif
 
-#if UNITY_IPHONE || UNITY_OSX
+#if UNITY_IPHONE// || UNITY_OSX
 	#define SUPPORT_METAL 1
 #endif
 
