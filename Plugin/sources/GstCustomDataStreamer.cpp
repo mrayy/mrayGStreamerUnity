@@ -11,7 +11,7 @@
 #include "IThreadManager.h"
 #include "IMutex.h"
 
-#include "GZipCompress.h"
+//#include "GZipCompress.h"
 
 #include <sstream>
 
@@ -39,7 +39,7 @@ protected:
 
 	OS::IMutex* m_dataMutex;
 
-	Compress::GZipCompress m_compress;
+	//Compress::GZipCompress m_compress;
 
 	struct DataSegment
 	{
@@ -118,12 +118,12 @@ public:
 	}
 	static void _DestroyNotifyChunk(gpointer       data)
 	{
-		Compress::GZipCompress::Chunk* d = static_cast<Compress::GZipCompress::Chunk*>(data);
+	/*	Compress::GZipCompress::Chunk* d = static_cast<Compress::GZipCompress::Chunk*>(data);
 		if (d)
 		{
 			d->autoRemove=true;
 			delete d;
-		}
+		}*/
 	}
 
 	DataSegment* GetDataSegment(int size)
@@ -245,18 +245,18 @@ public:
 			//	gLogManager.log("AppSrcVideoSrc::NeedBuffer() - Failed to grab buffer " + std::stringConverter::toString(index), ELL_WARNING);
 			return GST_FLOW_ERROR;
 		}
-
+/*
 		Compress::GZipCompress::Chunk input(false), output(true);
 
 		input.data = s->data;
 		input.length = s->length;
 
 		m_compress.compress(&input,&output);
-
+*/
 		uchar* bufferData;
 		int len;
 
- 		if (output.length < s->length)
+ 	/*	if (output.length < s->length)
  		{
 			len = output.length + 1;
 			bufferData = new uchar[len];
@@ -265,7 +265,7 @@ public:
 			m_grave.push_back(s);
  
  		}
-		else
+		else*/
 		{
 
 			len = s->length + 1;

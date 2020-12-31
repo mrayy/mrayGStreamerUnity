@@ -137,7 +137,7 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetGrabber(Gs
 #ifdef USE_UNITY_GRABBER
 	if (p)
 	{
-		p->SetVideoGrabber(g);
+		p->SetVideoGrabber((mray::video::IVideoGrabber*)g);
 	}
 #endif
 }

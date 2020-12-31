@@ -12,10 +12,11 @@ public class FileVideoPlayer : BaseVideoPlayer {
 	// Use this for initialization
 	protected override string _GetPipeline ()
 	{
-		VideoPath=(Application.dataPath +"/" + VideoPath).Replace ('\\', '/');
+		if(!VideoPath.Contains(":") || !VideoPath.StartsWith("/"))
+			VideoPath=(Application.dataPath +"/" + VideoPath).Replace ('\\', '/');
 
 		string pipeline = "filesrc location=\""+VideoPath+"\" ! qtdemux name=demux "+
-			" demux.video_0 ! queue ! avdec_h264 ! videoconvert ! video/x-raw,format=I420 ! " + (flipVideo?"videoflip method=5 !" : "")+ " appsink name=videoSink sync=true";
+			" demux.video_0 ! queue ! decodebin ! videoconvert ! video/x-raw,format=I420 ! " + (flipVideo?"videoflip method=5 !" : "")+ " appsink name=videoSink sync=true";
 
 		if (AudioSupport)
 			pipeline += " demux.audio_0 ! queue ! decodebin ! audioconvert ! autoaudiosink name=audioSink sync=true ";

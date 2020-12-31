@@ -10,7 +10,7 @@
 //#include "ILogManager.h"
 #include "IThreadManager.h"
 #include "IMutex.h"
-#include "GZipCompress.h"
+//#include "GZipCompress.h"
 
 namespace mray
 {
@@ -57,7 +57,7 @@ namespace video
 
 		DataSegment* m_dataSegment;
 
-		Compress::GZipCompress m_compress;
+		//Compress::GZipCompress m_compress;
 
 		std::string m_dataType;
 		int m_payload;
@@ -288,7 +288,7 @@ namespace video
 
 			m_mutex->lock();
 
-			if (mapinfo.data[0])
+		/*	if (mapinfo.data[0])
 			{
 
 				Compress::GZipCompress::Chunk input(false), output(true);
@@ -299,7 +299,7 @@ namespace video
 
 				memcpy(s->data, output.data, output.length);
 			}
-			else
+			else*/
 			{
 				DataSegment* s = GetDataSegment(size-1);
 

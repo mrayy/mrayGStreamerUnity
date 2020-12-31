@@ -3,11 +3,21 @@ cmake_minimum_required(VERSION 3.0.0)
 project("GStreamerUnityPlugin")
 
 find_package(PkgConfig REQUIRED)
-find_package(ZLIB REQUIRED)
 find_package(OpenGL REQUIRED)
 
 
-set(ENV{PKG_CONFIG_PATH} "/Library/Frameworks/GStreamer.framework/Versions/1.0/lib/pkgconfig")
+if(APPLE)
+        set(ENV{PKG_CONFIG_PATH} "/Library/Frameworks/GStreamer.framework/Versions/1.0/lib/pkgconfig")
+else()
+      #  set(ZLIB_ROOT  "D:/Projects/zlib-1.2.11/")
+     #   set(ZLIB_LIBRARY  "D:/Projects/zlib-1.2.11/build/MinSizeRel/zlibstaticd.lib")
+
+        add_compile_definitions(USE_UNITY_GRABBER)
+        add_compile_definitions(USE_UNITY_NETWORK)
+        add_compile_definitions(GSTREAMERUNITYPLUGIN_EXPORTS)
+endif()
+#find_package(ZLIB REQUIRED)
+
 
 pkg_check_modules(GSTLIBS REQUIRED
         gstreamer-1.0
@@ -36,13 +46,12 @@ set (SOURCE
         "sources/CoreAPI.cpp"
         "sources/CustomAudioGrabber.cpp"
         "sources/GStreamerCore.cpp"
-        "sources/GZipCompress.cpp"
-        #"sources/GstAppAudioPlayer.cpp"
+        #"sources/GZipCompress.cpp"
         "sources/GstAppNetAudioStreamer.cpp"
         "sources/GstAudioSampler.cpp"
-        "sources/GstCustomDataPlayer.cpp"
         #"sources/GstCustomDataReceiver.cpp"
         "sources/GstCustomDataStreamer.cpp"
+        "sources/GstCustomDataPlayer.cpp"
         "sources/GstCustomVideoPlayer.cpp"
         "sources/GstCustomVideoStreamer.cpp"
         "sources/GstNetworkAudioPlayer.cpp"
@@ -55,11 +64,9 @@ set (SOURCE
         "sources/IAppSinkHandler.cpp"
         "sources/IGStreamerPlayer.cpp"
         "sources/IGStreamerStreamer.cpp"
-        #"sources/LocalAudioGrabber.cpp"
         "sources/NetworkAudioGrabber.cpp"
         "sources/PlayersAPI.cpp"
         "sources/StreamersAPI.cpp"
-        #"sources/UnityAudioGrabber.cpp"
         "sources/UnityHelpers.cpp"
         "sources/UnityImageGrabber.cpp"
         "sources/VideoAppSinkHandler.cpp"
@@ -74,21 +81,48 @@ set (SOURCE
         "includes/RenderAPI_OpenGLCoreES.cpp"
         "includes/RenderAPI_OpenGL2.cpp"
 
+)
+if(APPLE)
+set (SOURCE 
+        ${SOURCE}
+
         "includes/OSX/OSXThread.cpp"
         "includes/OSX/OSXThreadManager.cpp"
         "includes/OSX/OSXMutex.cpp"
         "includes/GLEW/glew.c"
-
-        #"sources/DirectSoundInputStream.cpp"
-        #"sources/DirectSoundOutputStream.cpp"
 )
+else()
+
+set (SOURCE 
+        ${SOURCE}
+
+        "includes/Win32/Win32Network.cpp"
+        "includes/Win32/Win32UDPClient.cpp"
+        "includes/Win32/WinThread.cpp"
+        "includes/Win32/WinThreadManager.cpp"
+        "includes/Win32/WinMutex.cpp"
+       # "sources/DirectSoundInputStream.cpp"
+       # "sources/DirectSoundOutputStream.cpp"
+        "sources/LocalAudioGrabber.cpp"
+        "sources/GstAppAudioPlayer.cpp"
+        "sources/UnityAudioGrabber.cpp"
+        "includes/RenderAPI_D3D11.cpp"
+)
+
+endif()
 
 
 link_directories("${GSTLIBS_LIBRARY_DIRS}")
 
-add_library("${PROJECT_NAME}"   MODULE  "${SOURCE}")
-set_target_properties("${PROJECT_NAME}"  PROPERTIES BUNDLE TRUE)
 
+if(APPLE)
+        add_library("${PROJECT_NAME}"   MODULE  "${SOURCE}")
+        set_target_properties("${PROJECT_NAME}"  PROPERTIES BUNDLE TRUE)
+       # target_link_libraries("${PROJECT_NAME}" ZLIB::ZLIB)
+else()
+        add_library("${PROJECT_NAME}"   SHARED  "${SOURCE}")
+        target_link_libraries("${PROJECT_NAME}" wsock32 ws2_32)
+     #   target_link_libraries("${PROJECT_NAME}" ${ZLIB_LIBRARY})
+endif()
 target_link_libraries("${PROJECT_NAME}" ${GSTLIBS_LIBRARIES})
-target_link_libraries("${PROJECT_NAME}" ZLIB::ZLIB)
 target_link_libraries("${PROJECT_NAME}" ${OPENGL_LIBRARIES})
