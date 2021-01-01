@@ -41,8 +41,6 @@ set (SOURCE
         "sources/CMyListener.cpp"
         "sources/CMySink.cpp"
         "sources/CMySrc.cpp"
-        "sources/CMyUDPSink.cpp"
-        "sources/CMyUDPSrc.cpp"
         "sources/CoreAPI.cpp"
         "sources/CustomAudioGrabber.cpp"
         "sources/GStreamerCore.cpp"
@@ -86,11 +84,17 @@ if(APPLE)
 set (SOURCE 
         ${SOURCE}
 
+        "includes/RenderAPI_Metal.mm"
         "includes/OSX/OSXThread.cpp"
         "includes/OSX/OSXThreadManager.cpp"
         "includes/OSX/OSXMutex.cpp"
         "includes/GLEW/glew.c"
 )
+
+set(CMAKE_C_FLAGS "-x objective-c")
+set(CMAKE_CXX_FLAGS "-x objective-c++")
+set(CMAKE_EXE_LINKER_FLAGS "-framework OpenGL -framework CoreFoundation")
+
 else()
 
 set (SOURCE 

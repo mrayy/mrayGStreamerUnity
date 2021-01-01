@@ -6,8 +6,6 @@
 
 #include <sstream>
 
-#include "CMyUDPSink.h"
-#include "CMyUDPSrc.h"
 #include "GstPipelineHandler.h"
 #include "UnityHelpers.h"
 #include "stdafx.h"
@@ -25,8 +23,6 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
     std::string m_pipeLineString;
     GstAppSrc* m_audioSrc;
     GstElement* m_audioSink;
-    GstMyUDPSink* m_audioRtcpSink;
-    GstMyUDPSrc* m_audioRtcpSrc;
 
     IAudioGrabber* m_audioGrabber;
 
@@ -36,8 +32,6 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
     GstAppNetAudioStreamerImpl() {
         m_appSourceID = 0;
         m_audioSink = 0;
-        m_audioRtcpSink = 0;
-        m_audioRtcpSrc = 0;
         m_ipAddr = "127.0.0.1";
         m_audioPort = 5005;
         m_rtcp = false;
@@ -65,10 +59,10 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
            << ",channels=" << (m_audioGrabber->GetChannelsCount())
            << " "
               //" ! audiochebband mode=band-pass lower-frequency=1000
-              //upper-frequency=6000 poles=4 "
+              // upper-frequency=6000 poles=4 "
               "! audioconvert  ! audioresample ! ";
         //	"audiochebband mode=band-pass lower-frequency=1000
-        //upper-frequency=4000 type=2 ! "
+        // upper-frequency=4000 type=2 ! "
 
         ss << "opusenc  bitrate=96000 frame-size=5 ! rtpopuspay  ";
 #elif defined VORBIS_ENC
@@ -85,7 +79,7 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
             "x-raw,endianness=1234,signed=true,width=16,depth=16,rate=32000,"
             "channels=2   ! audioconvert ! ";
         //	"audiochebband mode=band-pass lower-frequency=1000
-        //upper-frequency=4000 type=2 ! "
+        // upper-frequency=4000 type=2 ! "
 
         audioStr += "vorbisenc quality=1 ! rtpvorbispay config-interval=3 ";
 #elif defined SPEEX_ENC
@@ -101,22 +95,8 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
             "x-raw,endianness=1234,signed=true,width=16,depth=16,rate=8000,"
             "channels=1   ! amrnbenc ! rtpamrpay";
 #endif
-        if (m_rtcp) {
-            m_pipeLineString =
-                "rtpbin  name=rtpbin " + ss.str() +
-                " ! "
-                " rtpbin.send_rtp_sink_0 "
-
-                "rtpbin.send_rtp_src_0 ! "
-                "myudpsink name=audioSink  "
-
-                "rtpbin.send_rtcp_src_0 ! "
-                "myudpsink name=audioRtcpSink sync=false async=false "
-                "myudpsrc name=audioRtcpSrc ! rtpbin.recv_rtcp_sink_0 ";
-        } else {
-            ss << +" ! "
+        ss << +" ! "
 				"udpsink name=audioSink port=" << (m_audioPort) << " host=" << m_ipAddr << " sync=false ";
-        }
         m_pipeLineString = ss.str();
     }
     void _UpdatePorts() {
@@ -138,8 +118,6 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
         g_object_set(m_audioSink, "port", m_audioPort, 0, NULL);
         g_object_set(m_audioSink, "host", m_ipAddr.c_str(), 0, NULL);
         //	SET_SINK(audioSink, m_audioPort);
-        SET_SRC(audioRtcpSrc, (m_audioPort + 1));
-        SET_SINK(audioRtcpSink, (m_audioPort + 2));
     }
 
     void SetAudioGrabber(IAudioGrabber* g) { m_audioGrabber = g; }
@@ -196,7 +174,7 @@ class GstAppNetAudioStreamerImpl : public GstPipelineHandler {
         if (d->NeedBuffer(&buffer) == GST_FLOW_OK) {
             ret = gst_app_src_push_buffer(d->m_audioSrc, buffer);
             //	LogMessage("pushing data to: ",
-            //std::StringConverter::toString(d->index),ELL_INFO);
+            // std::StringConverter::toString(d->index),ELL_INFO);
             if (ret != GST_FLOW_OK) {
                 LogMessage(
                     "GstAppNetAudioStreamer::read_data() - Failed to push data "
