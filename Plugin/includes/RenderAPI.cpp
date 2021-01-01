@@ -2,8 +2,10 @@
 
 #include "PlatformBase.h"
 #include "Unity/IUnityGraphics.h"
+#include "UnityHelpers.h"
 
 RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType) {
+    LogMessage("Render API: " + std::to_string(apiType), ELL_INFO);
 #if SUPPORT_D3D11
     if (apiType == kUnityGfxRendererD3D11) {
         extern RenderAPI* CreateRenderAPI_D3D11();

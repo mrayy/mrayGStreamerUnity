@@ -101,7 +101,7 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 
 		if (_newFrame)
 			_processNewFrame ();
