@@ -6,13 +6,14 @@ find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
 
 
+add_compile_definitions(USE_UNITY_GRABBER)
+
 if(APPLE)
         set(ENV{PKG_CONFIG_PATH} "/Library/Frameworks/GStreamer.framework/Versions/1.0/lib/pkgconfig")
 else()
       #  set(ZLIB_ROOT  "D:/Projects/zlib-1.2.11/")
      #   set(ZLIB_LIBRARY  "D:/Projects/zlib-1.2.11/build/MinSizeRel/zlibstaticd.lib")
 
-        add_compile_definitions(USE_UNITY_GRABBER)
         add_compile_definitions(USE_UNITY_NETWORK)
         add_compile_definitions(GSTREAMERUNITYPLUGIN_EXPORTS)
 endif()

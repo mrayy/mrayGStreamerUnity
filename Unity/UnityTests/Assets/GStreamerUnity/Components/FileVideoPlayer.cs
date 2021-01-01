@@ -19,11 +19,13 @@ public class FileVideoPlayer : BaseVideoPlayer
 		if (!VideoPath.Contains(":") || !VideoPath.StartsWith("/"))
 			VideoPath = (Application.dataPath + "/" + VideoPath).Replace('\\', '/');
 
-		string pipeline = "filesrc location=\"" + VideoPath + "\" ! qtdemux name=demux " +
-			" demux.video_0 ! queue ! decodebin ! videoconvert ! video/x-raw,format=I420 ! " + (flipVideo ? "videoflip method=5 !" : "") + " appsink name=videoSink sync=true";
+		string mux = "matroskademux";
+
+		string pipeline = "filesrc location=\"" + VideoPath + "\" ! "+ mux + " name=demux " +
+			" demux.video_0 ! queue ! decodebin ! videoconvert ! video/x-raw,format=I420 ! " + (flipVideo ? "videoflip method=5 !" : "") + " appsink name=videoSink sync=false";
 
 		if (AudioSupport)
-			pipeline += " demux.audio_0 ! queue ! decodebin ! audioconvert ! autoaudiosink name=audioSink sync=true ";
+			pipeline += " demux.audio_0 ! queue ! decodebin ! audioconvert ! autoaudiosink name=audioSink sync=false ";
 
 		//		pipeline = "filesrc location=\""+VideoPath+"\" ! decodebin ! videoconvert ! video/x-raw,format=I420 ! appsink name=videoSink sync=true";
 		//		pipeline = "filesrc location=~/Documents/Projects/BeyondAR/Equirectangular_projection_SW.jpg ! jpegdec ! videoconvert ! imagefreeze ! videoconvert ! imagefreeze ! videoconvert ! video/x-raw,format=I420 ! appsink name=videoSink sync=true";
@@ -38,5 +40,24 @@ public class FileVideoPlayer : BaseVideoPlayer
 		Position = InternalTexture.Player.GetPosition() / 1000;
 		Duration = InternalTexture.Player.GetDuration() / 1000;
 
+		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		{
+			var p = (Position - 5000);
+			if (p < 0)
+				p = 0;
+			InternalTexture.Player.Seek(p * 1000);
+		}
+		if (Input.GetKeyDown(KeyCode.RightArrow))
+		{
+			var p = (Position + 5000);
+			if (p >= Duration)
+				p = Duration;
+			InternalTexture.Player.Seek(p * 1000);
+		}
+		if (Input.GetKeyDown(KeyCode.S))
+			InternalTexture.Pause();
+
+		if (Input.GetKeyDown(KeyCode.P))
+			InternalTexture.Play();
 	}
 }
