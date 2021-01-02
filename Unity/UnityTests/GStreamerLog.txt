@@ -5,6 +5,7 @@ Initializing GStreamer Engine - Done
 Initializing GStreamer
 GStreamerCore - Registering Elements!
 GStreamerCore - GStreamer inited
+Initializing GStreamer - Done
 Entering main loop
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
@@ -12,10 +13,11 @@ Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
 Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
 Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: This file is invalid and cannot be played. - ../gst/isomp4/qtdemux.c(537): gst_qtdemux_pull_atom (): /GstPipeline:pipeline0/GstQTDemux:demux:
-atom has bogus size 440786851
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: This file is invalid and cannot be played. - ../gst/isomp4/qtdemux.c(537): gst_qtdemux_pull_atom (): /GstPipeline:pipeline0/GstQTDemux:demux:
-atom has bogus size 440786851
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/isomp4/qtdemux.c(6545): gst_qtdemux_loop (): /GstPipeline:pipeline0/GstQTDemux:demux:
+streaming stopped, reason not-linked (-1)
+Info: Checking is active
 mray_gstreamer_initialize
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
@@ -24,77 +26,8 @@ Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no 
 Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
 Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
 Info: GstPipelineHandler::HandleMessage(): Received EOS message 
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: This file is invalid and cannot be played. - ../gst/isomp4/qtdemux.c(537): gst_qtdemux_pull_atom (): /GstPipeline:pipeline0/GstQTDemux:demux:
-atom has bogus size 440786851
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: This file is invalid and cannot be played. - ../gst/isomp4/qtdemux.c(537): gst_qtdemux_pull_atom (): /GstPipeline:pipeline0/GstQTDemux:demux:
-atom has bogus size 440786851
-Info: Checking is active
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
 Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/isomp4/qtdemux.c(6545): gst_qtdemux_loop (): /GstPipeline:pipeline1/GstQTDemux:demux:
 streaming stopped, reason not-linked (-1)
-Info: Checking is active
-mray_gstreamer_initialize
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
-Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
-Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
-Warning: GstPipelineHandler::HandleMessage(): warning in module demux  reported: Delayed linking failed.
-mray_gstreamer_initialize
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
-Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
-Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline3/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): warning in module demux  reported: Delayed linking failed.
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/matroska/matroska-demux.c(5860): gst_matroska_demux_loop (): /GstPipeline:pipeline2/GstMatroskaDemux:demux:
-streaming stopped, reason not-linked (-1)
-Info: Checking is active
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline3/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline3/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Info: Checking is active
-mray_gstreamer_initialize
-mray_gstreamer_initialize
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
-Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
-Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline5/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline5/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline5/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/matroska/matroska-demux.c(5860): gst_matroska_demux_loop (): /GstPipeline:pipeline4/GstMatroskaDemux:demux:
-streaming stopped, reason not-linked (-1)
-Info: Checking is active
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline5/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline5/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Info: Checking is active
-mray_gstreamer_initialize
-mray_gstreamer_initialize
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
-Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
-Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
-Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
-Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline7/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/matroska/matroska-demux.c(5860): gst_matroska_demux_loop (): /GstPipeline:pipeline6/GstMatroskaDemux:demux:
-streaming stopped, reason not-linked (-1)
-Info: Checking is active
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline7/GstMatroskaDemux:demux:
-got eos but no streams (yet)
-Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Could not demultiplex stream. - ../gst/matroska/matroska-demux.c(5874): gst_matroska_demux_loop (): /GstPipeline:pipeline7/GstMatroskaDemux:demux:
-got eos but no streams (yet)
 Info: Checking is active

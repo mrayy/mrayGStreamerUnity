@@ -1,13 +1,15 @@
 ﻿<Properties StartupConfiguration="{B202993C-03CB-D2C1-630C-701B2C7269DA}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GStreamerUnity/Components/CustomPipelinePlayer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GStreamerUnity/Scripts/GstCustomPlayer.cs">
     <Files>
-      <File FileName="Assets/GStreamerUnity/Components/FileVideoPlayer.cs" Line="35" Column="12" />
-      <File FileName="Assets/GStreamerUnity/Components/CustomPipelinePlayer.cs" Line="51" Column="18" />
-      <File FileName="Assets/GStreamerUnity/Components/BaseVideoPlayer.cs" Line="61" Column="4" />
-      <File FileName="Assets/GStreamerUnity/Components/CameraCapture.cs" Line="1" Column="1" />
-      <File FileName="Assets/GStreamerUnity/Components/CustomSBSPipelinePlayer.cs" Line="79" Column="31" />
-      <File FileName="Assets/GStreamerUnity/Scripts/GstCustomTexture.cs" Line="5" Column="40" />
-      <File FileName="Assets/GStreamerUnity/Components/LocalCameraVideoPlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/GStreamerUnity/Components/FileVideoPlayer.cs" Line="53" Column="33" />
+      <File FileName="Assets/GStreamerUnity/Components/CustomPipelinePlayer.cs" />
+      <File FileName="Assets/GStreamerUnity/Components/BaseVideoPlayer.cs" Line="27" Column="6" />
+      <File FileName="Assets/GStreamerUnity/Components/CameraCapture.cs" />
+      <File FileName="Assets/GStreamerUnity/Components/CustomSBSPipelinePlayer.cs" />
+      <File FileName="Assets/GStreamerUnity/Scripts/GstCustomTexture.cs" Line="11" Column="16" />
+      <File FileName="Assets/GStreamerUnity/Components/LocalCameraVideoPlayer.cs" />
+      <File FileName="Assets/GStreamerUnity/Scripts/IGstPlayer.cs" Line="121" Column="1" />
+      <File FileName="Assets/GStreamerUnity/Scripts/GstCustomPlayer.cs" Line="159" Column="6" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,25 +17,20 @@
           <Node name="UnityTests" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="GStreamerUnity" expanded="True">
-                <Node name="Components" expanded="True">
-                  <Node name="CustomPipelinePlayer.cs" selected="True" />
+                <Node name="Components" expanded="True" />
+                <Node name="Scripts" expanded="True">
+                  <Node name="GstCustomPlayer.cs" selected="True" />
                 </Node>
-                <Node name="Scripts" expanded="True" />
               </Node>
             </Node>
           </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.UnitTesting.TestPad">
-        <State name="__root__">
-          <Node name="UnityTests" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="c5f68e8e-53f6-40ab-95ee-a70e2a6d9747" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="f414703c-0b1a-4ffd-ba3b-4deb3034e069" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

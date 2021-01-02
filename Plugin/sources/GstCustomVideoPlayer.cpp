@@ -13,7 +13,9 @@
 namespace mray {
 namespace video {
 
-class GstCustomVideoPlayerImpl : public GstPipelineHandler {
+class GstCustomVideoPlayerImpl : public GstPipelineHandler,
+                                 public IPipelineListener {
+   public:
     std::string m_inputPipeline;
     std::string m_pipeLineString;
 
@@ -23,10 +25,19 @@ class GstCustomVideoPlayerImpl : public GstPipelineHandler {
     VideoAppSinkHandler m_videoHandler;
     AudioAppSinkHandler m_audioHandler;
 
+    bool _loop;
+
+   public:
+    virtual void OnPipelineEOS(GstPipelineHandler* p) {
+        if (_loop) this->SetPosition(0);
+    }
+
    public:
     GstCustomVideoPlayerImpl() {
         m_videoSink = 0;
         m_audioSink = 0;
+        _loop = false;
+        this->AddListener(this);
     }
     virtual ~GstCustomVideoPlayerImpl() {}
 
@@ -223,6 +234,9 @@ unsigned long GstCustomVideoPlayer::GetLastFrameTimestamp(int i) {
 void* GstCustomVideoPlayer::GetLastFrameRTPMeta(int i) {
     return m_impl->GetLastFrameRTPMeta();
 }
+void GstCustomVideoPlayer::SetLoop(bool loop) { m_impl->_loop = loop; }
+
+bool GstCustomVideoPlayer::IsLoop() { return m_impl->_loop; }
 
 int GstCustomVideoPlayer::GetAudioFrameSize() {
     return m_impl->GetAudioFrameSize();

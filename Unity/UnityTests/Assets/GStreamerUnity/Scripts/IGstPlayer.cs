@@ -119,6 +119,7 @@ public abstract class IGstPlayer
         return mray_gst_PlayerGetPosition(m_Instance);
     }
 
+
     public long GetDuration()
     {
         return mray_gst_PlayerGetDuration(m_Instance);
