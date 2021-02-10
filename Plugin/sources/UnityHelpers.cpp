@@ -7,6 +7,7 @@
 #include <windows.h>
 #endif
 //#include <gl/gl.h>
+#include <glib.h>
 
 
 
@@ -73,8 +74,9 @@ LogManager* LogManager::Instance()
 
 LogManager::LogManager()
 {
-	fileName = "GStreamerLog.txt";
-	m_logFile = fopen("GStreamerLog.txt", "w");
+    logFilePath = DetermineLogFilePath("GStreamerLog.txt");
+
+	m_logFile = fopen(logFilePath.c_str(), "w");
 	fclose(m_logFile);
 	m_logFile = 0;
 }
@@ -84,12 +86,25 @@ LogManager::~LogManager()
 }
 void LogManager::LogMessage(const std::string& msg)
 {
-	m_logFile = fopen("GStreamerLog.txt", "a");
+    m_logFile = fopen(logFilePath.c_str(), "a");
 	fprintf(m_logFile, "%s\n", msg.c_str());
 	fclose(m_logFile);
 	m_logFile = 0;
 }
 
+std::string LogManager::DetermineLogFilePath(const std::string& fileName)
+{
+    std::string logFilePathDirectory = "";
+    const gchar* environmentLogFilePath = g_getenv("GSTREAMER_UNITY_LOG_FILE_PATH");
+
+    if (environmentLogFilePath != NULL)
+    {
+        logFilePathDirectory = environmentLogFilePath;
+        logFilePathDirectory += "\\";
+    }
+
+    return logFilePathDirectory + fileName;
+}
 
 
 void CopyToTexture(const ImageInfo* src, uchar* dst,video::EPixelFormat fmt)
