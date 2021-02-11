@@ -96,7 +96,7 @@ void g_logFunction(const gchar   *log_domain,
         LogMessage(message, ELL_INFO);
     else if(log_level==G_LOG_LEVEL_WARNING)
         LogMessage(message, ELL_WARNING);
-    else if(log_level==G_LOG_LEVEL_CRITICAL || log_level==G_LOG_FLAG_FATAL)
+    else if(log_level==G_LOG_LEVEL_CRITICAL || log_level==G_LOG_FLAG_FATAL || log_level==G_LOG_LEVEL_ERROR)
         LogMessage(message, ELL_ERROR);
     else
         LogMessage(message, ELL_INFO);
