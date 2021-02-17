@@ -23,11 +23,11 @@ UnityAudioGrabber::UnityAudioGrabber()
 }
 UnityAudioGrabber::~UnityAudioGrabber()
 {
-	for each (float* v in _graveyard)
+	for (float* v : _graveyard)
 	{
 		delete[] v;
 	}
-	for each (float* v in _samples)
+	for (float* v : _samples)
 	{
 		delete[] v;
 	}
