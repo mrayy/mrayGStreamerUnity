@@ -41,7 +41,10 @@ extern "C" class UNITY_INTERFACE_EXPORT LogManager
 {
 	static LogManager* s_instance;;
 	FILE* m_logFile;
-	std::string fileName;
+	std::string logFilePath;
+
+	std::string DetermineLogFilePath(const std::string& fileName);
+
 public:
 	LogManager();
 	~LogManager();
