@@ -112,6 +112,13 @@ gpointer gst_main_loop_func(gpointer data)
 
 void GStreamerCore::_Init()
 {
+	g_log_set_handler(0,  G_LOG_LEVEL_WARNING, g_logFunction, 0);
+	g_log_set_handler(0,  G_LOG_LEVEL_MESSAGE, g_logFunction, 0);
+	g_log_set_handler(0,  G_LOG_LEVEL_INFO, g_logFunction, 0);
+	g_log_set_handler(0,  G_LOG_LEVEL_DEBUG, g_logFunction, 0);
+	g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
+	g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
+	g_log_set_default_handler(g_logFunction, 0);
 
 	GError *err = 0;
 	_gst_debug_enabled = false; 
@@ -121,15 +128,6 @@ void GStreamerCore::_Init()
 	}
 	else
     {
-        g_log_set_handler(0,  G_LOG_LEVEL_WARNING, g_logFunction, 0);
-        g_log_set_handler(0,  G_LOG_LEVEL_MESSAGE, g_logFunction, 0);
-        g_log_set_handler(0,  G_LOG_LEVEL_INFO, g_logFunction, 0);
-        g_log_set_handler(0,  G_LOG_LEVEL_DEBUG, g_logFunction, 0);
-        g_log_set_handler(0,  G_LOG_LEVEL_CRITICAL, g_logFunction, 0);
-		g_log_set_handler(0, G_LOG_FLAG_FATAL , g_logFunction, 0);
-		g_log_set_default_handler(g_logFunction, 0);
-
-
 #if defined (__ANDROID__)
 		//gst_android_register_static_plugins();
 		//gst_android_load_gio_modules();
