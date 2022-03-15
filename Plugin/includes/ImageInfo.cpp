@@ -3,7 +3,7 @@
 #include "ImageInfo.h"
 
 #include "PixelUtil.h"
-
+#include <string>
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) < (b)) ? (b) : (a))
@@ -256,7 +256,10 @@ void ImageInfo::copyCroppedFrom(const ImageInfo* src,Vector2d pos,Vector2d sz,bo
 	}
 	else
 	{
-
+		LogManager::Instance()->LogMessage(
+			"ImageInfo - WARNING: Conversion requested from pixel format " + std::to_string(src->format) + " to " +
+			std::to_string(targetFormat) + ", which is currently not supported, and was ignored."
+		);
 	}
 }
     
