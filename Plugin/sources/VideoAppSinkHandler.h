@@ -14,6 +14,7 @@
 
 #include "CMyListener.h"
 
+#include <mutex>
 
 namespace mray
 {
@@ -38,7 +39,7 @@ protected:
 	bool			m_HavePixelsChanged;
 	bool			m_BackPixelsChanged;
 	bool			m_IsAllocated;
-	OS::IMutex*			m_mutex;
+	std::recursive_mutex			m_mutex;
 	Vector2d m_frameSize;
 	int m_surfaceCount;
 
@@ -63,6 +64,7 @@ public:
 		m_sink = s;
 		m_samplesCount= 0;
 	}
+	GstAppSink*  GetSink(){return m_sink;}
 	void SetRTPListener(GstMyListener* preRTP, GstMyListener* postRTP, GstMyListener* preapp);
 
 	void Close();
@@ -78,7 +80,7 @@ public:
 
 	int GetSamplesCount() { return m_samplesCount; }
 
-	virtual GstFlowReturn process_sample(std::shared_ptr<GstSample> sample);
+	virtual GstFlowReturn process_sample(std::shared_ptr<GstSample> sample,bool preroll);
 };
 
 }

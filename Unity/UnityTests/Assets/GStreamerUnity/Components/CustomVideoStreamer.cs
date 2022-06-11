@@ -8,9 +8,9 @@ public class CustomVideoStreamer : MonoBehaviour,IDependencyNode {
 	public CameraCapture camCap;
 	public string Pipeline;
 
-	public int width=1280,height=720,fps=30;
+	public int fps=30;
 
-	bool _created=false;
+	public bool _created=false;
 
 	GstCustomVideoStreamer _streamer;
 	public void OnDependencyStart(DependencyRoot root)
@@ -18,11 +18,17 @@ public class CustomVideoStreamer : MonoBehaviour,IDependencyNode {
 		Debug.Log ("node start");
 		_streamer.SetGrabber (camCap._grabber);
 		_streamer.SetPipelineString (Pipeline);
-		_streamer.SetResolution(width,height,fps);
+		_streamer.SetResolution(camCap.Width,camCap.Height,fps);
+	}
+	public void OnDependencyDestroyed(DependencyRoot root)
+	{
+		Debug.Log ("node destroyed");
+		Destroy ();
 	}
 
 	void Destroy()
 	{
+		_streamer.SetGrabber (null);
 		_streamer.Pause ();
 		Thread.Sleep (100);
 		_streamer.Stop ();
@@ -31,11 +37,6 @@ public class CustomVideoStreamer : MonoBehaviour,IDependencyNode {
 		//_streamer.SetGrabber (null);
 		_streamer.Destroy ();
 		_streamer = null;
-	}
-	public void OnDependencyDestroyed(DependencyRoot root)
-	{
-		Debug.Log ("node destroyed");
-		Destroy ();
 	}
 
 	// Use this for initialization

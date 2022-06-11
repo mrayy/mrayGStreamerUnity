@@ -22,6 +22,20 @@ public class CameraCapture : DependencyRoot
 
 	public bool HasData=false;
 
+	public int Width
+	{
+		get{
+			return _width;
+		}
+	}
+	public int Height
+	{
+		get{
+			return _height;
+		}
+	}
+
+
 	void OnValidate()
 	{
 	}
@@ -47,8 +61,8 @@ public class CameraCapture : DependencyRoot
 	{
 //		_material = new Material(_shader);
 		_grabber=new GstUnityImageGrabber();
-		_width = Screen.width;
-		_height = Screen.height;
+		/*_width = Screen.width;
+		_height = Screen.height;*/
 
 		base.Start ();
 	}
@@ -61,13 +75,13 @@ public class CameraCapture : DependencyRoot
 	{
 		if (_prepared)
 		{
-			var tempRT = RenderTexture.GetTemporary(source.width, source.height);
+			var tempRT = RenderTexture.GetTemporary(Width, Height);
 			Graphics.Blit(source, tempRT);
 			if (_tempTex == null) {
-				_tempTex = new Texture2D (source.width, source.height, TextureFormat.RGB24, false);
+				_tempTex = new Texture2D (Width, Height, TextureFormat.RGB24, false);
 
 			}
-			_tempTex.ReadPixels(new Rect(0, 0, source.width, source.height), 0, 0, false);
+			_tempTex.ReadPixels(new Rect(0, 0, Width, Height), 0, 0, false);
 			_tempTex.Apply();
 			_grabber.SetTexture2D (_tempTex);
 			_grabber.Update ();

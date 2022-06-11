@@ -1,3 +1,4 @@
+Info: Render API: 2
 mray_gstreamer_initialize
 Initializing GStreamer Engine
 Initializing GStreamer Engine - Done
@@ -6,8 +7,146 @@ GStreamerCore - Registering Elements!
 GStreamerCore - GStreamer inited
 Initializing GStreamer - Done
 Entering main loop
+mray_gstreamer_initialize
+Info: Creating Pipeline: appsrc name=src do-timestamp=true is-live=true block=true ! video/x-raw,format=RGB,width=640,height=480,framerate=30/1 ! videoconvert  ! video/x-raw,format=I420 ! videoconvert ! video/x-raw,format=I420 ! x264enc name=videoEnc bitrate=5000 tune=zerolatency pass=qual ! rtph264pay ! udpsink host=127.0.0.1 port=7000 sync=false
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pausing
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_PLAYING
+Info: : Pausing
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : Pausing
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+mray_gstreamer_initialize
+mray_gstreamer_initialize
+Info: Creating Pipeline: appsrc name=src do-timestamp=true is-live=true block=true ! video/x-raw,format=RGB,width=640,height=480,framerate=30/1 ! videoconvert  ! video/x-raw,format=I420 ! videoconvert ! video/x-raw,format=I420 ! x264enc name=videoEnc bitrate=5000 tune=zerolatency pass=qual ! rtph264pay ! udpsink host=127.0.0.1 port=7000 sync=false
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pausing
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_PLAYING
+Info: : Pausing
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : Pausing
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+mray_gstreamer_initialize
+Info: Creating Pipeline: videotestsrc ! videoconvert  ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pausing
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_PLAYING
+Info: : Pausing
+Info: : Pipeline State Changes:  GST_STATE_PLAYING--> GST_STATE_PAUSED
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
 Info: Checking is active
 mray_gstreamer_initialize
+Info: Creating Pipeline: autovideosrc ! videoconvert  ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Warning: : GstPipelineHandler::HandleMessage(): error in module autovideosrc0-actual-src-mfvide  reported: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure. - ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPipeline:pipeline3/GstAutoVideoSrc:autovideosrc0/GstMFVideoSrc:autovideosrc0-actual-src-mfvide:
+Failed to start
+Info: : Pausing
+Info: : Playing
+Warning: : GstPipelineHandler::HandleMessage(): error in module autovideosrc0-actual-src-mfvide  reported: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure. - ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPipeline:pipeline3/GstAutoVideoSrc:autovideosrc0/GstMFVideoSrc:autovideosrc0-actual-src-mfvide:
+Failed to start
+Info: : Pausing
+Warning: : GstPipelineHandler::HandleMessage(): error in module autovideosrc0-actual-src-mfvide  reported: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure. - ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPipeline:pipeline3/GstAutoVideoSrc:autovideosrc0/GstMFVideoSrc:autovideosrc0-actual-src-mfvide:
+Failed to start
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
 Info: Checking is active
 mray_gstreamer_initialize
+Info: Creating Pipeline: udpsrc port=7000 ! application/x-rtp ! rtpjitterbuffer ! rtph264depay ! decodebin ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Warning: Can't seek to invalid time
+Info: : Playing
+Info: : GstPipelineHandler::Stop 
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_READY
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Warning: Can't seek to invalid time
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
 Info: Checking is active
+mray_gstreamer_initialize
+Info: Creating Pipeline: udpsrc port=7000 ! application/x-rtp ! rtpjitterbuffer ! rtph264depay ! decodebin ! video/x-raw,format=I420 ! videoconvert ! appsink name=videoSink
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Warning: Can't seek to invalid time
+Info: : Playing
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_PLAYING
+Info: : Pausing
+Info: : Pipeline State Changes:  GST_STATE_PLAYING--> GST_STATE_PAUSED
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_READY
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Warning: Can't seek to invalid time
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: Checking is active
+mray_gstreamer_initialize
+Info: Creating Pipeline: filesrc location="D:/Development/mrayGStreamerUnity/Unity/UnityTests/Assets/.videos/small.mp4" ! qtdemux name=demux  demux.video_0 ! queue ! decodebin ! videoconvert ! video/x-raw,format=I420 ! videoflip method=5 ! appsink name=videoSink sync=true demux.audio_0 ! queue ! decodebin ! audioconvert ! autoaudiosink name=audioSink sync=true 
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
+Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
+Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
+Info: : GstPipelineHandler::CreatePipeline 
+Info: : Pipeline State Changes:  GST_STATE_NULL--> GST_STATE_READY
+Info: : Pausing
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_READY--> GST_STATE_PAUSED
+Info: : Playing
+Info: : Pipeline State Changes:  GST_STATE_PAUSED--> GST_STATE_PLAYING
+Info: : Pausing
+Info: : Pipeline State Changes:  GST_STATE_PLAYING--> GST_STATE_PAUSED
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: : GstPipelineHandler::Close 
+Info: : GstPipelineHandler::Stop 
+Info: Checking is active
+Warning: : GstPipelineHandler::HandleMessage(): error in module autovideosrc0-actual-src-mfvide  reported: GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure. - ../libs/gst/base/gstbasesrc.c(3557): gst_base_src_start (): /GstPipeline:pipeline3/GstAutoVideoSrc:autovideosrc0/GstMFVideoSrc:autovideosrc0-actual-src-mfvide:
+Failed to start
+Warning: : GstPipelineHandler::Play(): unable to pause pipeline
