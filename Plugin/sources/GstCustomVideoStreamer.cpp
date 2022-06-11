@@ -286,11 +286,11 @@ class GstCustomVideoStreamerImpl : public GstPipelineHandler,
         GError* err = 0;
         BuildString();
         GstElement* pipeline = gst_parse_launch(m_pipeLineString.c_str(), &err);
+        LogMessage("Creating Pipeline: "+m_pipeLineString, ELL_INFO);
         if (err) {
             LogMessage(std::string("GstCustomVideoPlayer: Pipeline error:") +
                            err->message,
                        ELL_ERROR);
-            LogMessage(m_pipeLineString, ELL_ERROR);
         }
         if (!pipeline) return false;
 

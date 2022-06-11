@@ -184,7 +184,7 @@ public class GstImageInfo {
 	public void BlitToTexture(Texture2D tex)
 	{
 		if (tex.width != _width || tex.height != _height || tex.format != ConvertFormat(_format)) {
-			tex.Resize (_width, _height, ConvertFormat(_format), false);
+			tex.Reinitialize (_width, _height, ConvertFormat(_format), false);
 			tex.Apply (false,false);
 
 		}

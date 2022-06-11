@@ -164,7 +164,7 @@ public abstract class GstBaseTexture : MonoBehaviour {
 		}
 		if (m_Texture [index].width != _Width || m_Texture [index].height != _Height) {
 			Debug.Log("Creating Texture video stream: "+_Width.ToString()+"x"+_Height.ToString());
-			m_Texture [index].Resize (_Width, _Height, GetFormat (components), false);
+			m_Texture [index].Reinitialize (_Width, _Height, GetFormat (components), false);
 			m_Texture [index].Apply (false, false);
 		}
 		

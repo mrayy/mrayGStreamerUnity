@@ -23,7 +23,7 @@ void IAppSinkHandler::Close()
 
 GstFlowReturn IAppSinkHandler::preroll_cb(std::shared_ptr<GstSample> sample)
 {
-	GstFlowReturn ret = process_sample(sample);
+	GstFlowReturn ret = process_sample(sample,true);
 	if (ret == GST_FLOW_OK){
 		return GST_FLOW_OK;
 	}
@@ -35,7 +35,7 @@ GstFlowReturn IAppSinkHandler::buffer_cb(std::shared_ptr<GstSample> sample)
 {
 
 
-	GstFlowReturn ret = process_sample(sample);
+	GstFlowReturn ret = process_sample(sample,false);
 	if (ret == GST_FLOW_OK){
 		return GST_FLOW_OK;
 	}
