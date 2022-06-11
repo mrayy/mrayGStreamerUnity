@@ -1,6 +1,20 @@
 # mrayGStreamerUnity
 GStreamer Integration with Unity using a Native plugin 
 
+Updated 11/June/2021:
+
+Major update to this version includes:
+
+- Use CMake to generate project for cross-platform building
+- Support for GStreamer 1.20.1
+- Tested against latest Unity3D 2021.3.4f1
+
+Currently only built for windows, but building for macOS should be straight forward. I will try to update the repo once I have some time to compile for MacOS
+
+All scenes were tested and working fine!
+
+---------------------------------------
+
 Updated 29/April/2020:
 
 The current plugin uses GStreamer 1.16.2:
