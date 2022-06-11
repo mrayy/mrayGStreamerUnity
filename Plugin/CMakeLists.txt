@@ -14,7 +14,7 @@ else()
       #  set(ZLIB_ROOT  "D:/Projects/zlib-1.2.11/")
      #   set(ZLIB_LIBRARY  "D:/Projects/zlib-1.2.11/build/MinSizeRel/zlibstaticd.lib")
 
-        add_compile_definitions(USE_UNITY_NETWORK)
+     #   add_compile_definitions(USE_UNITY_NETWORK)
         add_compile_definitions(GSTREAMERUNITYPLUGIN_EXPORTS)
 endif()
 #find_package(ZLIB REQUIRED)
