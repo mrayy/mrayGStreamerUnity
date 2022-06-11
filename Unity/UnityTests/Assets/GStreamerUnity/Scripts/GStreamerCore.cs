@@ -59,6 +59,7 @@ public class GStreamerCore {
 			IntPtr intptr_del=Marshal.GetFunctionPointerForDelegate(callback);
 			mray_SetDebugFunction(intptr_del);
 		}*/
+		Debug.Log("initializing gstreamer");
 		mray_gstreamer_initialize();
 	}
 	public static void Unref()

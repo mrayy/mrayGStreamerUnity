@@ -3,8 +3,8 @@
 #include "stdafx.h"
 #include "LocalAudioGrabber.h"
 
-#include "DirectSoundInputStream.h"
-#include "DirectSoundOutputStream.h"
+//#include "DirectSoundInputStream.h"
+//#include "DirectSoundOutputStream.h"
 
 
 
@@ -12,6 +12,7 @@ namespace mray
 {
 namespace video
 {
+	/*
 	std::vector<sound::InputStreamDeviceInfo> _dsInputInterfacesList;
 	std::vector<sound::OutputStreamDeviceInfo> _dsOutputInterfacesList;
 
@@ -30,7 +31,7 @@ namespace video
 		_dsOutputInterfacesList.clear();
 		instance->ListDevices(_dsOutputInterfacesList);
 		delete instance;
-	}
+	}*/
 
 
 LocalAudioGrabber::LocalAudioGrabber()
@@ -56,52 +57,61 @@ void LocalAudioGrabber::Init(const std::string &deviceGUID, int channels, int sa
 
 int LocalAudioGrabber::GetInputInterfacesCount()
 {
-	LoadInputInterfaces();
-	return _dsInputInterfacesList.size();
+//	LoadInputInterfaces();
+//	return _dsInputInterfacesList.size();
+return 1;
 }
 
 
 const char* LocalAudioGrabber::GetInputInterfaceName(int i)
 {
+	return "Default";
+	/*
 	LoadInputInterfaces();
 	if (i >= _dsInputInterfacesList.size())
 		return "";
-	return _dsInputInterfacesList[i].description.c_str();
+	return _dsInputInterfacesList[i].description.c_str();*/
 }
 
 
 const char* LocalAudioGrabber::GetInputInterfaceGUID(int i)
 {
+	return "Default";
+	/*
 	LoadInputInterfaces();
 	if (i >= _dsInputInterfacesList.size())
 		return "";
-	return _dsInputInterfacesList[i].deviceGUID.c_str();
+	return _dsInputInterfacesList[i].deviceGUID.c_str();*/
 }
 
 int LocalAudioGrabber::GetOutputInterfacesCount()
 {
+	return 1;
+	/*
 	LoadOutputInterfaces();
-	return _dsOutputInterfacesList.size();
+	return _dsOutputInterfacesList.size();*/
 }
 
 
 const char* LocalAudioGrabber::GetOutputInterfaceName(int i)
 {
-	LoadOutputInterfaces();
+	return "Default";
+	/*LoadOutputInterfaces();
 
 	if (i >= _dsOutputInterfacesList.size())
 		return "";
-	return _dsOutputInterfacesList[i].description.c_str();
+	return _dsOutputInterfacesList[i].description.c_str();*/
 }
 
 
 const char* LocalAudioGrabber::GetOutputInterfaceGUID(int i)
 {
-	LoadOutputInterfaces();
+	return "Default";
+	/*LoadOutputInterfaces();
 
 	if (i >= _dsOutputInterfacesList.size())
 		return "";
-	return _dsOutputInterfacesList[i].GUID.c_str();
+	return _dsOutputInterfacesList[i].GUID.c_str();*/
 }
 
 }

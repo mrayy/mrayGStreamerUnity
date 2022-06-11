@@ -9,6 +9,7 @@
 #if SUPPORT_METAL
 
 #include "Unity/IUnityGraphicsMetal.h"
+#include "UnityHelpers.h"
 #import <Metal/Metal.h>
 
 
@@ -74,11 +75,10 @@ void RenderAPI_Metal::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInt
 
 void* RenderAPI_Metal::BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch)
 {
-	const int rowPitch = textureWidth * 4;
+	const int rowPitch = textureWidth * 1;
 	// Just allocate a system memory buffer here for simplicity
-	unsigned char* data = new unsigned char[rowPitch * textureHeight];
 	*outRowPitch = rowPitch;
-	return data;
+	return 0;
 }
 
 
@@ -87,7 +87,7 @@ void RenderAPI_Metal::EndModifyTexture(void* textureHandle, int textureWidth, in
 	id<MTLTexture> tex = (__bridge id<MTLTexture>)textureHandle;
 	// Update texture data, and free the memory buffer
 	[tex replaceRegion:MTLRegionMake3D(0,0,0, textureWidth,textureHeight,1) mipmapLevel:0 withBytes:dataPtr bytesPerRow:rowPitch];
-	delete[](unsigned char*)dataPtr;
+	//delete[](unsigned char*)dataPtr;
 }
 
 

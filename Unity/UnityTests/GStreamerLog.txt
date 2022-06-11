@@ -1,3 +1,4 @@
+Info: Render API: 16
 mray_gstreamer_initialize
 Initializing GStreamer Engine
 Initializing GStreamer Engine - Done
@@ -6,8 +7,27 @@ GStreamerCore - Registering Elements!
 GStreamerCore - GStreamer inited
 Initializing GStreamer - Done
 Entering main loop
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
+Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
+Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/isomp4/qtdemux.c(6545): gst_qtdemux_loop (): /GstPipeline:pipeline0/GstQTDemux:demux:
+streaming stopped, reason not-linked (-1)
 Info: Checking is active
 mray_gstreamer_initialize
-Info: Checking is active
-mray_gstreamer_initialize
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstBaseSink'
+Error: gst_base_sink_set_sync: assertion 'GST_IS_BASE_SINK (sink)' failed
+Warning: g_object_set_is_valid_property: object class 'GstAutoAudioSink' has no property named 'emit-signals'
+Warning: invalid cast from 'GstAutoAudioSink' to 'GstAppSink'
+Error: gst_app_sink_set_callbacks: assertion 'GST_IS_APP_SINK (appsink)' failed
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Info: GstPipelineHandler::HandleMessage(): Received EOS message 
+Warning: GstPipelineHandler::HandleMessage(): error in module demux  reported: Internal data stream error. - ../gst/isomp4/qtdemux.c(6545): gst_qtdemux_loop (): /GstPipeline:pipeline1/GstQTDemux:demux:
+streaming stopped, reason not-linked (-1)
 Info: Checking is active

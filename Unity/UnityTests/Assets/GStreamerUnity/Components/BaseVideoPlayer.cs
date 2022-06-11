@@ -16,13 +16,36 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 
 	public bool ConvertToRGB=true;
 
+	bool _disabledPause;
+
 	public GstCustomTexture InternalTexture
 	{
 		get{return m_Texture;}
 	}
 
+    private void OnDisable()
+    {
+		if (m_Texture.IsPlaying)
+		{
+			m_Texture.Pause();
+			_disabledPause = true;
+        }
+        else
+        {
+			_disabledPause = false;
 
-	public delegate void Delg_OnFrameAvailable(BaseVideoPlayer src,Texture tex);
+		}
+	}
+
+    private void OnEnable()
+    {
+        if (_disabledPause)
+		{
+			m_Texture.Play();
+		}
+    }
+
+    public delegate void Delg_OnFrameAvailable(BaseVideoPlayer src,Texture tex);
 	public event Delg_OnFrameAvailable OnFrameAvailable;
 
 	protected abstract string _GetPipeline ();
@@ -30,7 +53,9 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 	// Use this for initialization
 	protected override void Start () {
 
-		_Processor=new OffscreenProcessor();
+		_disabledPause = false;
+
+		_Processor =new OffscreenProcessor();
 		m_Texture = gameObject.GetComponent<GstCustomTexture>();
 
 		material=gameObject.GetComponent<MeshRenderer> ().material;
@@ -101,7 +126,7 @@ public abstract class BaseVideoPlayer : DependencyRoot {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 
 		if (_newFrame)
 			_processNewFrame ();

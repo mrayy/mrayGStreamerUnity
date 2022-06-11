@@ -18,6 +18,12 @@ public class GstCustomPlayer : IGstPlayer
     extern static private bool mray_gst_customPlayerCreateStream(System.IntPtr p);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    extern static private void mray_gst_customPlayerSetLoop(System.IntPtr p,bool loop);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    extern static private bool mray_gst_customPlayerIsLoop(System.IntPtr p);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     extern static private void mray_gst_customPlayerGetFrameSize(System.IntPtr p, ref int w, ref int h, ref int comp);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -156,6 +162,16 @@ public class GstCustomPlayer : IGstPlayer
     public bool CreateStream()
     {
         return mray_gst_customPlayerCreateStream(m_Instance);
+    }
+
+
+    public void SetLoop(bool loop)
+    {
+        mray_gst_customPlayerSetLoop(m_Instance,loop);
+    }
+    public bool IsLoop()
+    {
+        return mray_gst_customPlayerIsLoop(m_Instance);
     }
 
     public bool GrabFrame(out Vector2 frameSize, out int components)
