@@ -1,7 +1,7 @@
 # mrayGStreamerUnity
 GStreamer Integration with Unity using a Native plugin 
 
-Updated 11/June/2021:
+Updated 11/June/2022:
 
 Major update to this version includes:
 
