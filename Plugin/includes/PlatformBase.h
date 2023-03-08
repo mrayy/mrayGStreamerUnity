@@ -29,6 +29,8 @@
 #elif defined(__EMSCRIPTEN__)
 // this is already defined in Unity 5.6
 #define UNITY_WEBGL 1
+#elif defined(__linux__)
+#define UNITY_LINUX 1
 #else
 #error "Unknown platform!"
 #endif

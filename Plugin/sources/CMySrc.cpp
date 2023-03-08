@@ -1,7 +1,7 @@
 ﻿
 
 #include "stdafx.h"
-#include "cmysrc.h"
+#include "CMySrc.h"
 
 
 

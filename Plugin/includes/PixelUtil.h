@@ -15,6 +15,7 @@ purpose:
 #define ___PixelUtil___
 
 #include <string>
+#include <cstring> // memcpy
 #include "mTypes.h"
 #include "videoCommon.h"
 

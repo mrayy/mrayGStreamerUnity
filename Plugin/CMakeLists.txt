@@ -84,7 +84,6 @@ set (SOURCE
 if(APPLE)
 set (SOURCE 
         ${SOURCE}
-
         "includes/RenderAPI_Metal.mm"
         "includes/OSX/OSXThread.cpp"
         "includes/OSX/OSXThreadManager.cpp"
@@ -96,16 +95,14 @@ set(CMAKE_C_FLAGS "-x objective-c")
 set(CMAKE_CXX_FLAGS "-x objective-c++")
 set(CMAKE_EXE_LINKER_FLAGS "-framework OpenGL -framework CoreFoundation")
 
-else()
-
+elseif(WIN32)
 set (SOURCE 
         ${SOURCE}
-
-        "includes/Win32/Win32Network.cpp"
-        "includes/Win32/Win32UDPClient.cpp"
-        "includes/Win32/WinThread.cpp"
-        "includes/Win32/WinThreadManager.cpp"
-        "includes/Win32/WinMutex.cpp"
+	"includes/Win32/Win32Network.cpp"
+	"includes/Win32/Win32UDPClient.cpp"
+	"includes/Win32/WinThread.cpp"
+	"includes/Win32/WinThreadManager.cpp"
+	"includes/Win32/WinMutex.cpp"
        # "sources/DirectSoundInputStream.cpp"
        # "sources/DirectSoundOutputStream.cpp"
         "sources/LocalAudioGrabber.cpp"
@@ -113,7 +110,17 @@ set (SOURCE
         "sources/UnityAudioGrabber.cpp"
         "includes/RenderAPI_D3D11.cpp"
 )
-
+else() # Linux / Unix
+set (SOURCE 
+        ${SOURCE}
+        "includes/OSX/OSXThread.cpp"
+        "includes/OSX/OSXThreadManager.cpp"
+        "includes/OSX/OSXMutex.cpp"
+        "sources/LocalAudioGrabber.cpp"
+        "sources/GstAppAudioPlayer.cpp"
+        "sources/UnityAudioGrabber.cpp"
+        "includes/RenderAPI_D3D11.cpp"
+)
 endif()
 
 
@@ -124,10 +131,14 @@ if(APPLE)
         add_library("${PROJECT_NAME}"   MODULE  "${SOURCE}")
         set_target_properties("${PROJECT_NAME}"  PROPERTIES BUNDLE TRUE)
        # target_link_libraries("${PROJECT_NAME}" ZLIB::ZLIB)
-else()
+elseif(WIN32)
         add_library("${PROJECT_NAME}"   SHARED  "${SOURCE}")
         target_link_libraries("${PROJECT_NAME}" wsock32 ws2_32)
      #   target_link_libraries("${PROJECT_NAME}" ${ZLIB_LIBRARY})
+else()
+        add_library("${PROJECT_NAME}"   MODULE  "${SOURCE}")
+	target_link_libraries("${PROJECT_NAME}" GLEW)
 endif()
+
 target_link_libraries("${PROJECT_NAME}" ${GSTLIBS_LIBRARIES})
 target_link_libraries("${PROJECT_NAME}" ${OPENGL_LIBRARIES})

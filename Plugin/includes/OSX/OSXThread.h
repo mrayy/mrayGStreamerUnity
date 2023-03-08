@@ -5,6 +5,7 @@
 
 #include <IThread.h>
 #include <pthread.h>
+#include <signal.h> // pthread_kill
 
 namespace mray{
 namespace OS{

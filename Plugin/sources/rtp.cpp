@@ -9,6 +9,9 @@
 #include <sys/endian.h>
 #endif
 
+#ifdef __linux__
+#include <arpa/inet.h> // ntohl
+#endif
 
 static unsigned int header_offset = (4 + 1 + 1 + 2 + 7 + 1 + 16 + 32 + 32) / sizeof(char);
 
