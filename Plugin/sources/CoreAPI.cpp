@@ -7,19 +7,14 @@
 #ifdef WIN32
 #include "Win32/WinThreadManager.h"
 #include "Win32/Win32Network.h"
-#else
-
-#ifdef __APPLE__
+#elif defined(__APPLE__)
 #include "OSX/OSXThreadManager.h"
-#else
-
-
-#ifdef __ANDROID__
+#elif defined(__ANDROID__)
 #include "Android/AndroidThreadManager.h"
+#elif defined(__linux__)
+#include "OSX/OSXThreadManager.h" // pthreads
 #endif
 
-#endif
-#endif
 #include <vector>
 
 #include "UnityGraphicsDevice.h"
@@ -33,17 +28,12 @@ extern "C" UNITY_INTERFACE_EXPORT bool mray_gstreamer_initialize()
 #ifdef WIN32
 		new OS::WinThreadManager();
 		new network::Win32Network();
-#else 
-#ifdef __APPLE__
-        new OS::OSXThreadManager();
-#else
-#ifdef __ANDROID__
+#elif defined(__APPLE__)
+		new OS::OSXThreadManager();
+#elif defined(__ANDROID__)
 		new OS::AndroidThreadManager();
-
-
-#endif
-
-#endif
+#elif defined(__linux__)
+		new OS::OSXThreadManager(); // pthreads like OSX
 #endif
 		LogManager::Instance()->LogMessage("Initializing GStreamer Engine - Done");
 	}

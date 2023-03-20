@@ -101,6 +101,7 @@ class GstCustomVideoStreamerImpl : public GstPipelineHandler,
             // ksvideosrc
             ss << "appsrc"
                   " name=src"
+		  " format=time" // without, it causes: Error: gst_segment_to_running_time: assertion 'segment->format == format' failed
                << " do-timestamp=true is-live=true block=true"
                   " ! video/x-raw,format=" +
                       format + ",width="

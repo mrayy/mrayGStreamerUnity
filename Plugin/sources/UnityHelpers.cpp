@@ -36,11 +36,18 @@ void LogMessage(const std::string& msg, ELogLevel level)
 		m = "Error: ";
 
 	m += msg;
+
+
+#if UNITY_LINUX
+	m += '\n';
+#endif
+
 #if UNITY_WIN
 	OutputDebugStringA(m.c_str());
 #else
 	printf("%s", m.c_str());
 #endif
+
 	LogManager::Instance()->LogMessage(m);
 // 	if (Debug)
 // 		Debug(m.c_str());
@@ -74,22 +81,33 @@ LogManager* LogManager::Instance()
 
 LogManager::LogManager()
 {
-    logFilePath = DetermineLogFilePath("GStreamerLog.txt");
+	logFilePath = DetermineLogFilePath("GStreamerLog.txt");
 
+	// empty log
 	m_logFile = fopen(logFilePath.c_str(), "w");
-	fclose(m_logFile);
-	m_logFile = 0;
+	if (m_logFile)
+	{
+		fclose(m_logFile);
+		m_logFile = 0;
+	}
 }
 LogManager::~LogManager()
 {
-	fclose(m_logFile);
+	if (m_logFile)
+	{
+		fclose(m_logFile);
+		m_logFile = 0;
+	}
 }
 void LogManager::LogMessage(const std::string& msg)
 {
     m_logFile = fopen(logFilePath.c_str(), "a");
 	fprintf(m_logFile, "%s\n", msg.c_str());
-	fclose(m_logFile);
-	m_logFile = 0;
+	if (m_logFile)
+	{
+		fclose(m_logFile);
+		m_logFile = 0;
+	}
 }
 
 std::string LogManager::DetermineLogFilePath(const std::string& fileName)

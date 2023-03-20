@@ -3,8 +3,10 @@
 #include "stdafx.h"
 #include "UnityAudioGrabber.h"
 
+#include "IThreadManager.h"
 #include "MutexLocks.h"
-#include "Win32/WinMutex.h"
+
+#include <cstring> // memcpy
 
 namespace mray
 {
@@ -15,7 +17,7 @@ namespace video
 
 UnityAudioGrabber::UnityAudioGrabber()
 {
-	m_mutex = new OS::WinMutex();
+	m_mutex = OS::IThreadManager::getInstance().createMutex();;
 	_samplingRate = 44100;
 	_channels = 1;
 	_bufferLength = 1000;
