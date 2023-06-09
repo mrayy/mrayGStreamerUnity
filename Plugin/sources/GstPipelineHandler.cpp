@@ -408,6 +408,7 @@ void GstPipelineHandler::Stop() {
   LogMessage(m_data->_name + ": GstPipelineHandler::Stop ", ELL_INFO);
   if (!m_data->Loaded) return;
   std::lock_guard<std::recursive_mutex> lock(GetMutex());
+  if (m_data->paused == true && m_data->playing == false) return;
   GstState state;
   m_data->_seekPos = GST_CLOCK_TIME_NONE;
   // gst_element_send_event(m_data->gstPipeline, gst_event_new_eos());
