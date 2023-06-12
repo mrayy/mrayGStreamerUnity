@@ -23,6 +23,8 @@ class GstCustomVideoStreamerImpl : public GstPipelineHandler,
     std::string m_pipeLineString;
     std::string m_srcPipeLineString;
 
+    ConnectionStatusCallback m_connectionStatusCallback = nullptr;
+
     int m_fps;
     Vector2d m_frameSize;
 
@@ -58,6 +60,11 @@ class GstCustomVideoStreamerImpl : public GstPipelineHandler,
     void SetResolution(int width, int height, int fps) {
         m_frameSize = Vector2d(width, height);
         m_fps = fps;
+    }
+
+    void SetConnectionStatusCallback(ConnectionStatusCallback cb)
+    {
+        m_connectionStatusCallback = cb;
     }
 
     std::string GetFormatStr(EPixelFormat fmt) {
@@ -313,6 +320,38 @@ class GstCustomVideoStreamerImpl : public GstPipelineHandler,
     virtual void OnPipelineStopped(GstPipelineHandler* p) {
         m_owner->__FIRE_OnStreamerStopped(m_owner);
     }
+    virtual void OnPipelineError(GstPipelineHandler* p, const std::string& elementName)
+    {
+        if (m_connectionStatusCallback && elementName.find("rtspclientsink") != std::string::npos)
+        {
+            m_connectionStatusCallback(false);
+        }
+    }
+    virtual void OnPipelineProgress(GstPipelineHandler* p, int progressType, const std::string& code, const std::string& info) override
+    {
+        if(!m_connectionStatusCallback)
+        {
+            return;
+        }
+
+        switch (progressType)
+        {
+        case 2: // GST_PROGRESS_TYPE_COMPLETE
+            if (code.find("open") != std::string::npos)
+            {
+                m_connectionStatusCallback(true);
+            }
+            break;
+        case 4: // GST_PROGRESS_TYPE_ERROR
+            if (code.find("open") != std::string::npos)
+            {
+                m_connectionStatusCallback(false);
+            }
+            break;
+        default:
+            break;
+        }
+    }
 };
 
 GstCustomVideoStreamer::GstCustomVideoStreamer() {
@@ -334,6 +373,11 @@ bool GstCustomVideoStreamer::IsStreaming() { return m_impl->IsStreaming(); }
 
 void GstCustomVideoStreamer::SetResolution(int width, int height, int fps) {
     m_impl->SetResolution(width, height, fps);
+}
+
+void GstCustomVideoStreamer::SetConnectionStatusCallback(ConnectionStatusCallback cb)
+{
+    m_impl->SetConnectionStatusCallback(cb);
 }
 
 void GstCustomVideoStreamer::SetVideoGrabber(IVideoGrabber* grabber0) {

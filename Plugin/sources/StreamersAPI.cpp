@@ -149,6 +149,17 @@ extern "C" UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetResolution
 	}
 }
 
+extern "C"
+{
+	UNITY_INTERFACE_EXPORT void mray_gst_customImageStreamerSetConnectionStatusCallback(GstCustomVideoStreamer* p, ConnectionStatusCallback cb)
+	{
+		if (p)
+		{
+			p->SetConnectionStatusCallback(cb);
+		}
+	}
+}
+
 #ifdef USE_UNITY_NETWORK
 
 extern "C" UNITY_INTERFACE_EXPORT void *mray_gst_createNetworkStreamer()

@@ -20,6 +20,7 @@ purpose:
 #define GstCustomVideoStreamer_h__
 
 #include "IGStreamerStreamer.h"
+#include "Unity/IUnityInterface.h"
 #include <string>
 
 namespace mray
@@ -29,6 +30,12 @@ namespace video
 
 class GstCustomVideoStreamerImpl;
 class IVideoGrabber;
+
+// Uggly fix to expose the ConnectionStatusCallback signature where relevant.
+extern "C"
+{
+	typedef void(UNITY_INTERFACE_API* ConnectionStatusCallback)(bool);
+}
 
 class GstCustomVideoStreamer :public IGStreamerStreamer
 {
@@ -50,7 +57,8 @@ public:
 	virtual void Close();
 
 	void SetVideoGrabber(IVideoGrabber* grabber0);
-	void  SetResolution(int width, int height, int fps);
+	void SetResolution(int width, int height, int fps);
+	void SetConnectionStatusCallback(ConnectionStatusCallback cb);
 
 	virtual void SetPaused(bool paused);
 	virtual bool IsPaused();

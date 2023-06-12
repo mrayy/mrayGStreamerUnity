@@ -17,6 +17,15 @@ public class GstCustomVideoStreamer:IGstStreamer {
 	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
 	extern static private int mray_gst_customImageStreamerSetResolution(System.IntPtr p,int width, int height, int fps);
 
+
+	public delegate void ConnectionStatusCallback(bool isConnected);
+	
+	[DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+   extern static internal void 
+   mray_gst_customImageStreamerSetConnectionStatusCallback(
+	System.IntPtr p, 
+	[MarshalAs(UnmanagedType.FunctionPtr)] ConnectionStatusCallback callbackPointer);
+
 	GstUnityImageGrabber _grabber;
 
 	public GstCustomVideoStreamer()
@@ -44,4 +53,9 @@ public class GstCustomVideoStreamer:IGstStreamer {
 	{
 		mray_gst_customImageStreamerSetResolution (m_Instance, w,h,fps);
 	}
+
+	public void SetCallback(ConnectionStatusCallback cb)
+    {
+    	mray_gst_customImageStreamerSetConnectionStatusCallback(m_Instance, cb);
+    }
 }

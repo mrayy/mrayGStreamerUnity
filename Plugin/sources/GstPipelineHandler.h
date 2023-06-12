@@ -25,7 +25,7 @@ class IPipelineListener {
   virtual void OnPipelineStopped(GstPipelineHandler* p) {}
   virtual void OnPipelineClosed(GstPipelineHandler* p) {}
   virtual void OnPipelineWarning(GstPipelineHandler* p) {}
-  virtual void OnPipelineError(GstPipelineHandler* p) {}
+  virtual void OnPipelineError(GstPipelineHandler* p, const std::string& elementName) {}
   virtual void OnPipelineEOS(GstPipelineHandler* p) {}
   virtual void OnPipelineBuffering(GstPipelineHandler* p, int percent) {}
 
@@ -34,6 +34,7 @@ class IPipelineListener {
 
   virtual void OnPreSeek(GstPipelineHandler* p, long pos) {}
   virtual void OnPostSeek(GstPipelineHandler* p) {}
+  virtual void OnPipelineProgress(GstPipelineHandler* p, int progressType, const std::string& code, const std::string& info) {}
 };
 
 class GstPipelineHandler : public ListenerContainer<IPipelineListener*> {
@@ -48,7 +49,7 @@ class GstPipelineHandler : public ListenerContainer<IPipelineListener*> {
   DECLARE_FIRE_METHOD(OnPipelineStopped, (GstPipelineHandler * p), (p));
   DECLARE_FIRE_METHOD(OnPipelineClosed, (GstPipelineHandler * p), (p));
   DECLARE_FIRE_METHOD(OnPipelineWarning, (GstPipelineHandler * p), (p));
-  DECLARE_FIRE_METHOD(OnPipelineError, (GstPipelineHandler * p), (p));
+  DECLARE_FIRE_METHOD(OnPipelineError, (GstPipelineHandler * p, const std::string& elementName), (p, elementName));
   DECLARE_FIRE_METHOD(OnPipelineEOS, (GstPipelineHandler * p), (p));
   DECLARE_FIRE_METHOD(OnPreSeek, (GstPipelineHandler * p, long pos), (p, pos));
   DECLARE_FIRE_METHOD(OnPostSeek, (GstPipelineHandler * p), (p));
@@ -58,6 +59,7 @@ class GstPipelineHandler : public ListenerContainer<IPipelineListener*> {
                       (p, prevState, newState, pendState));
   DECLARE_FIRE_METHOD(OnPipelineBuffering,
                       (GstPipelineHandler * p, int percent), (p, percent));
+  DECLARE_FIRE_METHOD(OnPipelineProgress, (GstPipelineHandler* p, int progressType, const std::string& code, const std::string& info), (p, progressType, code, info));
 
  public:
   GstPipelineHandler(const char* name = "");

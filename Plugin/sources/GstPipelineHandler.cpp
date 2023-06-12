@@ -5,6 +5,7 @@
 #include <gst/net/gstnet.h>
 
 #include <mutex>
+#include <string>
 
 #include "GStreamerCore.h"
 #include "IThreadManager.h"
@@ -368,9 +369,16 @@ long GstPipelineHandler::GetDuration() {
 }
 bool GstPipelineHandler::IsResettingEOS() { return m_data->_restartingEOS; }
 void GstPipelineHandler::SetPaused(bool p) {
+  if (m_data->gstPipeline == NULL && m_data->busWatchID == 0)
+  {
+    m_data->paused = true;
+    m_data->Loaded = false;
+    m_data->playing = false;
+    return;
+  }
   std::lock_guard<std::recursive_mutex> lock(GetMutex());
   m_data->paused = p;
-  if (m_data->Loaded || true) {
+  if (m_data->Loaded) {
     if (m_data->playing) {
       GstState state;
       if (m_data->paused) {
@@ -405,6 +413,14 @@ void GstPipelineHandler::SetPaused(bool p) {
   }
 }
 void GstPipelineHandler::Stop() {
+  if (m_data->gstPipeline == NULL && m_data->busWatchID == 0)
+  {
+    m_data->paused = true;
+    m_data->Loaded = false;
+    m_data->playing = false;
+    return;
+  }
+
   LogMessage(m_data->_name + ": GstPipelineHandler::Stop ", ELL_INFO);
   if (!m_data->Loaded) return;
   std::lock_guard<std::recursive_mutex> lock(GetMutex());
@@ -445,11 +461,16 @@ bool GstPipelineHandler::QueryLatency(bool &isLive, ulong &minLatency,
   return ok;
 }
 void GstPipelineHandler::Close() {
+  if (m_data->gstPipeline == NULL && m_data->busWatchID == 0)
+  {
+    m_data->Loaded = false;
+    return;
+  }
   LogMessage(m_data->_name + ": GstPipelineHandler::Close ", ELL_INFO);
   std::lock_guard<std::recursive_mutex> lock(GetMutex());
   Stop();
 
-  if (true || m_data->Loaded) {
+  if (m_data->Loaded) {
     if (m_data->busWatchID != 0) g_source_remove(m_data->busWatchID);
     m_data->busWatchID = 0;
 
@@ -608,27 +629,30 @@ bool GstPipelineHandler::HandleMessage(GstBus *bus, GstMessage *msg) {
     case GST_MESSAGE_PROGRESS: {
       GstProgressType type;
       gchar *code, *text;
-      bool in_progress = false;
       gst_message_parse_progress(msg, &type, &code, &text);
       switch (type) {
         case GST_PROGRESS_TYPE_START:
         case GST_PROGRESS_TYPE_CONTINUE:
-          in_progress = TRUE;
-          break;
         case GST_PROGRESS_TYPE_COMPLETE:
         case GST_PROGRESS_TYPE_CANCELED:
         case GST_PROGRESS_TYPE_ERROR:
-          in_progress = FALSE;
+        {
+          const std::string progressCode(code);
+          const std::string progressInfo(text);
+          FIRE_LISTENR_METHOD(OnPipelineProgress, (this, type, progressCode, progressInfo));
+        }
           break;
         default:
           break;
       }
-      LogMessage("Progress: (" + std::string(code) + ") " + std::string(text),
-                 ELL_INFO);
+      LogMessage("Progress: (" + std::to_string(type) + ") ("
+          + std::string(code) + ") " + std::string(text),
+          ELL_INFO);
       g_free(code);
       g_free(text);
 
-    } break;
+    } 
+    break;
 
     case GST_MESSAGE_WARNING: {
       GError *err;
@@ -669,15 +693,16 @@ bool GstPipelineHandler::HandleMessage(GstBus *bus, GstMessage *msg) {
                      std::string(" - ") + debug,
                  ELL_WARNING);
 
+
+      const std::string gstElementName(name);
+      if (m_data) {
+        FIRE_LISTENR_METHOD(OnPipelineError, (this, gstElementName));
+      }
+
       g_free(name);
       g_error_free(err);
       g_free(debug);
 
-      if (m_data) {
-        FIRE_LISTENR_METHOD(OnPipelineError, (this));
-        // gst_element_set_state(GST_ELEMENT(m_data->gstPipeline),
-        // GST_STATE_NULL);
-      }
     } break;
 
     default:
