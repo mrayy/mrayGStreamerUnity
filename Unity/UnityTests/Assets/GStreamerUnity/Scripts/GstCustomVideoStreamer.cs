@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
+namespace GStreamerUnity{
+
 public class GstCustomVideoStreamer:IGstStreamer {
 	
 	
@@ -58,4 +60,6 @@ public class GstCustomVideoStreamer:IGstStreamer {
     {
     	mray_gst_customImageStreamerSetConnectionStatusCallback(m_Instance, cb);
     }
+}
+
 }

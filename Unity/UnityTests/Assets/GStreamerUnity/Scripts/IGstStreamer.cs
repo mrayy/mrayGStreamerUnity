@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 
+
+namespace GStreamerUnity{
+
 public class IGstStreamer : MonoBehaviour {
 	
 	internal const string DllName = "GStreamerUnityPlugin";
@@ -80,4 +83,6 @@ public class IGstStreamer : MonoBehaviour {
 	{
 		mray_gst_StreamerClose (m_Instance);
 	}
+}
+
 }
