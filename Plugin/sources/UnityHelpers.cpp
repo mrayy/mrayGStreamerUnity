@@ -8,6 +8,8 @@
 #endif
 //#include <gl/gl.h>
 #include <glib.h>
+#include <chrono>
+#include <ctime>
 
 
 
@@ -81,7 +83,7 @@ LogManager* LogManager::Instance()
 
 LogManager::LogManager()
 {
-	logFilePath = DetermineLogFilePath("GStreamerLog.txt");
+    logFilePath = DetermineLogFilePath("GStreamerLog.txt");
 
 	// empty log
 	m_logFile = fopen(logFilePath.c_str(), "w");
@@ -101,13 +103,19 @@ LogManager::~LogManager()
 }
 void LogManager::LogMessage(const std::string& msg)
 {
-    m_logFile = fopen(logFilePath.c_str(), "a");
-	fprintf(m_logFile, "%s\n", msg.c_str());
-	if (m_logFile)
-	{
-		fclose(m_logFile);
-		m_logFile = 0;
-	}
+    auto end = std::chrono::system_clock::now();
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::string end_ctime(std::ctime(&end_time));
+    {
+        const std::lock_guard<std::mutex> lock(m_mutex);
+        m_logFile = fopen(logFilePath.c_str(), "a");
+        fprintf(m_logFile, "[%s] %s\n", end_ctime.substr(end_ctime.find(':') - 2, 8).c_str(), msg.c_str());
+        if (m_logFile)
+        {
+            fclose(m_logFile);
+            m_logFile = 0;
+        }
+    }
 }
 
 std::string LogManager::DetermineLogFilePath(const std::string& fileName)

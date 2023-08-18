@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
+#include <mutex>
 #include "mTypes.h"
 #include "Unity/IUnityInterface.h"
 
@@ -45,6 +46,7 @@ typedef float(*FuncFloatRetPtr)();
 extern "C" class UNITY_INTERFACE_EXPORT LogManager
 {
 	static LogManager* s_instance;;
+	std::mutex m_mutex;
 	FILE* m_logFile;
 	std::string logFilePath;
 

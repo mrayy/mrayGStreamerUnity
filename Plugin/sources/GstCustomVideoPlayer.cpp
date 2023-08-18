@@ -57,7 +57,7 @@ class GstCustomVideoPlayerImpl : public GstPipelineHandler,
     LogMessage("Creating Pipeline: " + m_pipeLineString, ELL_INFO);
     if (err) {
       LogMessage(
-          std::string("GstCustomVideoPlayer: Pipeline error:") + err->message,
+          std::string("GstCustomVideoPlayer: Pipeline error: ") + err->message,
           ELL_ERROR);
     }
     if (!p) return false;
