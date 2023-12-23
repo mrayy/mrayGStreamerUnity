@@ -3,6 +3,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System;
 
+namespace GStreamerUnity{
+
 public class GstUnityImageGrabber {
 	
 	enum EPixelFormat
@@ -140,4 +142,6 @@ public class GstUnityImageGrabber {
 
 		mray_gst_UnityImageGrabberSetData (m_Instance, m_lastArrayPtr, m_width,m_height, (int)m_format);
 	}
+}
+
 }
